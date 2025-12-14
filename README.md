@@ -19,4 +19,10 @@ loopback - /32
 - 2 – p2p links
 - 3 – reserved
 - 4-7 – services
-- Был разработан адресный план для приведенной на примере схеме сети:
+## Был разработан адресный план для приведенной на примере схеме сети:
+### конфигурация spine 1
+spine1#ce Loopback1
+spine1#ddress 10.1.1.1/31
+
+interface Ethernet1
+   ip address unnumbered Loopback1
