@@ -21,8 +21,15 @@ loopback - /32
 - 4-7 – services
 ## Был разработан адресный план для приведенной на примере схеме сети:
 ### конфигурация spine 1
-spine1#ce Loopback1
-spine1#ddress 10.1.1.1/31
+interface Loopback1
+   ip address 10.1.1.1/31
 
 interface Ethernet1
    ip address unnumbered Loopback1
+
+### конфигурация spine 2
+interface Loopback1
+   ip address 10.1.2.1/31
+
+interface Ethernet1
+   ip address 10.10.2.1/31
