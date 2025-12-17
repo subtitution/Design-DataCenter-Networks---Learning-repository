@@ -38,7 +38,6 @@ https://eltexcm.ru/assets/files/site/3686/ip_fabric_design_guide.pdf
 - EVE-NG Community version, она ставится легко и особо проблем с ней нет. Но есть определённые ограничения (нельзя "на горячую" подключать кабеля, например это из того что не нравится мне : ). сравнение фич с платной версией тут - https://www.eve-ng.net/index.php/features-compare/
 
 - Второй вариант - pnetlab ( https://www.pnetlab.com/pages/main ) это форктуная версия профессиональной EVE NG, но с установкой могут возникнуть "нюансики". Я бы рекомендовал pnetlab попробовать - если приготовите её хорошо это будет хорошим подспорьем в будущем, за пределами данного курсаhttp://ciscomaster.ru/content/chto-takoe-vxlan
-
-- ## образы для скачивания
-- - Например ариста https://labhub.eu.org/addons/qemu/Arista%20vEOS/
-  - 
+## Образы для скачивания
+ - Например ариста https://labhub.eu.org/addons/qemu/Arista%20vEOS/
+    
