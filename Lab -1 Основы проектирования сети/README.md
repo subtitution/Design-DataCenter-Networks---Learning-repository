@@ -23,12 +23,9 @@ loopback - /32
 ## Конфигурация коммутаторов уровня Spine
 # ----------[ Spine Level]----------
 ### Конфигурация spine 1
-interface Loopback1
-   description Peer-to-peer link to leaf-1
-   ip address 10.0.0.1/31
    
 interface Loopback1
-   ip address 10.0.0.0/32
+* ip address 10.0.0.0/32
 
 interface Ethernet1
        ip address 10.0.0.1/31 <br>
