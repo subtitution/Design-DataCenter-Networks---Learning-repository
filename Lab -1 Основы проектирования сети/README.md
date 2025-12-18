@@ -27,8 +27,8 @@ interface Loopback1
    ip address 10.0.0.0/32
 
 interface Ethernet1
-   ip address 10.0.0.1/31 <br>
-   Description Peer-to-peer link  to leaf-1  
+       ip address 10.0.0.1/31 <br>
+       Description Peer-to-peer link  to leaf-1  
 
 interface Ethernet2
    ip address 10.0.0.3/31 <br>
