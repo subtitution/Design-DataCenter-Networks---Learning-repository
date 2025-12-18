@@ -28,15 +28,15 @@ interface Loopback1
 
 interface Ethernet1
    ip address 10.0.0.1/31 <br>
-   Description Peer-to-peer link link to leaf-1  
+   Description Peer-to-peer link  to leaf-1  
 
 interface Ethernet2
    ip address 10.0.0.3/31 <br>
-   Description Peer-to-peer link link to leaf-2  
+   Description Peer-to-peer link  to leaf-2  
 
 interface Ethernet3
    ip address 10.0.0.5/31 <br>
-   Description Peer-to-peer link link to leaf-3  
+   Description Peer-to-peer link  to leaf-3  
 
 ### Конфигурация spine 2
 interface Loopback1
@@ -44,15 +44,15 @@ interface Loopback1
 
 interface Ethernet1
    ip address 10.0.1.1/31
-   Description Peer-to-peer link link to leaf-1
+   Description Peer-to-peer link  to leaf-1
 
 interface Ethernet2
    ip address 10.0.1.3/31
-   Description Peer-to-peer link link to leaf-2
+   Description Peer-to-peer link  to leaf-2
 
 interface Ethernet3
    ip address 10.0.1.5/31
-   Description Peer-to-peer link link to leaf-3
+   Description Peer-to-peer link  to leaf-3
 
 
 #  ----------[ Leaf Level]-------------
@@ -63,11 +63,11 @@ interface Loopback1
 
 interface Ethernet1
    ip address 10.0.0.2/31
-   Description Peer-to-peer link link to Spine-1
+   Description Peer-to-peer link  to Spine-1
 
 interface Ethernet2
    ip address 10.0.1.2/31
-   Description Peer-to-peer link link to Spine-2
+   Description Peer-to-peer link  to Spine-2
 
   ### Конфигурация Leaf 2
 interface Loopback1
@@ -75,11 +75,11 @@ interface Loopback1
 
 interface Ethernet1
    ip address 10.0.0.4/31
-   Description Peer-to-peer link link to Spine-1
+   Description Peer-to-peer link  to Spine-1
 
 interface Ethernet2
    ip address 10.0.1.4/31
-   Description Peer-to-peer link link to Spine-2
+   Description Peer-to-peer link to Spine-2
 
   ### Конфигурация Leaf 3
 interface Loopback1
@@ -87,10 +87,10 @@ interface Loopback1
 
 interface Ethernet1
    ip address 10.0.0.6/31
-   Description Peer-to-peer link link to Spine-1
+   Description Peer-to-peer link to Spine-1
 
 interface Ethernet2
    ip address 10.0.1.6/31
-   Description Peer-to-peer link link to Spine-2
+   Description Peer-to-peer link to Spine-2
 
 
