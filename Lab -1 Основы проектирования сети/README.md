@@ -48,10 +48,6 @@ interface Ethernet3
    ip address 10.0.0.5/31
    Description Peer-to-peer link link to leaf-3
 
-interface Ethernet4
-   ip address 10.0.0.7/31
-   Description Peer-to-peer link link to leaf-4
-
 ### Конфигурация spine 2
 interface Loopback1
    ip address 10.0.1.0/32
@@ -68,9 +64,6 @@ interface Ethernet3
    ip address 10.0.1.5/31
    Description Peer-to-peer link link to leaf-3
 
-interface Ethernet4
-   ip address 10.0.1.7/31
-   Description Peer-to-peer link link to leaf-4
 
 #  ---------------------------[ Leaf Level]-----------------------
 ## Конфигурации коммутаторов уровня Leaf
@@ -110,14 +103,4 @@ interface Ethernet2
    ip address 10.0.1.6/31
    Description Peer-to-peer link link to Spine-2
 
-  ### Конфигурация Leaf 4
-interface Loopback1
-   ip address 10.0.0.0/32 ---?
 
-interface Ethernet1
-   ip address 10.0.0.8/31
-   Description Peer-to-peer link link to Spine-1
-
-interface Ethernet2
-   ip address 10.0.1.8/31
-   Description Peer-to-peer link link to Spine-2
