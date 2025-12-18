@@ -28,17 +28,96 @@ loopback - /32
 - 2 – p2p links
 - 3 – reserved
 - 4-7 – services
-## Был разработан адресный план для приведенной на примере схеме сети:
-### конфигурация spine 1
+
+# Разработанный адресный план для приведенной схемы сети приведен далее по тексту:
+## Конфигурация коммутаторов уровня Spine
+---------------------------------[ Spine Level]-----------------------------------
+### Конфигурация spine 1
 interface Loopback1
-   ip address 10.1.1.1/31
+   ip address 10.0.0.0/32
 
 interface Ethernet1
-   ip address unnumbered Loopback1
+   ip address 10.0.0.1/31
+   Description Peer-to-peer link link to leaf-1
 
-### конфигурация spine 2
+interface Ethernet2
+   ip address 10.0.0.3/31
+   Description Peer-to-peer link link to leaf-2
+
+interface Ethernet3
+   ip address 10.0.0.5/31
+   Description Peer-to-peer link link to leaf-3
+
+interface Ethernet4
+   ip address 10.0.0.7/31
+   Description Peer-to-peer link link to leaf-4
+
+### Конфигурация spine 2
 interface Loopback1
-   ip address 10.1.2.1/31
+   ip address 10.0.1.0/32
 
 interface Ethernet1
-   ip address 10.10.2.1/31
+   ip address 10.0.1.1/31
+   Description Peer-to-peer link link to leaf-1
+
+interface Ethernet2
+   ip address 10.0.1.3/31
+   Description Peer-to-peer link link to leaf-2
+
+interface Ethernet3
+   ip address 10.0.1.5/31
+   Description Peer-to-peer link link to leaf-3
+
+interface Ethernet4
+   ip address 10.0.1.7/31
+   Description Peer-to-peer link link to leaf-4
+
+   --------------------------------[ Leaf Level]----------------------------
+## Конфигурации коммутаторов уровня Leaf
+   ### Конфигурация Leaf 1
+interface Loopback1
+   ip address 10.0.0.0/32 ---?
+
+interface Ethernet1
+   ip address 10.0.0.2/31
+   Description Peer-to-peer link link to Spine-1
+
+interface Ethernet2
+   ip address 10.0.1.2/31
+   Description Peer-to-peer link link to Spine-2
+
+  ### Конфигурация Leaf 2
+interface Loopback1
+   ip address 10.0.0.0/32 ---?
+
+interface Ethernet1
+   ip address 10.0.0.4/31
+   Description Peer-to-peer link link to Spine-1
+
+interface Ethernet2
+   ip address 10.0.1.4/31
+   Description Peer-to-peer link link to Spine-2
+
+  ### Конфигурация Leaf 3
+interface Loopback1
+   ip address 10.0.0.0/32 ---?
+
+interface Ethernet1
+   ip address 10.0.0.6/31
+   Description Peer-to-peer link link to Spine-1
+
+interface Ethernet2
+   ip address 10.0.1.6/31
+   Description Peer-to-peer link link to Spine-2
+
+  ### Конфигурация Leaf 4
+interface Loopback1
+   ip address 10.0.0.0/32 ---?
+
+interface Ethernet1
+   ip address 10.0.0.8/31
+   Description Peer-to-peer link link to Spine-1
+
+interface Ethernet2
+   ip address 10.0.1.8/31
+   Description Peer-to-peer link link to Spine-2
