@@ -33,15 +33,15 @@ interface Loopback2<br>
   ip address 10.0.1.1/32<br>
 
 interface Ethernet1<br>
-         ip address 10.0.0.1/31 <br>
+         ip address 10.2.1.1/31 <br>
          Description Peer-to-peer link  to leaf-1  <br>
   
 interface Ethernet2<br>
-     ip address 10.2.0.3/31 <br>
+     ip address 10.2.1.2/31 <br>
      Description Peer-to-peer link  to leaf-2  <br>
 
 interface Ethernet3<br>
-     ip address 10.2.0.5/31 <br>
+     ip address 10.2.1.3/31 <br>
      Description Peer-to-peer link  to leaf-3<br>
 
 ### Конфигурация spine 2
