@@ -68,40 +68,41 @@ loopback - /32
    ## Конфигурация Leaf 1
 
 #### interface Loopback1<br>
-    description IP for underlay -Router-ID <br>
-    ip address 10.0.0.1/32 <br>
+    description IP for underlay -Router-ID 
+    ip address 10.0.0.1/32 
   
 #### interface Ethernet1
-     ip address 10.0.1.2/31
+     ip address 10.0.1.0/31
      Description Peer-to-peer link  to Spine-1
 
-interface Ethernet2
-   ip address 10.0.1.2/31
-   Description Peer-to-peer link  to Spine-2
+#### interface Ethernet2
+     ip address 10.0.1.4/31
+     Description Peer-to-peer link  to Spine-2
 
   ## Конфигурация Leaf 2
 #### interface Loopback1<br>
-    description IP for underlay -Router-ID <br>
-    ip address 10.0.0.2/32 <br>
+    description IP for underlay -Router-ID 
+    ip address 10.0.0.2/32
 
-interface Ethernet1
-   ip address 10.0.0.4/31
-   Description Peer-to-peer link  to Spine-1
+#### interface Ethernet1
+     ip address 10.0.2.0/31
+     Description Peer-to-peer link  to Spine-1
 
-interface Ethernet2
-   ip address 10.0.1.4/31
-   Description Peer-to-peer link to Spine-2
+#### interface Ethernet2
+     ip address 10.0.2.4/31
+     Description Peer-to-peer link to Spine-2
 
-  ### Конфигурация Leaf 3
-interface Loopback1
-   ip address 10.0.0.0/32 ---?
+  ## Конфигурация Leaf 3
+#### interface Loopback1
+      description IP for underlay -Router-ID 
+      ip address 10.0.0.3/32
 
-interface Ethernet1
-   ip address 10.0.0.6/31
-   Description Peer-to-peer link to Spine-1
+#### interface Ethernet1
+     ip address 10.0.3.0/31
+     Description Peer-to-peer link to Spine-1
 
-interface Ethernet2
-   ip address 10.0.1.6/31
-   Description Peer-to-peer link to Spine-2
+#### interface Ethernet2
+     ip address 10.0.3.4/31
+     Description Peer-to-peer link to Spine-2
 
 
