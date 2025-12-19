@@ -21,7 +21,7 @@ loopback - /32
 
 # Разработанный адресный план для приведенной схемы сети приведен далее по тексту:
 ## Конфигурация коммутаторов уровня Spine
-# ----------[ конфигаруция для Spine Underlay Level]----------
+# ----[ конфигаруция для Spine Underlay Level]----
 ### Конфигурация spine 1
    
 interface Loopback1<br>
@@ -94,7 +94,7 @@ interface Ethernet3<br>
    ip address 10.0.1.5/31<br>
    Description Peer-to-peer link  to leaf-3<br>
 
-#  ----------[ Leaf Level]-------------
+#  -----[ Leaf Level]------
 ## Конфигурации коммутаторов уровня Leaf
    ### Конфигурация Leaf 1
 interface Loopback1
