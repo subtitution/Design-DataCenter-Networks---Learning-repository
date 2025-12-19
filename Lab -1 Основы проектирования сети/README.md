@@ -28,9 +28,9 @@ interface Loopback1<br>
   description IP for underlay -Router-ID <br>
   ip address 10.0.1.0/32<br>
 
-interface Loopback1<br>
-  description IP for underlay -Router-ID <br>
-  ip address 10.0.1.0/32<br>
+interface Loopback2<br>
+  description IP for overlay layer <br>
+  ip address 10.0.1.1/32<br>
 
 interface Ethernet1<br>
          ip address 10.0.0.1/31 <br>
