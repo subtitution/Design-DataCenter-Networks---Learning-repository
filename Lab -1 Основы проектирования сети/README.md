@@ -25,12 +25,12 @@ loopback - /32
 ## Конфигурация spine 1
    
 #### interface Loopback1<br>
-  description IP for underlay -Router-ID
-  ip address 10.0.1.1/32
+  description IP for underlay -Router-ID <br>
+  ip address 10.0.1.1/32 <br>
 
 #### interface Loopback2<br>
-  description IP for overlay layer
-  ip address 10.1.1.1/32
+  description IP for overlay layer <br>
+  ip address 10.1.1.1/32 <br>
 
 #### interface Ethernet1<br>
          ip address 10.2.1.1/31 
