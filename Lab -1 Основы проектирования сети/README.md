@@ -25,43 +25,43 @@ loopback - /32
    
 #### interface Loopback1<br>
   description IP for underlay -Router-ID <br>
-  ip address 10.0.1.1/32 <br>
+  ip address 10.1.1.1/32 <br>
 
 #### interface Loopback2<br>
   description IP for overlay layer <br>
-  ip address 10.1.1.1/32 <br>
+  ip address 10.1.1.2/32 <br>
 
 #### interface Ethernet1<br>
-         ip address 10.2.1.1/31 
+         ip address 10.0.1.1/31
          Description Peer-to-peer link  to leaf-1 
   
 #### interface Ethernet2<br>
-     ip address 10.2.1.2/31
+     ip address 10.0.2.1/31
      Description Peer-to-peer link  to leaf-2 
 
 #### interface Ethernet3<br>
-     ip address 10.2.1.3/31
+     ip address 10.0.3.1/31
      Description Peer-to-peer link  to leaf-3
 
 # Конфигурация spine 2
 #### interface Loopback1<br>
     description  IP for underlay -Router-ID  <br>
-    ip address 10.0.2.1/32<br>
+    ip address 10.2.2.1/32<br>
    
 #### interface Loopback2<br>
     description IP for overlay layer <br>
-    ip address 10.1.2.1/32<br>
+    ip address 10.2.2.2/32<br>
   
 ### interface Ethernet1<br>
-     ip address 10.2.2.1/31<br>
+     ip address 10.0.1.5/31<br>
      Description Peer-to-peer link  to leaf-1<br>
 
 ### interface Ethernet2<br>
-     ip address 10.2.2.2/31<br>
+     ip address 10.0.2.5/31<br>
      Description Peer-to-peer link  to leaf-2<br>
 
 ### interface Ethernet3<br>
-     ip address 10.2.2.3/31<br>
+     ip address 10.0.3.5/31<br>
      Description Peer-to-peer link  to leaf-3<br>
 
 # Конфигурации коммутаторов уровня Leaf
