@@ -5,6 +5,8 @@
   Распределите адресное пространство для Underlay сети.
 <img width="914" height="503" alt="image" src="https://github.com/user-attachments/assets/81fea0f3-7bb0-4fd1-a47d-48b8780de459" />
 Рукводствуясь следующими общими рекомендациями:
+<img width="1053" height="651" alt="image" src="https://github.com/user-attachments/assets/905d5bf4-1480-4dc0-af1a-fd38076b0f59" />
+
 p2p - /30, /31 или unnumbered
 loopback - /32
 Например:
