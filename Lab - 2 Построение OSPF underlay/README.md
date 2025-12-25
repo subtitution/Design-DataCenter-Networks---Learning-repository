@@ -20,19 +20,20 @@ interface Ethernet3<br>
          no switchport<br>
          ip address 192.168.1.1/24<br>
          <br> <br>
-- ####  Leaf 2, конфигурация порта в сторону хоста<br>
+- Leaf 2, конфигурация порта в сторону хоста<br>
 interface Ethernet5 <br>
    description -=Direction to hosts=-<br>
    no switchport<br>
    ip address 192.168.2.1/24<br>
 
 <br>
-- #### Leaf 3, конфигурация порта в сторону хоста<br>
+- Leaf 3, конфигурация порта в сторону хоста<br>
 interface Vlan3<br>
    ip address 192.168.3.1/24<br>
 <br><br>
    interface Ethernet3<br>
    switchport access vlan 3<br>
+
 
 
 
