@@ -111,28 +111,37 @@ loopback - /32
 Т.к. автоматическая маршрутизация, с использованием специальных протоколов не настроена,  впрочем и настройки статической маршрутизации также отсутсвуют, то мы сможем проверить  IP связность только смежных устройств, у которых имеется Directed connect.
 ### Проверим с leaf1 IP доступ до spine 1 и spine 2
 
-leaf1#ping 10.0.1.1
-PING 10.0.1.1 (10.0.1.1) 72(100) bytes of data.
-80 bytes from 10.0.1.1: icmp_seq=1 ttl=64 time=105 ms
-80 bytes from 10.0.1.1: icmp_seq=2 ttl=64 time=105 ms
-80 bytes from 10.0.1.1: icmp_seq=3 ttl=64 time=98.3 ms
-80 bytes from 10.0.1.1: icmp_seq=4 ttl=64 time=96.8 ms
-80 bytes from 10.0.1.1: icmp_seq=5 ttl=64 time=95.2 ms
+leaf1#ping 10.0.1.1 <br>
+PING 10.0.1.1 (10.0.1.1) 72(100) bytes of data. <br>
+80 bytes from 10.0.1.1: icmp_seq=1 ttl=64 time=105 ms <br>
+80 bytes from 10.0.1.1: icmp_seq=2 ttl=64 time=105 ms <br>
 
+<br>
+<br>
 
-leaf1#ping 10.0.1.5
-PING 10.0.1.5 (10.0.1.5) 72(100) bytes of data.
-80 bytes from 10.0.1.5: icmp_seq=1 ttl=64 time=48.8 ms
-80 bytes from 10.0.1.5: icmp_seq=2 ttl=64 time=42.9 ms
-80 bytes from 10.0.1.5: icmp_seq=3 ttl=64 time=64.3 ms
-80 bytes from 10.0.1.5: icmp_seq=4 ttl=64 time=64.9 ms
-80 bytes from 10.0.1.5: icmp_seq=5 ttl=64 time=70.5 ms
+leaf1#ping 10.0.1.5 <br>
+PING 10.0.1.5 (10.0.1.5) 72(100) bytes of data. <br>
+80 bytes from 10.0.1.5: icmp_seq=1 ttl=64 time=48.8 ms <br>
+80 bytes from 10.0.1.5: icmp_seq=2 ttl=64 time=42.9 ms <br>
+
 
 ### Теперь проверим доступ с leaf3
-leaf1#
-leaf1#ping 10.0.3.0
-connect: Network is unreachable
+leaf1# <br>
+leaf1#ping 10.0.3.0 <br>
+connect: Network is unreachable <br>
+<br>
+Разумеется доступа нет, т.к. не настроена маршрутизация. <br>
+<br>
+ ###   Аналогично проверим доступность spine1,2 с leaf 3
+leaf3# <br>
+leaf3#ping 10.0.3.1 <br>
+PING 10.0.3.1 (10.0.3.1) 72(100) bytes of data. <br>
+80 bytes from 10.0.3.1: icmp_seq=1 ttl=64 time=106 ms <br>
+80 bytes from 10.0.3.1: icmp_seq=2 ttl=64 time=95.8 ms <br>
 
-Разумеется доступа нет, т.к. не настроена маршрутизация.
-
+<br>
+<br>
+leaf3#ping 10.0.3.5<br>
+PING 10.0.3.5 (10.0.3.5) 72(100) bytes of data. <br>
+80 bytes from 10.0.3.5: icmp_seq=1 ttl=64 time=66.3 ms <br>
 
