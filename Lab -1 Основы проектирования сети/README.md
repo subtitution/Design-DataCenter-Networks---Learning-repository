@@ -125,7 +125,7 @@ PING 10.0.1.5 (10.0.1.5) 72(100) bytes of data. <br>
 80 bytes from 10.0.1.5: icmp_seq=2 ttl=64 time=42.9 ms <br>
 
 
-### Теперь проверим доступ с leaf3
+### Теперь проверим доступность leaf3
 leaf1# <br>
 leaf1#ping 10.0.3.0 <br>
 connect: Network is unreachable <br>
