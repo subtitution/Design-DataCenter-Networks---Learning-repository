@@ -8,6 +8,8 @@
 - Убедится в наличии IP связанности между устройствами в OSFP домене
 
 Возьмем для основы схему из 1-й лабораторной работы, к ней добавим IP подсети для конечных устройств, пример схемы L3 приведен ниже: <br>
+![Uploading image.png…]()
+
 
 <img width="667" height="595" alt="image" src="https://github.com/user-attachments/assets/846f5a0b-4241-4cc3-b04b-6adce141d9f8" />
 
@@ -36,6 +38,7 @@ interface Vlan3<br>
 <br><br>
    interface Ethernet3<br>
    switchport access vlan 3<br>
+
 
 
 
