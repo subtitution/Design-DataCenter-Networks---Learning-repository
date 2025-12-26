@@ -10,9 +10,6 @@
 Возьмем для основы схему из 1-й лабораторной работы, к ней добавим IP подсети для конечных устройств, пример схемы L3 приведен ниже: <br>
 ![Uploading image.png…]()
 
-
-<img width="667" height="595" alt="image" src="https://github.com/user-attachments/assets/846f5a0b-4241-4cc3-b04b-6adce141d9f8" />
-
 -- Тут должна быть схема, но она не вставляется, надеюсь позже она добавится. <br>
 Для Хостов которые будут жить за лифами будем использовать сеть 192.168.x.0/24 <br>
 где х - это номер leaf<br>
@@ -38,6 +35,7 @@ interface Vlan3<br>
 <br><br>
    interface Ethernet3<br>
    switchport access vlan 3<br>
+
 
 
 
