@@ -1,4 +1,4 @@
-<img width="1852" height="645" alt="image" src="https://github.com/user-attachments/assets/7426ee82-e005-4796-ac19-ce817f0b0ecc" /># Построение Underlay сети с использованием OSPF
+# Построение Underlay сети с использованием OSPF
 ## Цель:
 Настроить OSPF для Underlay сети.
 ### План работы
@@ -71,7 +71,9 @@ After this command entered, we can see the first message from leaf 1, you can se
 
 As you can see, после включения оспиэф, первое сообщение от роутера, это IGMP которое сообщает, что роутер присоединился к группе мультикасата с адресом  224.0.0.5 <br>
 ### Теперь, давайте рассмотрим первое Hello сообщение от Leaf1
+На рисунке ниже представлен скриншот сообщения, давайте посмотрим, на что стоит обратить внимание?
 ![Uploading image.png…]()
+
 
 
   
@@ -95,6 +97,7 @@ interface Vlan3<br>
 <br><br>
    interface Ethernet3<br>
    switchport access vlan 3<br>
+
 
 
 
