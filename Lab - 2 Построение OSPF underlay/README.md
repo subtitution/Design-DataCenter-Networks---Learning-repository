@@ -17,31 +17,31 @@
 где х - это номер leaf<br>
 Поехали:<br>
 ### 1. Давайте добавим SVI адреса и VLAN для подключения хостов<br>
-- Создаем vlan 1, для сети хостов
-  vlan 1
-   name Host_Network
-  - Согдаем интерфейс vlan 1
-    
-- interface Vlan1
-   ip address 192.168.1.1/24
-
-  Теперь проверим доступность хоста с ip адресом 192.168.1.2, который находится за 3-м ethernet портом:
-  leaf1#
-leaf1#ping 192.168.1.2
-PING 192.168.1.2 (192.168.1.2) 72(100) bytes of data.
-
---- 192.168.1.2 ping statistics ---
-5 packets transmitted, 0 received, 100% packet loss, time 43ms
-
-Хост не доступен, смотрим настройки порта eth3, который смотрит в сторону хоста:
-interface Ethernet3
-   description -=Direction to host=-
-   no switchport
-
-   Меняем конфигурацию порта на switchport, проверяем.
-   leaf1# ping 192.168.1.2
-PING 192.168.1.2 (192.168.1.2) 72(100) bytes of data.
-80 bytes from 192.168.1.2: icmp_seq=1 ttl=64 time=10.1 ms
+- Создаем vlan 1, для сети хостов <br>
+  vlan <br>
+   name Host_Network<br>
+  - Согдаем интерфейс vlan 1<br>
+    <br><br>
+- interface Vlan1<br>
+   ip address 192.168.1.1/24<br>
+<br><br>
+  Теперь проверим доступность хоста с ip адресом 192.168.1.2, который находится за 3-м ethernet портом:<br>
+  leaf1#<br>
+leaf1#ping 192.168.1.2<br>
+PING 192.168.1.2 (192.168.1.2) 72(100) bytes of data.<br>
+<br>
+--- 192.168.1.2 ping statistics ---<br>
+5 packets transmitted, 0 received, 100% packet loss, time 43ms<br>
+<br><br>
+Хост не доступен, смотрим настройки порта eth3, который смотрит в сторону хоста:<br>
+interface Ethernet3<br>
+   description -=Direction to host=-<br>
+   no switchport<br>
+<br><br>
+   Меняем конфигурацию порта на switchport, проверяем.<br>
+   leaf1# ping 192.168.1.2<br>
+PING 192.168.1.2 (192.168.1.2) 72(100) bytes of data.<br>
+80 bytes from 192.168.1.2: icmp_seq=1 ttl=64 time=10.1 ms<br>
 
 
   
@@ -65,6 +65,7 @@ interface Vlan3<br>
 <br><br>
    interface Ethernet3<br>
    switchport access vlan 3<br>
+
 
 
 
