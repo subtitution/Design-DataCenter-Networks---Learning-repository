@@ -1,4 +1,4 @@
-# Построение Underlay сети с использованием OSPF
+<img width="1852" height="645" alt="image" src="https://github.com/user-attachments/assets/7426ee82-e005-4796-ac19-ce817f0b0ecc" /># Построение Underlay сети с использованием OSPF
 ## Цель:
 Настроить OSPF для Underlay сети.
 ### План работы
@@ -16,7 +16,7 @@
 Для Хостов которые будут жить за лифами будем использовать сеть 192.168.x.0/24 <br>
 где х - это номер leaf<br>
 Поехали:<br>
-### 1. Давайте добавим SVI адреса и VLAN для подключения хостов<br>
+### 1. Давайте добавим SVI адреса и VLAN для подключения хостов - Настраиваем Leaf 1<br>
 - Создаем vlan 1, для сети хостов <br>
   vlan <br>
    name Host_Network<br>
@@ -42,7 +42,25 @@ interface Ethernet3<br>
    leaf1# ping 192.168.1.2<br>
 PING 192.168.1.2 (192.168.1.2) 72(100) bytes of data.<br>
 80 bytes from 192.168.1.2: icmp_seq=1 ttl=64 time=10.1 ms<br>
-### Включим ospf на интерфейсах eth1 and eth2 на leaf1, интерфейсы идут в сторону spein1 / spine 2
+
+## Включим ospf на интерфейсах eth1 and eth2 на leaf1, интерфейсы идут в сторону spein1 / spine 2
+leaf1(config)#int eth1<br>
+leaf1(config-if-Et1)#ip ospf area ?<br>
+  A.B.C.D         OSPF area-id in IP address format<br>
+  <0-4294967295>  OSPF area-id in decimal format<br>
+<br><br>
+leaf1(config-if-Et1)#ip ospf area 0.0.0.0<br>
+leaf1(config-if-Et1)#ip ospf network point-to-point<br>
+<br>
+Аналогичные настройки прописываем на интерфейсе eth2<br>
+<br>
+interface Ethernet2<br>
+   description Peer-to-peer link to Spine-2<br>
+   no switchport<br>
+  ** ip address 10.0.1.4/31 ** <br>
+   ip ospf network point-to-point<br>
+   ip ospf area 0.0.0.0<br>
+!
 
 <img width="1852" height="645" alt="image" src="https://github.com/user-attachments/assets/85545c79-6585-420d-bb8e-732b5feab880" />
 
@@ -68,6 +86,7 @@ interface Vlan3<br>
 <br><br>
    interface Ethernet3<br>
    switchport access vlan 3<br>
+
 
 
 
