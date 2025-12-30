@@ -43,7 +43,7 @@ interface Ethernet3<br>
 PING 192.168.1.2 (192.168.1.2) 72(100) bytes of data.<br>
 80 bytes from 192.168.1.2: icmp_seq=1 ttl=64 time=10.1 ms<br>
 
-## Включим ospf на интерфейсах eth1 and eth2 на leaf1, интерфейсы идут в сторону spein1 / spine 2
+## Настроим и включим ospf на интерфейсах eth1 and eth2 на leaf1, интерфейсы идут в сторону spein1 / spine 2
 leaf1(config)#int eth1<br>
 leaf1(config-if-Et1)#ip ospf area ?<br>
   A.B.C.D         OSPF area-id in IP address format<br>
@@ -57,13 +57,19 @@ leaf1(config-if-Et1)#ip ospf network point-to-point<br>
 interface Ethernet2<br>
    description Peer-to-peer link to Spine-2<br>
    no switchport<br>
-  ** ip address 10.0.1.4/31 ** <br>
+  ip address 10.0.1.4/31  <br>
    ip ospf network point-to-point<br>
    ip ospf area 0.0.0.0<br>
 !
+### try to enable OSPF proccess on leaf1
+leaf1(config)#router ospf 1<br>
+leaf1(config-router-ospf)#router-id 10.0.0.1<br>
+<br>
+After this command entered, we can see the first message from leaf 1, you can see it on screen below:
 
 <img width="1852" height="645" alt="image" src="https://github.com/user-attachments/assets/85545c79-6585-420d-bb8e-732b5feab880" />
 
+As you can see, после включения оспиэф, первое сообщение от роутера, это IGMP которое сообщает, что роутер присоединился к группе мультикасата с адресом  224.0.0.5 <br>
 
   
 #### Leaf 1, конфигурация порта в сторону хоста<br>
@@ -86,6 +92,7 @@ interface Vlan3<br>
 <br><br>
    interface Ethernet3<br>
    switchport access vlan 3<br>
+
 
 
 
