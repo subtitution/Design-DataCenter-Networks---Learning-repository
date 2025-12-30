@@ -72,7 +72,7 @@ After this command entered, we can see the first message from leaf 1, you can se
 As you can see, после включения оспиэф, первое сообщение от роутера, это IGMP которое сообщает, что роутер присоединился к группе мультикасата с адресом  224.0.0.5 <br>
 ### Теперь, давайте рассмотрим первое Hello сообщение от Leaf1
 На рисунке ниже представлен скриншот сообщения, давайте посмотрим, на что стоит обратить внимание?
-![Uploading image.png…]()
+<img width="909" height="255" alt="image" src="https://github.com/user-attachments/assets/0e347185-0416-4b54-b15b-42702ba0f0f4" />
 
 
 <img width="999" height="988" alt="image" src="https://github.com/user-attachments/assets/0b8c12a1-f606-4f24-ab9a-29c96d876c59" />
@@ -85,6 +85,9 @@ Max LSAs: 12000, Total LSAs: 1 <br>
 Type-5 Ext LSAs: 0 <br>
 ID               Type   Intf   Nbrs (full) RTR LSA NW LSA  SUM LSA ASBR LSA TYPE-7 LSA <br>
 0.0.0.0          normal 3      0    (0   ) 1       0       0       0       0 <br>
+
+![Uploading image.png…]()
+
 
    <br>
 #### Leaf 1, конфигурация порта в сторону хоста<br>
@@ -107,6 +110,7 @@ interface Vlan3<br>
 <br><br>
    interface Ethernet3<br>
    switchport access vlan 3<br>
+
 
 
 
