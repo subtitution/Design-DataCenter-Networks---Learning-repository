@@ -33,7 +33,7 @@ PING 192.168.1.2 (192.168.1.2) 72(100) bytes of data.<br>
 --- 192.168.1.2 ping statistics ---<br>
 5 packets transmitted, 0 received, 100% packet loss, time 43ms<br>
 <br><br>
-Хост не доступен, смотрим настройки порта eth3, который смотрит в сторону хоста:<br>
+Хост не доступен, проверяем настройки порта eth3, который смотрит в сторону хоста:<br>
 interface Ethernet3<br>
    description -=Direction to host=-<br>
    no switchport<br>
@@ -42,6 +42,9 @@ interface Ethernet3<br>
    leaf1# ping 192.168.1.2<br>
 PING 192.168.1.2 (192.168.1.2) 72(100) bytes of data.<br>
 80 bytes from 192.168.1.2: icmp_seq=1 ttl=64 time=10.1 ms<br>
+### Включим ospf на интерфейсах eth1 and eth2 на leaf1, интерфейсы идут в сторону spein1 / spine 2
+
+<img width="1852" height="645" alt="image" src="https://github.com/user-attachments/assets/85545c79-6585-420d-bb8e-732b5feab880" />
 
 
   
@@ -65,6 +68,7 @@ interface Vlan3<br>
 <br><br>
    interface Ethernet3<br>
    switchport access vlan 3<br>
+
 
 
 
