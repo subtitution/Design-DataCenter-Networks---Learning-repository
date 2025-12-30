@@ -78,7 +78,15 @@ As you can see, после включения оспиэф, первое соо�
 <img width="999" height="988" alt="image" src="https://github.com/user-attachments/assets/0b8c12a1-f606-4f24-ab9a-29c96d876c59" />
 
 
-  
+ip ospf summary <br>
+OSPF instance 1 with ID 10.0.0.1, VRF default <br>
+Time since last SPF: 12517 s <br>
+Max LSAs: 12000, Total LSAs: 1 <br>
+Type-5 Ext LSAs: 0 <br>
+ID               Type   Intf   Nbrs (full) RTR LSA NW LSA  SUM LSA ASBR LSA TYPE-7 LSA <br>
+0.0.0.0          normal 3      0    (0   ) 1       0       0       0       0 <br>
+
+   <br>
 #### Leaf 1, конфигурация порта в сторону хоста<br>
 <br> 
 interface Ethernet3<br>
@@ -99,6 +107,7 @@ interface Vlan3<br>
 <br><br>
    interface Ethernet3<br>
    switchport access vlan 3<br>
+
 
 
 
