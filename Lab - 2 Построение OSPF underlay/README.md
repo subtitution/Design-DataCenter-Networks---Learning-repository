@@ -74,6 +74,7 @@ As you can see, после включения оспиэф, первое соо�
 На рисунке ниже представлен скриншот сообщения, давайте посмотрим, на что стоит обратить внимание?
 ![Uploading 1-2. Hello ospf.PNG…]()
 
+<img width="999" height="988" alt="image" src="https://github.com/user-attachments/assets/0b8c12a1-f606-4f24-ab9a-29c96d876c59" />
 
 
   
@@ -97,6 +98,7 @@ interface Vlan3<br>
 <br><br>
    interface Ethernet3<br>
    switchport access vlan 3<br>
+
 
 
 
