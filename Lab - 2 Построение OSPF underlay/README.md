@@ -86,7 +86,7 @@ Type-5 Ext LSAs: 0 <br>
 ID               Type   Intf   Nbrs (full) RTR LSA NW LSA  SUM LSA ASBR LSA TYPE-7 LSA <br>
 0.0.0.0          normal 3      0    (0   ) 1       0       0       0       0 <br>
 
-![Uploading image.png…]()
+<img width="1035" height="185" alt="image" src="https://github.com/user-attachments/assets/420e9963-1945-4bb2-94c0-40b41e1d1936" />
 
 
    <br>
@@ -97,6 +97,39 @@ interface Ethernet3<br>
          no switchport<br>
          ip address 192.168.1.1/24<br>
          <br> <br>
+
+
+## Настройка Spine1
+
+### Проверка появления маршрутов OSPF
+
+spine1#sho ip route
+
+VRF: default
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ C        10.0.1.0/31 is directly connected, Ethernet1
+ O        10.0.1.4/31 [110/20] via 10.0.1.0, Ethernet1
+ C        10.0.2.0/31 is directly connected, Ethernet2
+ C        10.0.3.0/31 is directly connected, Ethernet3
+ C        10.1.1.1/32 is directly connected, Loopback1
+ C        10.1.1.2/32 is directly connected, Loopback2
+ O        192.168.1.0/24 [110/20] via 10.0.1.0, Ethernet1
+
+ ![Uploading image.png…]()
+
 ### Leaf 2, конфигурация порта в сторону хоста<br>
 interface Ethernet5 <br>
    description -=Direction to hosts=-<br>
@@ -110,6 +143,7 @@ interface Vlan3<br>
 <br><br>
    interface Ethernet3<br>
    switchport access vlan 3<br>
+
 
 
 
