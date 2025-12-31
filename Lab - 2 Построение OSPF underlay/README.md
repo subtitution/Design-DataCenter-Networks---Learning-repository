@@ -129,6 +129,16 @@ Gateway of last resort is not set
  O        192.168.1.0/24 [110/20] via 10.0.1.0, Ethernet1
 
  ![Uploading image.png…]()
+## Какие настройки добавили на Spine1 для работы OSPF?
+! <br>
+interface Ethernet1 <br>
+   description Peer-to-peer link to leaf-1<br>
+   no switchport<br>
+   ip address 10.0.1.1/31<br>
+ ###  ip ospf network point-to-point
+###   ip ospf area 0.0.0.0
+<br>
+<br>
 
 ### Leaf 2, конфигурация порта в сторону хоста<br>
 interface Ethernet5 <br>
@@ -143,6 +153,7 @@ interface Vlan3<br>
 <br><br>
    interface Ethernet3<br>
    switchport access vlan 3<br>
+
 
 
 
