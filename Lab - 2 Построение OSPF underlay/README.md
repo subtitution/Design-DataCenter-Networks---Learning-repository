@@ -128,7 +128,7 @@ Gateway of last resort is not set
  C        10.1.1.2/32 is directly connected, Loopback2
  O        192.168.1.0/24 [110/20] via 10.0.1.0, Ethernet1
 
- ![Uploading image.png…]()
+ <img width="1151" height="630" alt="image" src="https://github.com/user-attachments/assets/d4b78f39-3a0f-467c-9a12-36fe41819514" />
 ## Какие настройки добавили на Spine1 для работы OSPF?
 ! <br>
 interface Ethernet1 <br>
@@ -139,6 +139,7 @@ interface Ethernet1 <br>
 ###   ip ospf area 0.0.0.0
 <br>
 <br>
+![Uploading image.png…]()
 
 ### Leaf 2, конфигурация порта в сторону хоста<br>
 interface Ethernet5 <br>
@@ -153,6 +154,7 @@ interface Vlan3<br>
 <br><br>
    interface Ethernet3<br>
    switchport access vlan 3<br>
+
 
 
 
