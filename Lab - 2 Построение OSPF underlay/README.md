@@ -155,6 +155,9 @@ Leaf1 Шлет OSPF, LSA-1 <br>
 Spine1 понял, что не все послал, и решил сразу же кинуть еще один __LSA Update__ добавив туда peer to peer сеть, выделил желтым, смотрите: <br>
 ![alt text](image-10.png)
 <br>
+В знак взаимного уважения, LEAF1 ОТВЕЧАЕТ СООБЩЕНИЕМ __Link State Acknowledge__: <br>
+![alt text](image-11.png)
+<br>
 ### Проверка появления маршрутов OSPF
 
 spine1#sho ip route
