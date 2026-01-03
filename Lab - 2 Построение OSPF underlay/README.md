@@ -84,6 +84,14 @@ As you can see, после включения оспиэф, первое соо�
 2. Первое сообщение которое мы видим, это Hello, мы видим Hello Packet (1) сообщение 1-е
 3. In Source address we can see 10.0.1.0 - it's address of peer-to peer interface
 4. But in OSPF Header we can see that Source OSPF Router is: 10.0.0.1 , it's loopback interface that used like OSPF router ID.
+![alt text](<1-2-1. Hello ospf.PNG>)
+5. Мы видимо, что Designated router 0.0.0.0 еще не выбран.
+6. Выставлен бит 1, External routing Capable.
+7. Hello time interval = 10 sec
+8. Давайте проверим, что раз в 10 сек. шлются Хеллоу пакеты?
+![alt text](<1-2-2. Hello ospf-time interval-10.PNG>)
+![alt text](<1-2-3. Hello ospf-time interval-10.PNG>)
+Как видно разница по времени между фремом 27 и 28, равняется 10 Sec.
 
 <img width="909" height="255" alt="image" src="https://github.com/user-attachments/assets/0e347185-0416-4b54-b15b-42702ba0f0f4" />
 
