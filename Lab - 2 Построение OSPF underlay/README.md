@@ -129,9 +129,14 @@ spine1(config-router-ospf)#__router-id 10.1.1.1__<br>
 <br>
 Spine 1 отвечает аналогичным сообщением init, в нем практически ничего не отличается кроме cheksum
 <br>
-Leaf1 Шлет OSPF, LSA-1
+Leaf1 Шлет OSPF, LSA-1 <br>
 ![alt text](image-2.png)
+<br>
+Далее  видим сообщение __Link State request__ <br>
+![alt text](image-3.png) <br>
 
+Далее, в сообщении OSPF мы видим используется в качестве Router ID, значение интерфейса loopback2 spine 1, это довольно странно, чуть позже посморим конфигурацию спайн1. <br>
+![alt text](image-4.png)
 ### Проверка появления маршрутов OSPF
 
 spine1#sho ip route
