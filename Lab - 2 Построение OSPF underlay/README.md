@@ -149,6 +149,9 @@ Leaf1 Шлет OSPF, LSA-1 <br>
 После всех этих сообщений, spine1 соизволил ответить сообщением __Link State Acknowledge__, пример как обычно представлен под текстом: <br>
 ![alt text](image-8.png)
 <br>
+Затем после __Acknowledge__ spine1 посылает __Link State Update__ message; <br>
+![alt text](image-9.png)
+<br>
 ### Проверка появления маршрутов OSPF
 
 spine1#sho ip route
