@@ -142,8 +142,10 @@ Leaf1 Шлет OSPF, LSA-1 <br>
 ![alt text](image-5.png)
 <br>
 Далее Leaf1 продолжает свою активность, и в след за сообщением __Link state Update__, посылает __Link state Requet__, снизу представлен пример: <br>
-![alt text](image-6.png)
-
+![alt text](image-6.png) <br>
+В свою очередь leaf1 продолжает рассылать различные сообщения, и в этот раз решил послать ospf db description, что это бы значило, не понятно, но пример представлен снизу: <br>
+![alt text ](image-7.png)
+<br>
 ### Проверка появления маршрутов OSPF
 
 spine1#sho ip route
