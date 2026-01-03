@@ -108,7 +108,20 @@ interface Ethernet3<br>
          <br> <br>
 
 
-## Настройка Spine1
+# Настройка OSPF Spine1
+      spine1(config)#interface Loopback1 <br>
+      spine1(config-if-Lo1)#__ip ospf area 0.0.0.0__ <br>
+<br><br>
+spine1(config)#interface Ethernet1 <br>
+      spine1(config-if-Et1)#__ip ospf area 0.0.0.0__<br>
+      spine1(config-if-Et1)#__ip ospf network point-to-point__ <br>
+<br><br>
+Далее включаем OSPF процесс, командой, __Router ospf 1__ , пример ниже:<br>
+spine1(config)#__router ospf 1__<br>
+spine1(config-router-ospf)#__router-id 10.1.1.1__<br>
+<br> после чего начинает бегать OSPF, давайте более подробно рассмотрим, процесс, установления соседства между маршрутизаторами.
+
+
 
 ### Проверка появления маршрутов OSPF
 
