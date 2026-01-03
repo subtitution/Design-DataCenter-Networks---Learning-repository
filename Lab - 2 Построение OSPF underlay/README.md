@@ -136,11 +136,14 @@ Leaf1 Шлет OSPF, LSA-1 <br>
 ![alt text](image-3.png) <br>
 
 Далее, в сообщении OSPF мы видим используется в качестве Router ID, значение интерфейса loopback2 spine 1, это довольно странно, чуть позже посморим конфигурацию спайн1. <br>
-![alt text](image-4.png)
+![alt text](image-4.png) <br>
+А теперь ребята, мы видим, наконец-то пришел Link State Update, от нашего Leaf1, c перечислением 3-х подсетей, которые у него имеются.
+Ниже представлен скрин: <br>
+![alt text](image-5.png)
+<br>
 ### Проверка появления маршрутов OSPF
 
 spine1#sho ip route
-
 VRF: default
 Codes: C - connected, S - static, K - kernel,
        O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
