@@ -182,14 +182,14 @@ interface Ethernet2<br>
    description Peer-to-peer link to leaf-2<br>
    no switchport<br>
    ip address 10.0.2.5/31<br>
-   ip ospf network point-to-point<br>
-   ip ospf area 0.0.0.0<br>
+   __ip ospf network point-to-point__<br>
+   __ip ospf area 0.0.0.0__<br>
 !<br><br>
 interface Ethernet3<br>
    description Peer-to-peer link to leaf-3<br>
    no switchport<br>
    ip address 10.0.3.5/31<br>
-   ip ospf network point-to-point<br>
+   __ip ospf network point-to-point__<br>
 <br><br>
 
 ### Проверка появления маршрутов OSPF
