@@ -195,31 +195,14 @@ interface Ethernet3<br>
 ![alt text](image-12.png)<br>
 Как видно из трейса 42 сообщение, на Spine1 прилетает __Link State UPDATE__ сообщение, и вслед 43-м сообщением spine1 отвечает __Link State Acknowledge__<br>
 ![alt text](image-13.png)<br>
-### Проверка появления маршрутов OSPF
+### Проверка появления маршрутов OSPF<br>
+![alt text](image-15.png)
+<br>
+Обратите внимание, на leaf1 все маршруты приходят, только с интерфейса eth2, __но почему__? Где же дублирующие маршруты, которые должны приходить с eth1? Проверим настройки Spine1. <br>
+![alt text](image-14.png)
+Как видно из настроек spine 1, ospf не включен, на интерфейсах идущих к leaf2,3. Давайте же включим OSPF на интерфейсах eth 2/3 spine1
+<br>
 
-spine1#sho ip route
-VRF: default
-Codes: C - connected, S - static, K - kernel,
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
-       N2 - OSPF NSSA external type2, B - Other BGP Routes,
-       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
-       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
-       A O - OSPF Summary, NG - Nexthop Group Static Route,
-       V - VXLAN Control Service, M - Martian,
-       DH - DHCP client installed default route,
-       DP - Dynamic Policy Route, L - VRF Leaked,
-       G  - gRIBI, RC - Route Cache Route
-
-Gateway of last resort is not set
-
- C        10.0.1.0/31 is directly connected, Ethernet1
- O        10.0.1.4/31 [110/20] via 10.0.1.0, Ethernet1
- C        10.0.2.0/31 is directly connected, Ethernet2
- C        10.0.3.0/31 is directly connected, Ethernet3
- C        10.1.1.1/32 is directly connected, Loopback1
- C        10.1.1.2/32 is directly connected, Loopback2
- O        192.168.1.0/24 [110/20] via 10.0.1.0, Ethernet1
 
  <img width="1151" height="630" alt="image" src="https://github.com/user-attachments/assets/d4b78f39-3a0f-467c-9a12-36fe41819514" />
 ## Какие настройки добавили на Spine1 для работы OSPF?
