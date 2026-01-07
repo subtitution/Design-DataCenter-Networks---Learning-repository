@@ -191,7 +191,10 @@ interface Ethernet3<br>
    ip address 10.0.3.5/31<br>
    __ip ospf network point-to-point__<br>
 <br><br>
-
+После включения настроенной маршрутизации on spine2, командой ip routing, я снял трейс на spine 1, интерфейс eth1, примерно через 15 секунд, прилетелеи update с leaf1. <br>
+![alt text](image-12.png)<br>
+Как видно из трейса 42 сообщение, на Spine1 прилетает __Link State UPDATE__ сообщение, и вслед 43-м сообщением spine1 отвечает __Link State Acknowledge__<br>
+![alt text](image-13.png)<br>
 ### Проверка появления маршрутов OSPF
 
 spine1#sho ip route
