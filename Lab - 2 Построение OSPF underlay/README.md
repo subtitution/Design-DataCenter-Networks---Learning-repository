@@ -158,9 +158,39 @@ Spine1 понял, что не все послал, и решил сразу ж�
 В знак взаимного уважения, LEAF1 ОТВЕЧАЕТ СООБЩЕНИЕМ __Link State Acknowledge__: <br>
 ![alt text](image-11.png)
 <br>
-На этом наверное все! <br><br>
+<br><br>
 Далее они еще раз по очереди обменяются любезностями, вместе со своими пакетами, потом будут слать друг другу hello пакеты, <br>
-с таймером в 10 секунд, проверять не помер ли кто, вот в кратце как-то так. КОму инетесно ознакомиться с дампом, он тут:<br>
+с таймером в 10 секунд, проверять не помер ли кто, вот в кратце как-то так. 
+
+## Добавление аналогичных настроек ospf на spine2 и leaf2/3
+
+### Настройки spine2
+interface Loopback1 <br>
+   description IP for underlay -Router-ID <br>
+   ip address 10.2.2.1/32<br>
+   __ip ospf area 0.0.0.0__<br>
+<br>
+<br>
+interface Ethernet1<br>
+   description Peer-to-peer link to leaf-1<br>
+   no switchport<br>
+   ip address 10.0.1.5/31<br>
+   __ip ospf network point-to-point__ <br>
+   __ip ospf area 0.0.0.0__<br>
+!<br><br>
+interface Ethernet2<br>
+   description Peer-to-peer link to leaf-2<br>
+   no switchport<br>
+   ip address 10.0.2.5/31<br>
+   ip ospf network point-to-point<br>
+   ip ospf area 0.0.0.0<br>
+!<br><br>
+interface Ethernet3<br>
+   description Peer-to-peer link to leaf-3<br>
+   no switchport<br>
+   ip address 10.0.3.5/31<br>
+   ip ospf network point-to-point<br>
+<br><br>
 
 ### Проверка появления маршрутов OSPF
 
