@@ -199,7 +199,7 @@ interface Ethernet3<br>
 ![alt text](image-15.png)![alt text](image-16.png)
 <br>
 Обратите внимание, на leaf1 все маршруты приходят, только с интерфейса eth2, __но почему__? Где же дублирующие маршруты, которые должны приходить с eth1? Проверим настройки Spine1. <br>
-![alt text](image-14.png)
+![alt text](image-14.png)<br>
 Как видно из настроек spine 1, ospf не включен, на интерфейсах идущих к leaf2,3. Давайте же включим OSPF на интерфейсах eth 2/3 spine1
 <br>
 Вот так выглядят настройки интерфесов, после внесения дополнений: <br>
@@ -217,33 +217,9 @@ interface Ethernet3<br>
    __ip ospf network point-to-point__<br>
    __ip ospf area 0.0.0.0__<br>
 <br><br>
-
- <img width="1151" height="630" alt="image" src="https://github.com/user-attachments/assets/d4b78f39-3a0f-467c-9a12-36fe41819514" />
-## Какие настройки добавили на Spine1 для работы OSPF?
-! <br>
-interface Ethernet1 <br>
-   description Peer-to-peer link to leaf-1<br>
-   no switchport<br>
-   ip address 10.0.1.1/31<br>
- ###  ip ospf network point-to-point
-###   ip ospf area 0.0.0.0
-<br>
-<br>
-![Uploading image.png…]()
-
-### Leaf 2, конфигурация порта в сторону хоста<br>
-interface Ethernet5 <br>
-   description -=Direction to hosts=-<br>
-   no switchport<br>
-   ip address 192.168.2.1/24<br>
-
-<br>
-#### Leaf 3, конфигурация порта в сторону хоста<br>
-interface Vlan3<br>
-   ip address 192.168.3.1/24<br>
-<br><br>
-   interface Ethernet3<br>
-   switchport access vlan 3<br>
+После добавления этих строк, маршруты прилетели со spine1, ниже на рисунке представлен вывод ospf маршрутов как видно, теперь каждая сеть доступна через Spine1 и Spine 2. <br>
+![alt text](image-17.png)<br>
+ 
 
 
 
