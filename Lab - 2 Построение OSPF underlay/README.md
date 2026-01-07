@@ -196,13 +196,27 @@ interface Ethernet3<br>
 Как видно из трейса 42 сообщение, на Spine1 прилетает __Link State UPDATE__ сообщение, и вслед 43-м сообщением spine1 отвечает __Link State Acknowledge__<br>
 ![alt text](image-13.png)<br>
 ### Проверка появления маршрутов OSPF<br>
-![alt text](image-15.png)
+![alt text](image-15.png)![alt text](image-16.png)
 <br>
 Обратите внимание, на leaf1 все маршруты приходят, только с интерфейса eth2, __но почему__? Где же дублирующие маршруты, которые должны приходить с eth1? Проверим настройки Spine1. <br>
 ![alt text](image-14.png)
 Как видно из настроек spine 1, ospf не включен, на интерфейсах идущих к leaf2,3. Давайте же включим OSPF на интерфейсах eth 2/3 spine1
 <br>
-
+Вот так выглядят настройки интерфесов, после внесения дополнений: <br>
+interface Ethernet2 <br>
+   description Peer-to-peer link to leaf-2<br>
+   no switchport<br>
+   ip address 10.0.2.1/31<br>
+   __ip ospf network point-to-point__<br>
+   __ip ospf area 0.0.0.0__<br>
+!<br><br>
+interface Ethernet3<br>
+   description Peer-to-peer link to leaf-3<br>
+   no switchport<br>
+   ip address 10.0.3.1/31<br>
+   __ip ospf network point-to-point__<br>
+   __ip ospf area 0.0.0.0__<br>
+<br><br>
 
  <img width="1151" height="630" alt="image" src="https://github.com/user-attachments/assets/d4b78f39-3a0f-467c-9a12-36fe41819514" />
 ## Какие настройки добавили на Spine1 для работы OSPF?
