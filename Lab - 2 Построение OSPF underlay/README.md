@@ -220,7 +220,14 @@ interface Ethernet3<br>
 После добавления этих строк, маршруты прилетели со spine1, ниже на рисунке представлен вывод ospf маршрутов как видно, теперь каждая сеть доступна через Spine1 и Spine 2. <br>
 ![alt text](image-17.png)<br>
 Ну и на последок, пинганем с хоста интерфейс leaf3: <br>
-![alt text](image-18.png) 
+![alt text](image-18.png) <br>
+### Используемые команды: <br>
+- show ip ospf summary
+- show ip ospf
+- show ip ospf neighbor
+- show run section ospf
+- show log
+
 
 
 
