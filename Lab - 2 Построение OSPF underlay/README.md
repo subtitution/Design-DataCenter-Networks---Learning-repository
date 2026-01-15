@@ -227,6 +227,9 @@ interface Ethernet3<br>
 - show ip ospf neighbor
 - show run section ospf
 - show log
+  <img width="972" height="616" alt="image" src="https://github.com/user-attachments/assets/7ba9e442-e163-498e-b173-f84bf571af09" />
+
+
 
 
 
