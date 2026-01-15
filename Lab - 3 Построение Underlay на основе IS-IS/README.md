@@ -25,8 +25,8 @@ is-type level-1 <br>
  Ниже пример, как выглядит первый пакет Hello <br>
 <img width="647" height="840" alt="image" src="https://github.com/user-attachments/assets/d784756e-83e9-4a11-9f01-4327acfd6d36" /> <br>
 Далее включаем на интерфейсе eth1 __ISIS network point-to-point__ <br> 
-И сразу стоит обратить внимание, после включения меняется Destination mac adress, с бродкаста, на __какой-то другой.__ А также меняется PDU на Point-to-Point
-<img width="715" height="872" alt="image" src="https://github.com/user-attachments/assets/572a2099-fb80-43ca-b13b-d40856e025d7" />
+И сразу стоит обратить внимание, после включения меняется Destination mac adress, с бродкаста, на __какой-то другой.__ А также меняется PDU на Point-to-Point <br>
+<img width="715" height="872" alt="image" src="https://github.com/user-attachments/assets/572a2099-fb80-43ca-b13b-d40856e025d7" /> <br>
 
 
 
