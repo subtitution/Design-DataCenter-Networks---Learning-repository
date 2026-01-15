@@ -8,6 +8,8 @@
   - Использовать BFD в реальной жизни ( В лабе использовать не буду)
   - Для одного POD достаточно соединить всё L1 линками.
 <br>
+<img width="1053" height="651" alt="image" src="https://github.com/user-attachments/assets/4e18dff0-3110-4546-ab92-8426583554c1" />
+
 
 # 1. Настроим соседство с leaf-1 и Spine-1, leaf-1 и Spine-2 <br><br>
 leaf1# __sho run section isis__  <br>
@@ -20,5 +22,8 @@ is-type level-1 <br>
 !<br>
  address-family ipv4 unicast<br>
  Ниже пример, как выглядит первый пакет Hello <br>
-<img width="647" height="840" alt="image" src="https://github.com/user-attachments/assets/d784756e-83e9-4a11-9f01-4327acfd6d36" />
+<img width="647" height="840" alt="image" src="https://github.com/user-attachments/assets/d784756e-83e9-4a11-9f01-4327acfd6d36" /> <br>
+Далее включаем на интерфейсе eth1 __ISIS network point-to-point__ <br>
+<img width="562" height="506" alt="image" src="https://github.com/user-attachments/assets/dfbd65eb-bd65-4662-9edb-b22b548b33d5" />
+
 
