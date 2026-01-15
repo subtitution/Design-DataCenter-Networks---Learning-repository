@@ -19,4 +19,6 @@ router isis Underlay1 <br>
          is-type level-1 <br>
    !<br>
       address-family ipv4 unicast<br>
-    
+      Ниже пример, как выглядит первый пакет Hello <br>
+      <img width="647" height="840" alt="image" src="https://github.com/user-attachments/assets/d784756e-83e9-4a11-9f01-4327acfd6d36" />
+
