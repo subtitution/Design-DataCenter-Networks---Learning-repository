@@ -17,7 +17,7 @@ leaf1# __sho run section isis__  <br>
 interface Ethernet1<br>
 __isis enable Underlay1__ ! __После включения данной команды на интерфейсе, начали бегать ISIS пакеты__ 
 <br><br>
-router isis Underlay1 <br>
+__router isis Underlay1__ <br>
 net 49.0000.0000.0000.0001.00 <br>
 is-type level-1 <br>
 !<br>
