@@ -30,6 +30,31 @@ is-type level-1 <br>
 А также меняется PDU type   PDU type: __L1 HELLO (15)__ <br>
 На -->  PDU Type: __P2P HELLO (17)__ на Point-to-Point <br>
 <img width="715" height="872" alt="image" src="https://github.com/user-attachments/assets/572a2099-fb80-43ca-b13b-d40856e025d7" /> <br>
-
+<br>
+### Итоговые настройки ISIS на Leaf1:<br>
+leaf1#sho run section isis<br>
+interface Ethernet1<br>
+         isis enable Underlay1<br>
+         isis network point-to-point<br>
+interface Loopback1<br>
+      isis enable Underlay1<br>
+router isis Underlay1<br>
+         net 49.0000.0000.0000.0001.00<br>
+         is-type level-1<br>
+   !<br>
+   address-family ipv4 unicast<br>
+## 1.2. Произведем аналогичные настройки ISIS на Spine1 <br>
+Вот такие настройки на spine1:<br>
+spine1#sho run section isis<br>
+interface Ethernet1<br>
+   isis enable Underlay1<br>
+   isis network point-to-point<br>
+interface Loopback1<br>
+   isis enable Underlay1<br>
+router isis Underlay1<br>
+   net 49.0000.0000.0000.0011.00<br>
+   is-type level-1<br>
+   !<br>
+   address-family ipv4 unicast<br><br>
 
 
