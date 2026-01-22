@@ -33,12 +33,12 @@ is-type level-1 <br>
 <br>
 ### Итоговые настройки ISIS на Leaf1:<br>
 leaf1#sho run section isis<br><br>
-interface Ethernet1<br>
+__interface Ethernet1__<br>
          isis enable Underlay1<br>
          isis network point-to-point<br>
-interface Loopback1<br>
+__interface Loopback1__<br>
       isis enable Underlay1<br>
-router isis Underlay1<br>
+__router isis Underlay1__<br>
          net 49.0000.0000.0000.0001.00<br>
          is-type level-1<br>
    !<br>
@@ -49,9 +49,9 @@ spine1#sho run section isis<br> <br>
 __interface Ethernet1__<br>
    isis enable Underlay1<br>
    isis network point-to-point<br>
-interface Loopback1<br>
+__interface Loopback1__<br>
    isis enable Underlay1<br>
-router isis Underlay1<br>
+__router isis Underlay1__<br>
    net 49.0000.0000.0000.0011.00<br>
    is-type level-1<br>
    !<br>
