@@ -32,7 +32,7 @@ is-type level-1 <br>
 <img width="715" height="872" alt="image" src="https://github.com/user-attachments/assets/572a2099-fb80-43ca-b13b-d40856e025d7" /> <br>
 <br>
 ### Итоговые настройки ISIS на Leaf1:<br>
-leaf1#sho run section isis<br>
+leaf1#sho run section isis<br><br>
 interface Ethernet1<br>
          isis enable Underlay1<br>
          isis network point-to-point<br>
@@ -45,8 +45,8 @@ router isis Underlay1<br>
    address-family ipv4 unicast<br>
 ## 1.2. Произведем аналогичные настройки ISIS на Spine1 <br>
 Вот такие настройки на spine1:<br>
-spine1#sho run section isis<br>
-interface Ethernet1<br>
+spine1#sho run section isis<br> <br>
+__interface Ethernet1__<br>
    isis enable Underlay1<br>
    isis network point-to-point<br>
 interface Loopback1<br>
