@@ -56,5 +56,7 @@ __router isis Underlay1__<br>
    is-type level-1<br>
    !<br>
    address-family ipv4 unicast<br><br>
+Полезная команда (__sho isis spf log__), просмотреть историю отношений: <br>
+<img width="876" height="165" alt="image" src="https://github.com/user-attachments/assets/085eca66-f639-40ae-8f45-4bc50545b1c9" />
 
 
