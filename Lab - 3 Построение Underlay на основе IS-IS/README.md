@@ -13,6 +13,7 @@
 
 
 # 1. Настроим соседство с leaf-1 и Spine-1, leaf-1 и Spine-2 <br><br>
+## 1.1. Произведем настройки на Leaf1 <br>
 leaf1# __sho run section isis__  <br>
 interface Ethernet1<br>
 __isis enable Underlay1__ ! __После включения данной команды на интерфейсе, начали бегать ISIS пакеты__ 
@@ -22,7 +23,7 @@ net 49.0000.0000.0000.0001.00 <br>
 is-type level-1 <br>
 !<br>
  address-family ipv4 unicast<br>
- Ниже пример, как выглядит первый пакет Hello <br>
+ Ниже пример, как выглядит первый пакет __Hello__ <br>
 <img width="647" height="840" alt="image" src="https://github.com/user-attachments/assets/d784756e-83e9-4a11-9f01-4327acfd6d36" /> <br>
 Далее включаем на интерфейсе eth1 __ISIS network point-to-point__ <br> 
 И сразу стоит обратить внимание, после включения меняется Destination mac adress, с бродкаста, на __какой-то другой.__ А также меняется PDU на Point-to-Point <br>
