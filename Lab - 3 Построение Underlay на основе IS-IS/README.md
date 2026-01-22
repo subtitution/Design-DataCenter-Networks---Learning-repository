@@ -72,6 +72,12 @@ __router isis Underlay1__<br>
 - PDU Type: P2P Hello
 - SystemID: 0000.0000.0013
 - Point-to-Point Adjacency State: __Down__
+- Все сообщения посылаются в "общую песочницу", некий такой мультикаст-бродкаст адрес: 0900:2b00:0005
+<br>
+  В данной песочнице, Spine1 увидел сообщение Hello и говорит, "давай дружить", посылая в ответ также Hello сообщение, Но Adjacency State: Initializing <br>
+  Скрин ниже: <br>
+  <img width="777" height="561" alt="image" src="https://github.com/user-attachments/assets/d1a69dc3-6ada-42b7-85f4-fa9f258fde46" />
+
 
 
 
