@@ -81,7 +81,18 @@ __router isis Underlay1__<br>
   <img width="913" height="491" alt="image" src="https://github.com/user-attachments/assets/51860762-09b4-4a36-b83b-19780b449e1e" /> <br>
   После установления сосдства, маршрутизаторы начинают обмениваться сообщениями CSNP (Complete Sequence Number PDU (CSNP) в протоколе IS-IS — это пакет, содержащий полный список всех LSP (Link State PDU) в базе данных (LSDB) маршрутизатора)  (это аналог DB (database Description в OSPF)) <br>
   Ниже пример CSNP сообщения (Spine1, шлёт leaf1 информацию, и говорит, смотри, что у меня есть:))<br>
-  <img width="731" height="734" alt="image" src="https://github.com/user-attachments/assets/9190024a-8a1f-4650-af1d-195a1c191750" />
+  <img width="731" height="734" alt="image" src="https://github.com/user-attachments/assets/9190024a-8a1f-4650-af1d-195a1c191750" /><b3>
+  ## 3. Проверка маршрутов и связности
+  Просмотрим информацию о соседях например на leaf3: <br>
+   <img width="857" height="95" alt="image" src="https://github.com/user-attachments/assets/0017f043-9364-4d94-82db-ebf11dbe2e5d" /> <br>
+   Теперь давайте взглянем на анонсированные сети и через какие интерфейсы они доступны?:<br>
+   <img width="539" height="414" alt="image" src="https://github.com/user-attachments/assets/784af28c-19db-4cac-a528-995f7fa8fe99" /> <br>
+   Очень информативная команда, которая мне понравилась, это просмотр топологии isis, снизу пример вывода, думаю комментарии излишни и так все понятно:
+  <img width="703" height="195" alt="image" src="https://github.com/user-attachments/assets/d18805a5-d9f4-448d-91b5-893438e73d46" /><br>
+
+   
+
+
 
 
 
