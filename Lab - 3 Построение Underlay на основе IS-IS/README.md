@@ -64,6 +64,14 @@ __router isis Underlay1__<br>
 Второе сообщение: <br>
 <img width="1849" height="742" alt="image" src="https://github.com/user-attachments/assets/f738f19e-99be-4715-8096-f9fbf8c9a5e6" />
 
+## 1.3. Добавим аналогичные настройки на Spine2, leaf2,leaf3
+После добавления настроек на оставшееся оборудование, мне удалось запечатлить момент установки взаимотношений, между leaf3 и соседями.<br>
+Ниже представлен скриншот первого сообщения во внешние интерфейсы, посланное leaf3 <br>
+<img width="851" height="676" alt="image" src="https://github.com/user-attachments/assets/ed120846-02a1-4a04-bf77-754860cb0688" /><br>
+В данном сообщении, мы видим следующее:<br>
+- PDU Type: P2P Hello
+- SystemID: 0000.0000.0013
+- Point-to-Point Adjacency State: __Down__
 
 
 
