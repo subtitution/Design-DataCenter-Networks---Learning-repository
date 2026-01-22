@@ -76,7 +76,11 @@ __router isis Underlay1__<br>
 <br>
   В данной песочнице, Spine1 увидел сообщение Hello и говорит, "давай дружить", посылая в ответ также Hello сообщение, Но Adjacency State: Initializing <br>
   Скрин ниже: <br>
-  <img width="777" height="561" alt="image" src="https://github.com/user-attachments/assets/d1a69dc3-6ada-42b7-85f4-fa9f258fde46" />
+ <img width="765" height="491" alt="image" src="https://github.com/user-attachments/assets/5092d7db-33ee-4491-8646-365371933221" /><br>
+  И вот на __3-м__ сообщении, они договорились дружить, и быть соседями <br>
+  <img width="913" height="491" alt="image" src="https://github.com/user-attachments/assets/51860762-09b4-4a36-b83b-19780b449e1e" />
+
+
 
 
 
