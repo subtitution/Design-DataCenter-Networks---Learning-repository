@@ -81,7 +81,8 @@ __router isis Underlay1__<br>
   <img width="913" height="491" alt="image" src="https://github.com/user-attachments/assets/51860762-09b4-4a36-b83b-19780b449e1e" /> <br>
   После установления сосдства, маршрутизаторы начинают обмениваться сообщениями CSNP (Complete Sequence Number PDU (CSNP) в протоколе IS-IS — это пакет, содержащий полный список всех LSP (Link State PDU) в базе данных (LSDB) маршрутизатора)  (это аналог DB (database Description в OSPF)) <br>
   Ниже пример CSNP сообщения (Spine1, шлёт leaf1 информацию, и говорит, смотри, что у меня есть:))<br>
-  <img width="731" height="734" alt="image" src="https://github.com/user-attachments/assets/9190024a-8a1f-4650-af1d-195a1c191750" /><br>
+  <img width="731" height="734" alt="image" src="https://github.com/user-attachments/assets/e6b7a72f-23ae-455d-a006-fb51f5334d95" />
+<br>
   ## 3. Проверка маршрутов и связности <br>
   Просмотрим информацию о соседях например на leaf3: <br>
    <img width="857" height="95" alt="image" src="https://github.com/user-attachments/assets/0017f043-9364-4d94-82db-ebf11dbe2e5d" /> <br>
