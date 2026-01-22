@@ -87,8 +87,10 @@ __router isis Underlay1__<br>
    <img width="857" height="95" alt="image" src="https://github.com/user-attachments/assets/0017f043-9364-4d94-82db-ebf11dbe2e5d" /> <br>
    Теперь давайте взглянем на анонсированные сети и через какие интерфейсы они доступны?:<br>
    <img width="539" height="414" alt="image" src="https://github.com/user-attachments/assets/784af28c-19db-4cac-a528-995f7fa8fe99" /> <br>
-   Очень информативная команда, которая мне понравилась, это просмотр топологии isis, снизу пример вывода, думаю комментарии излишни и так все понятно:
+   Очень информативная команда, которая мне понравилась, это просмотр топологии isis, снизу пример вывода, думаю комментарии излишни и так все понятно: <br>
   <img width="703" height="195" alt="image" src="https://github.com/user-attachments/assets/d18805a5-d9f4-448d-91b5-893438e73d46" /><br>
+Ну и на последок, я добавил в анонсы сеть 192.168.1.0/24, на leaf1, проверим и пинганем хост, который подключен к leaf1. <br>
+<img width="473" height="579" alt="image" src="https://github.com/user-attachments/assets/985917da-3d56-483d-9ed8-7bcc25d1a95e" />
 
    
 
