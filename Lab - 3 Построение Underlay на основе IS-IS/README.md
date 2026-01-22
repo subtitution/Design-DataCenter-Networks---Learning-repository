@@ -92,6 +92,7 @@ __router isis Underlay1__<br>
 Ну и на последок, я добавил в анонсы сеть 192.168.1.0/24, на leaf1, проверим и пинганем хост, который подключен к leaf1. <br>
 <img width="473" height="579" alt="image" src="https://github.com/user-attachments/assets/985917da-3d56-483d-9ed8-7bcc25d1a95e" /> <br>
 Имитируем отказ одного линка, выключаем порт в сторону Spine 1, и проверяем трейсом, до выключения трафик шел через spine1, после отключения, трафик пошел через Spine2. <br>
+<br>
 <img width="580" height="675" alt="image" src="https://github.com/user-attachments/assets/d086a662-8837-451d-b728-3343a7e239b8" />
 
 
