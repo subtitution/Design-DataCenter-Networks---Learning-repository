@@ -79,7 +79,7 @@ __router isis Underlay1__<br>
  <img width="765" height="491" alt="image" src="https://github.com/user-attachments/assets/5092d7db-33ee-4491-8646-365371933221" /><br>
   И вот на __3-м__ сообщении, они договорились дружить, и быть соседями <br>
   <img width="913" height="491" alt="image" src="https://github.com/user-attachments/assets/51860762-09b4-4a36-b83b-19780b449e1e" /> <br>
-  После установления сосдства, маршрутизаторы начинают обмениваться сообщениями CSNP (это аналог DB (database Description в OSPF)) <br>
+  После установления сосдства, маршрутизаторы начинают обмениваться сообщениями CSNP (Complete Sequence Number PDU (CSNP) в протоколе IS-IS — это пакет, содержащий полный список всех LSP (Link State PDU) в базе данных (LSDB) маршрутизатора)  (это аналог DB (database Description в OSPF)) <br>
   Ниже пример CSNP сообщения (Spine1, шлёт leaf1 информацию, и говорит, смотри, что у меня есть:))<br>
   <img width="731" height="734" alt="image" src="https://github.com/user-attachments/assets/9190024a-8a1f-4650-af1d-195a1c191750" />
 
