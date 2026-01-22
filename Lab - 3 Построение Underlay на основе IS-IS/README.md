@@ -31,7 +31,7 @@ is-type level-1 <br>
 На -->  PDU Type: __P2P HELLO (17)__ на Point-to-Point <br>
 <img width="715" height="872" alt="image" src="https://github.com/user-attachments/assets/572a2099-fb80-43ca-b13b-d40856e025d7" /> <br>
 <br>
-### Итоговые настройки ISIS на Leaf1:<br>
+## Итоговые настройки ISIS на Leaf1: <br>
 leaf1#sho run section isis<br><br>
 __interface Ethernet1__<br>
          isis enable Underlay1<br>
@@ -81,7 +81,7 @@ __router isis Underlay1__<br>
   <img width="913" height="491" alt="image" src="https://github.com/user-attachments/assets/51860762-09b4-4a36-b83b-19780b449e1e" /> <br>
   После установления сосдства, маршрутизаторы начинают обмениваться сообщениями CSNP (Complete Sequence Number PDU (CSNP) в протоколе IS-IS — это пакет, содержащий полный список всех LSP (Link State PDU) в базе данных (LSDB) маршрутизатора)  (это аналог DB (database Description в OSPF)) <br>
   Ниже пример CSNP сообщения (Spine1, шлёт leaf1 информацию, и говорит, смотри, что у меня есть:))<br>
-  <img width="731" height="734" alt="image" src="https://github.com/user-attachments/assets/9190024a-8a1f-4650-af1d-195a1c191750" /><b3>
+  <img width="731" height="734" alt="image" src="https://github.com/user-attachments/assets/9190024a-8a1f-4650-af1d-195a1c191750" /><br>
   ## 3. Проверка маршрутов и связности
   Просмотрим информацию о соседях например на leaf3: <br>
    <img width="857" height="95" alt="image" src="https://github.com/user-attachments/assets/0017f043-9364-4d94-82db-ebf11dbe2e5d" /> <br>
