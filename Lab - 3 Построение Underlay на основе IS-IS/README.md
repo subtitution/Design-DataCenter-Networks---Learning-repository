@@ -57,8 +57,14 @@ __router isis Underlay1__<br>
    !<br>
    address-family ipv4 unicast<br><br>
 Полезная команда (__sho isis spf log__), просмотреть историю отношений: <br>
-<img width="876" height="165" alt="image" src="https://github.com/user-attachments/assets/085eca66-f639-40ae-8f45-4bc50545b1c9" /><br>
-<img width="876" height="166" alt="image" src="https://github.com/user-attachments/assets/8b5eec30-8d9e-4f05-adfe-59c2b5a36d55" />
+<br>
+<img width="876" height="166" alt="image" src="https://github.com/user-attachments/assets/8b5eec30-8d9e-4f05-adfe-59c2b5a36d55" /><br>
+Первый пакет от Spine1, после включения ISIS <br>
+<img width="1637" height="706" alt="image" src="https://github.com/user-attachments/assets/6b91d7fa-45b0-4525-abf3-dad2fae72bbf" /> <br>
+Второе сообщение: <br>
+<img width="1849" height="742" alt="image" src="https://github.com/user-attachments/assets/f738f19e-99be-4715-8096-f9fbf8c9a5e6" />
+
+
 
 
 
