@@ -16,7 +16,8 @@
 Начну повествование к данной работе в стиле Квентина Тарантина, с середины... <br>
 Предисловие: bgp настроен на всех Leaf и Spine. <br>
 Давайте внимательно посмотрим на вывод команды: _show ip bgp_  которую выполним на leaf1<br>
-![Uploading image.png…]()
+<img width="1247" height="383" alt="image" src="https://github.com/user-attachments/assets/f8e22d69-58d8-4e73-8279-c060e094243f" />
+<br>
 
 
 
