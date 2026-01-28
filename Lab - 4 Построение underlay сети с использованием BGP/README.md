@@ -18,6 +18,13 @@
 Давайте внимательно посмотрим на вывод команды: _show ip bgp_  которую выполним на leaf1<br>
 <img width="1247" height="383" alt="image" src="https://github.com/user-attachments/assets/f8e22d69-58d8-4e73-8279-c060e094243f" />
 <br>
+Итак, мы видим IP Loopback адресов Leaf2,3, но __Next hop__ очевидно не похож на адреса spine 1 и spine 2. <br>
+И правильно, мой дорогой, внимательный читатель, все Верно, на Spine коммутаторах я забыл ввести вот такю вот команду: _neighbor UNDERLAY next-hop-self_ <br>
+И добавляем на spine 1,2 в настройки bgp команду: _neighbor UNDERLAY next-hop-self_ <br>
+После возвращаемся на leaf1, и проверяемб что поменялось: <br>
+<img width="1235" height="449" alt="image" src="https://github.com/user-attachments/assets/ef2d9cf8-c54a-489f-8227-906895829f4a" /><br>
+Видно ТЕПЕРЬ, что адреса Next-hop поменялись, на адреса Spine-ов, про которые Leaf1 имеет представление. <br>
+
 
 
 
