@@ -12,6 +12,9 @@
 <br><br><img width="527" height="326" alt="laba" src="https://github.com/user-attachments/assets/a7e00c82-9960-4a15-851a-bd3a9f01a8b0" />
 <br>
 Сверху, представлена схема используемой сети. <br>
+<br>
+Начну повествование к данной работе в стиле Квентина Тарантина, с середины... <br>
+__Предисловие__: bgp настроен на всех Leaf и Spine. <br>
 
 leaf2#sho run section bgp  <br>
 router bgp 65500  <br>
