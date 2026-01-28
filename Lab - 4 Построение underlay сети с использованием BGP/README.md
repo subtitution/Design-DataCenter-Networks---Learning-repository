@@ -23,8 +23,10 @@
 И добавляем на spine 1,2 в настройки bgp команду: _neighbor UNDERLAY next-hop-self_ <br>
 После возвращаемся на leaf1, и проверяемб что поменялось: <br>
 <img width="1235" height="449" alt="image" src="https://github.com/user-attachments/assets/ef2d9cf8-c54a-489f-8227-906895829f4a" /><br>
-Видно ТЕПЕРЬ, что адреса Next-hop поменялись, на адреса Spine-ов, про которые Leaf1 имеет представление. <br>
-
+Видно ТЕПЕРЬ, что адреса __Next-hop__ поменялись, на адреса Spine-ов, про которые Leaf1 имеет представление. <br>
+Конечно же проверим IP связность между loopback адресами, связь есть, ниже пример: <br>
+<img width="983" height="1116" alt="image" src="https://github.com/user-attachments/assets/da3d6896-f47e-40aa-8a27-7a80780764dc" />
+<br>
 
 
 
