@@ -280,5 +280,6 @@ Spine2(10.0.3.5) иницирует tcp сессию, отправив паке�
 <img width="1014" height="824" alt="image" src="https://github.com/user-attachments/assets/ab0610a1-ed56-4bab-ac7e-c82212cff955" />
 <br>
 2-й пакет от leaf3 к Spine 2 приходит ответ ACKnowledgment на первое SYN сообщение, во втором пакете мы видим, что установлены флаги SYN и ACK, а также появилась возможность замереить время прохождения пакетов и повился параметр RTT пример снизу: <br>
-<img width="1029" height="948" alt="image" src="https://github.com/user-attachments/assets/c49f6bf5-7430-4f41-bfaf-d03b98968f93" />
+<img width="1029" height="948" alt="image" src="https://github.com/user-attachments/assets/24fc1b3c-fe3c-426e-965e-de08a0b79313" />
+
 
