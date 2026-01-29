@@ -177,7 +177,8 @@ __router bgp 65500__ <br>
       __network 10.0.0.1/32__ <br>
 
       Вывод команд bgp представлени ниже: <br>
-      <img width="1239" height="602" alt="image" src="https://github.com/user-attachments/assets/5b35cba7-b802-4794-9b6a-33c35b7c7079" /> <br>
+<img width="1250" height="597" alt="image" src="https://github.com/user-attachments/assets/b3f2b138-830e-42c3-a42c-26074b844df0" />
+<br>
 ### 2.4. Конфигурация Leaf-2 <br>
 hostname leaf2
 !
