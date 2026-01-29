@@ -69,14 +69,17 @@ __router bgp 65500__<br>
    neighbor UNDERLAY remote-as 65500<br>
    neighbor UNDERLAY next-hop-self<br>
    neighbor UNDERLAY route-reflector-client<br>
-   neighbor 10.0.1.0 peer group UNDERLAY<br>
-   neighbor 10.0.2.0 peer group UNDERLAY<br>
-   neighbor 10.0.3.0 peer group UNDERLAY<br>
+   __neighbor 10.0.1.0 peer group UNDERLAY__<br>
+   __neighbor 10.0.2.0 peer group UNDERLAY__<br>
+   __neighbor 10.0.3.0 peer group UNDERLAY__<br>
    !<br>
    address-family ipv4<br>
       neighbor UNDERLAY activate<br>
       network 10.1.1.1/32<br>
 !<br>
+<br>
+В данном примере в настройках соседей в bgp, мы используем команду __neighbor IP адрес LoopBack leaf-ов__, в данном случае это рабочий вариант и е критично, т.к. кол-во leaf-ов всего 3. Но в большинстве случаев, когда используется большее кол-во leaf-ов, лучше сразу использовать другую команду: __bgp listen range 10.0.0.0/16 peer-group UNDERLAY remote-as 65500__ , где 10.0.0.0/16 диапозон используемых адресов для loopback leaf-ов. Далее ниже по тексту, мы поменяем настройки.<br>
+
 
 leaf2#sho run section bgp  <br>
 router bgp 65500  <br>
