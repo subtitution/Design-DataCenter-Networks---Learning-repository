@@ -132,7 +132,161 @@ __router bgp 65500__<br>
 На скриншоте снизу представлен вывод соседства со стороны spine 2 <br>
 <img width="1067" height="559" alt="image" src="https://github.com/user-attachments/assets/47d7261d-e821-4adb-87f5-afb0fd65d889" />
 <br>
+<br>
+### 2.3. Конфигурация Leaf-1 <br> <br>
+hostname leaf1<br>
+!<br>
+spanning-tree mode mstp<br>
+!<br>
+vlan 1<br>
+   name Host_Network<br>
+!<br>
+__interface Ethernet1__ <br>
+   description Peer-to-peer link to Spine-1<br>
+   no switchport<br>
+   __ip address 10.0.1.0/31__ <br>
+!<br>
+__interface Ethernet2__ <br>
+   description Peer-to-peer link to Spine-2<br>
+   no switchport<br>
+   __ip address 10.0.1.4/31__ <br>
+!
+interface Ethernet3<br>
+   description -=Direction to host=-<br>
+!<br>
+__interface Loopback1__ <br>
+   description IP for underlay -Router-ID<br>
+   __ip address 10.0.0.1/32__ <br>
+!<br>
+interface Vlan1<br>
+   ip address 192.168.1.1/24<br>
+!<br>
+ip routing<br>
+!<br>
+__router bgp 65500__ <br>
+   __router-id 10.0.0.1__ <br>
+   timers bgp 3 9<br>
+   maximum-paths 2 ecmp 2<br>
+   neighbor UNDERLAY peer group<br>
+   neighbor UNDERLAY remote-as 65500<br>
+   __neighbor 10.0.1.1 peer group UNDERLAY__ <br>
+   __neighbor 10.0.1.5 peer group UNDERLAY__ <br>
+   !<br>
+   address-family ipv4<br>
+      neighbor UNDERLAY activate<br>
+      __network 10.0.0.1/32__ <br>
 
+      Вывод команд bgp представлени ниже: <br>
+      <img width="1239" height="602" alt="image" src="https://github.com/user-attachments/assets/5b35cba7-b802-4794-9b6a-33c35b7c7079" /> <br>
+### 2.4. Конфигурация Leaf-2 <br>
+hostname leaf2
+!
+spanning-tree mode mstp
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine-1
+   no switchport
+   ip address 10.0.2.0/31
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine-2
+   no switchport
+   ip address 10.0.2.4/31
+!
+interface Ethernet3
+!
+interface Ethernet4
+!
+interface Ethernet5
+   description -=Direction to hosts=-
+   no switchport
+   ip address 192.168.2.1/24
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Loopback0
+   ip address 2.2.2.2/32
+!
+interface Loopback1
+   description IP for underlay -Router-ID
+   ip address 10.0.0.2/32
+!
+interface Management1
+!
+ip routing
+!
+router bgp 65500
+   timers bgp 3 9
+   maximum-paths 2 ecmp 2
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor 10.0.2.1 peer group UNDERLAY
+   neighbor 10.0.2.5 peer group UNDERLAY
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.0.0.2/32
+<img width="1249" height="595" alt="image" src="https://github.com/user-attachments/assets/8df26f85-f78a-4b3d-9473-5ec832a38daa" /> <br>
+### 2.5. Конфигурация Leaf-3 <br><br>
+
+__hostname leaf3__ <br>
+!<br>
+vlan 3<br>
+   name 3<br>
+!<br>
+interface Ethernet1<br>
+   description Peer-to-peer link to Spine-1<br>
+   no switchport<br>
+   __ip address 10.0.3.0/31__ <br>
+!<br>
+interface Ethernet2<br>
+   description Peer-to-peer link to Spine-2<br>
+   no switchport<br>
+   __ip address 10.0.3.4/31__ <br>
+!<br>
+interface Ethernet3<br>
+   switchport access vlan 3<br>
+!<br>
+interface Loopback1<br>
+   description IP for underlay -Router-ID<br>
+   __ip address 10.0.0.3/32__ <br>
+!<br>
+interface Management1<br>
+!<br>
+interface Vlan3<br>
+   ip address 192.168.3.1/24<br>
+!<br>
+ip routing<br>
+!<br>
+__router bgp 65500__ <br>
+   __router-id 10.0.0.3__ <br>
+   timers bgp 3 9<br>
+   maximum-paths 2 ecmp 2<br>
+   neighbor UNDERLAY peer group<br>
+   neighbor UNDERLAY remote-as 65500<br>
+   neighbor 10.0.3.1 peer group UNDERLAY<br>
+   neighbor 10.0.3.5 peer group UNDERLAY<br>
+   !<br>
+   address-family ipv4<br>
+      neighbor UNDERLAY activate<br>
+      network 10.0.0.3/32<br>
+<br>
+<img width="1236" height="631" alt="image" src="https://github.com/user-attachments/assets/7cc12a5d-e0a8-434b-ad6f-4b6279ef606e" />
+<br>
+
+     
+
+
+
+      
+      
+
+
+      
 
 
 leaf2#sho run section bgp  <br>
