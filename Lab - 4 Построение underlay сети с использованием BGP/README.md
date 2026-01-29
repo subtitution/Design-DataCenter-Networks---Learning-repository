@@ -266,7 +266,13 @@ __router bgp 65500__ <br>
 <img width="1236" height="631" alt="image" src="https://github.com/user-attachments/assets/7cc12a5d-e0a8-434b-ad6f-4b6279ef606e" />
 <br>
 ### 3. Меняем конфигурацию Spin-ов на "Best Practice" <br>
-В данном примере в настройках соседей в bgp со стороны Spine-ов, вместо команды __neighbor IP адрес LoopBack leaf-ов__, в данном примере введу одну строчку: "__bgp listen range 10.0.0.0/16 peer-group UNDERLAY remote-as 65500__ " 
+В данном примере в настройках соседей в bgp со стороны Spine-ов, вместо команды __neighbor IP адрес LoopBack leaf-ов__, в данном примере введу одну строчку: "__bgp listen range 10.0.0.0/16 peer-group UNDERLAY remote-as 65500__ " <br>
+<img width="518" height="530" alt="image" src="https://github.com/user-attachments/assets/e1e40d71-df22-49d8-9ec0-df07d287fc8d" />
+<br>
+Ниже картинка после изменения: <br>
+<img width="1069" height="855" alt="image" src="https://github.com/user-attachments/assets/a4b524c5-f961-4edc-8b8d-0dc7af6a7390" />
+<br>
+
      
 
 
