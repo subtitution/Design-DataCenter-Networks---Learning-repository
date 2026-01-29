@@ -9,10 +9,13 @@
 - убедиться в IP связности, попробовать отключить один линк
 - настроить eBGP
 - убедиться в ip связности
-<br><br><img width="527" height="326" alt="laba" src="https://github.com/user-attachments/assets/a7e00c82-9960-4a15-851a-bd3a9f01a8b0" />
+<br><br>
+## 1. Начало <br>
+<img width="527" height="326" alt="laba" src="https://github.com/user-attachments/assets/a7e00c82-9960-4a15-851a-bd3a9f01a8b0" />
 <br>
 Сверху, представлена схема используемой сети. <br>
 <br>
+
 Начну повествование к данной работе в стиле Квентина Тарантина, с середины... <br>
 Предисловие: bgp настроен на всех Leaf и Spine. <br>
 Давайте внимательно посмотрим на вывод команды: _show ip bgp_  которую выполним на leaf1<br>
@@ -27,8 +30,53 @@
 Конечно же проверим IP связность между loopback адресами, связь есть, ниже пример: <br>
 <img width="983" height="1116" alt="image" src="https://github.com/user-attachments/assets/da3d6896-f47e-40aa-8a27-7a80780764dc" />
 <br>
-
-
+## Часть 2. Пример конфигов <br>
+### 2.1. Конфигурация Spine1 <br> <br>
+hostname spine1<br>
+!<br>
+spanning-tree mode mstp<br>
+!<br>
+interface Ethernet1<br>
+   description Peer-to-peer link to leaf-1<br>
+   no switchport<br>
+   ip address 10.0.1.1/31<br>
+!<br>
+interface Ethernet2<br>
+   description Peer-to-peer link to leaf-2<br>
+   no switchport<br>
+   ip address 10.0.2.1/31<br>
+!<br>
+interface Ethernet3<br>
+   description Peer-to-peer link to leaf-3<br>
+   no switchport<br>
+   ip address 10.0.3.1/31<br>
+!<br>
+  interface Loopback1<br>
+   description IP for underlay -Router-ID<br>
+   ip address 10.1.1.1/32<br>
+!<br>
+interface Loopback2<br>
+   description IP for overlay layer<br>
+   ip address 10.1.1.2/32<br>
+!<br>
+ip routing<br>
+!<br>
+__router bgp 65500__<br>
+   router-id 10.1.1.1<br>
+   no bgp default ipv4-unicast<br>
+   timers bgp 3 9<br>
+   neighbor UNDERLAY peer group<br>
+   neighbor UNDERLAY remote-as 65500<br>
+   neighbor UNDERLAY next-hop-self<br>
+   neighbor UNDERLAY route-reflector-client<br>
+   neighbor 10.0.1.0 peer group UNDERLAY<br>
+   neighbor 10.0.2.0 peer group UNDERLAY<br>
+   neighbor 10.0.3.0 peer group UNDERLAY<br>
+   !<br>
+   address-family ipv4<br>
+      neighbor UNDERLAY activate<br>
+      network 10.1.1.1/32<br>
+!<br>
 
 leaf2#sho run section bgp  <br>
 router bgp 65500  <br>
