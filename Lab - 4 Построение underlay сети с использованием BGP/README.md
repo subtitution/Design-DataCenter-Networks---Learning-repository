@@ -281,5 +281,8 @@ Spine2(10.0.3.5) иницирует tcp сессию, отправив паке�
 <br>
 2-й пакет от leaf3 к Spine 2 приходит ответ ACKnowledgment на первое SYN сообщение, во втором пакете мы видим, что установлены флаги SYN и ACK, а также появилась возможность замереить время прохождения пакетов и повился параметр RTT пример снизу: <br>
 <img width="1029" height="948" alt="image" src="https://github.com/user-attachments/assets/24fc1b3c-fe3c-426e-965e-de08a0b79313" />
+На 3-ем ответном пакете установка BGP сессии завершается успехом ( в нашем случае), Spine 2 отвечает Leaf 3, что получил SYN, ACK, пакетом ACK, пример ниже: <br>
+<img width="988" height="884" alt="image" src="https://github.com/user-attachments/assets/4860ff94-e3c8-4e81-9f6a-bdfeee1a2180" /> <br>
+
 
 
