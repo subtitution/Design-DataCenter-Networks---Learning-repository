@@ -283,6 +283,8 @@ Spine2(10.0.3.5) иницирует tcp сессию, отправив паке�
 <img width="1029" height="948" alt="image" src="https://github.com/user-attachments/assets/24fc1b3c-fe3c-426e-965e-de08a0b79313" />
 На 3-ем ответном пакете установка BGP сессии завершается успехом ( в нашем случае), Spine 2 отвечает Leaf 3, что получил SYN, ACK, пакетом ACK, пример ниже: <br>
 <img width="988" height="884" alt="image" src="https://github.com/user-attachments/assets/4860ff94-e3c8-4e81-9f6a-bdfeee1a2180" /> <br>
-
+Далее Spine2 посылает первое BGP сообщение OPEN, в котором указывает Номер AS и свой ID: <br>
+<img width="869" height="884" alt="image" src="https://github.com/user-attachments/assets/8c32990a-e7a0-42d6-8610-81a68b2d7be0" />
+<br>
 
 
