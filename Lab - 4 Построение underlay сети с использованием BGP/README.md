@@ -79,7 +79,57 @@ __router bgp 65500__<br>
       network 10.1.1.1/32<br>
 !<br>
 <br>
-В данном примере в настройках соседей в bgp, мы используем команду __neighbor IP адрес LoopBack leaf-ов__, в данном случае это рабочий вариант и е критично, т.к. кол-во leaf-ов всего 3. Но в большинстве случаев, когда используется большее кол-во leaf-ов, лучше сразу использовать другую команду: __bgp listen range 10.0.0.0/16 peer-group UNDERLAY remote-as 65500__ , где 10.0.0.0/16 диапозон используемых адресов для loopback leaf-ов. Далее ниже по тексту, мы поменяем настройки.<br>
+В данном примере в настройках соседей в bgp, мы используем команду __neighbor IP адрес LoopBack leaf-ов__, в данном случае это рабочий вариант и е критично, т.к. кол-во leaf-ов всего 3. Но на практике, когда используется большее кол-во leaf-ов, лучше сразу использовать другую команду, а именно: __bgp listen range 10.0.0.0/16 peer-group UNDERLAY remote-as 65500__ , где 10.0.0.0/16 диапозон используемых адресов для loopback leaf-ов. Далее ниже по тексту, мы поменяем настройки.<br>
+### 2.2. Конфигурация Spine2 <br> <br>
+hostname spine2<br>
+!<br>
+spanning-tree mode mstp<br>
+!<br>
+__interface Ethernet1__<br>
+   description Peer-to-peer link to leaf-1<br>
+   no switchport<br>
+   __ip address 10.0.1.5/31__<br>
+!<br>
+__interface Ethernet2__<br>
+   description Peer-to-peer link to leaf-2<br>
+   no switchport<br>
+   __ip address 10.0.2.5/31__<br>
+!<br>
+__interface Ethernet3__<br>
+   description Peer-to-peer link to leaf-3<br>
+   no switchport<br>
+   __ip address 10.0.3.5/31__<br>
+!<br>
+__interface Loopback1__ <br>
+   description IP for underlay -Router-ID <br>
+   __ip address 10.2.2.1/32__ <br>
+!<br>
+interface Loopback2<br>
+   description IP for overlay layer <br>
+   ip address 10.2.2.2/32<br>
+!<br>
+ip routing<br>
+!<br>
+__router bgp 65500__<br>
+   __router-id 10.2.2.1__<br>
+   no bgp default ipv4-unicast <br>
+   neighbor UNDERLAY peer group<br>
+   neighbor UNDERLAY remote-as 65500<br>
+   neighbor UNDERLAY next-hop-self<br>
+   neighbor UNDERLAY route-reflector-client<br>
+   neighbor grou peer group<br>
+   neighbor 10.0.1.4 peer group UNDERLAY<br>
+   neighbor 10.0.2.4 peer group UNDERLAY<br>
+   neighbor 10.0.3.4 peer group UNDERLAY<br>
+   !<br>
+   address-family ipv4<br>
+      neighbor UNDERLAY activate<br>
+      network 10.2.2.1/32<br>
+!<br>
+На скриншоте снизу представлен вывод соседства со стороны spine 2 <br>
+<img width="1067" height="559" alt="image" src="https://github.com/user-attachments/assets/47d7261d-e821-4adb-87f5-afb0fd65d889" />
+<br>
+
 
 
 leaf2#sho run section bgp  <br>
