@@ -180,7 +180,7 @@ __router bgp 65500__ <br>
 <img width="1250" height="597" alt="image" src="https://github.com/user-attachments/assets/b3f2b138-830e-42c3-a42c-26074b844df0" />
 <br><br>
 ### 2.4. Конфигурация Leaf-2
-<br><br>
+<br>
 hostname leaf2<br>
 !<br>
 spanning-tree mode mstp<br>
@@ -273,24 +273,6 @@ __router bgp 65500__ <br>
 Ниже картинка после изменения: <br>
 <img width="1069" height="855" alt="image" src="https://github.com/user-attachments/assets/a4b524c5-f961-4edc-8b8d-0dc7af6a7390" />
 <br>
-
-     
-
-
-
-      
-      
-
-
-      
-
-
-leaf2#sho run section bgp  <br>
-router bgp 65500  <br>
-   maximum-paths 2 ecmp 2  <br>
-   neighbor UNDERLAY peer group  <br>
-   neighbor UNDERLAY remote-as 65500  <br>
-   !  <br>
-   address-family ipv4  <br>
-      neighbor UNDERLAY activate  <br>
-      network 10.0.0.2/32  <br>
+## 4. Просмотр установления соседства <br>
+К данной работе приложен пример трейса установления соседства. <br>
+Предлагаю в кратце осветить ключевые моменты: <br>
