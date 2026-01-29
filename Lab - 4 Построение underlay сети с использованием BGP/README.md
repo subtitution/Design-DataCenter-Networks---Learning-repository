@@ -178,60 +178,47 @@ __router bgp 65500__ <br>
 
       Вывод команд bgp представлени ниже: <br>
 <img width="1250" height="597" alt="image" src="https://github.com/user-attachments/assets/b3f2b138-830e-42c3-a42c-26074b844df0" />
-<br>
-### 2.4. Конфигурация Leaf-2 <br>
-hostname leaf2
-!
-spanning-tree mode mstp
-!
-interface Ethernet1
-   description Peer-to-peer link to Spine-1
-   no switchport
-   ip address 10.0.2.0/31
-!
-interface Ethernet2
-   description Peer-to-peer link to Spine-2
-   no switchport
-   ip address 10.0.2.4/31
-!
-interface Ethernet3
-!
-interface Ethernet4
-!
-interface Ethernet5
-   description -=Direction to hosts=-
-   no switchport
-   ip address 192.168.2.1/24
-!
-interface Ethernet6
-!
-interface Ethernet7
-!
-interface Ethernet8
-!
-interface Loopback0
-   ip address 2.2.2.2/32
-!
-interface Loopback1
-   description IP for underlay -Router-ID
-   ip address 10.0.0.2/32
-!
-interface Management1
-!
-ip routing
-!
-router bgp 65500
-   timers bgp 3 9
-   maximum-paths 2 ecmp 2
-   neighbor UNDERLAY peer group
-   neighbor UNDERLAY remote-as 65500
-   neighbor 10.0.2.1 peer group UNDERLAY
-   neighbor 10.0.2.5 peer group UNDERLAY
-   !
-   address-family ipv4
-      neighbor UNDERLAY activate
-      network 10.0.0.2/32
-<img width="1249" height="595" alt="image" src="https://github.com/user-attachments/assets/8df26f85-f78a-4b3d-9473-5ec832a38daa" /> <br>
+<br><br>
+### 2.4. Конфигурация Leaf-2 <br><br>
+hostname leaf2<br>
+!<br>
+spanning-tree mode mstp<br>
+!<br>
+interface Ethernet1<br>
+   description Peer-to-peer link to Spine-1<br>
+   no switchport<br>
+   ip address 10.0.2.0/31<br>
+!<br>
+interface Ethernet2<br>
+   description Peer-to-peer link to Spine-2<br>
+   no switchport<br>
+   ip address 10.0.2.4/31<br>
+!<br>
+interface Ethernet5<br>
+   description -=Direction to hosts=-<br>
+   no switchport<br>
+   ip address 192.168.2.1/24<br>
+interface Loopback0<br>
+   ip address 2.2.2.2/32<br>
+!<br>
+interface Loopback1<br>
+   description IP for underlay -Router-ID<br>
+   ip address 10.0.0.2/32<br>
+!<br>
+ip routing<br>
+!<br>
+router bgp 65500<br>
+   timers bgp 3 9<br>
+   maximum-paths 2 ecmp 2<br>
+   neighbor UNDERLAY peer group<br>
+   neighbor UNDERLAY remote-as 65500<br>
+   neighbor 10.0.2.1 peer group UNDERLAY<br>
+   neighbor 10.0.2.5 peer group UNDERLAY<br>
+   !<br>
+   address-family ipv4<br>
+      neighbor UNDERLAY activate<br>
+      network 10.0.0.2/32<br>
+<img width="1249" height="595" alt="image" src="https://github.com/user-attachments/assets/8df26f85-f78a-4b3d-9473-5ec832a38daa" /> <br><br>
 ### 2.5. Конфигурация Leaf-3 <br><br>
 
 __hostname leaf3__ <br>
@@ -278,7 +265,8 @@ __router bgp 65500__ <br>
 <br>
 <img width="1236" height="631" alt="image" src="https://github.com/user-attachments/assets/7cc12a5d-e0a8-434b-ad6f-4b6279ef606e" />
 <br>
-
+### 3. Меняем конфигурацию Spin-ов на "Best Practice" <br>
+В данном примере в настройках соседей в bgp со стороны Spine-ов, вместо команды __neighbor IP адрес LoopBack leaf-ов__, в данном примере введу одну строчку: "__bgp listen range 10.0.0.0/16 peer-group UNDERLAY remote-as 65500__ " 
      
 
 
