@@ -286,6 +286,16 @@ Spine2(10.0.3.5) иницирует tcp сессию, отправив паке�
 После чего leaf Шлет своё OPEN сообщение, в котором сообщает свой номер AS и ID: <br>
 <img width="951" height="901" alt="image" src="https://github.com/user-attachments/assets/1afbb6c3-ddbc-48a2-b7cb-4c6f7807a4c2" /> <br><br>
 Далее Spine в рамках все той же TCP сессиия, по правилам TCP отсылает ACK, что сообщение получил <br>
+<img width="968" height="577" alt="image" src="https://github.com/user-attachments/assets/4ea4cf31-b90d-49c8-80ef-67ae5c5785b5" /> <br><br>
+Далее Spine2 шлет лифу BGP KEEPALIVE Message, leaf также шлет в сторону спайна BGP KEEPALIVE, пример снизу:<br>
+<img width="966" height="334" alt="image" src="https://github.com/user-attachments/assets/aee8bc43-4c2d-4b6f-953b-861a39f90341" /><br><br>
+Теперь игнорируем описание работы сесссий TCP, с их постоянным ACK подтверждениями получения, следующий пакет Spine2 (10.0.3.5) шлет BGP UPDATE Message в сторону Leaf (10.0.3.4) и в следующем сообщении Leaf3 также шлет BGP UPDATE Message в сторону spine2. Пример ниже:   <br>
+<img width="928" height="1936" alt="image" src="https://github.com/user-attachments/assets/07a92b79-5c7c-4280-b2f7-c6fee1e6d8d4" /> <br><br>
+
+
+
+
+
 
 
 
