@@ -289,8 +289,12 @@ Spine2(10.0.3.5) иницирует tcp сессию, отправив паке�
 <img width="968" height="577" alt="image" src="https://github.com/user-attachments/assets/4ea4cf31-b90d-49c8-80ef-67ae5c5785b5" /> <br><br>
 Далее Spine2 шлет лифу BGP KEEPALIVE Message, leaf также шлет в сторону спайна BGP KEEPALIVE, пример снизу:<br>
 <img width="966" height="334" alt="image" src="https://github.com/user-attachments/assets/aee8bc43-4c2d-4b6f-953b-861a39f90341" /><br><br>
-Теперь игнорируем описание работы сесссий TCP, с их постоянным ACK подтверждениями получения, следующий пакет Spine2 (10.0.3.5) шлет BGP UPDATE Message в сторону Leaf (10.0.3.4) и в следующем сообщении Leaf3 также шлет BGP UPDATE Message в сторону spine2. Пример ниже:   <br>
+Пропустим описание работы сесссий TCP, с их постоянным ACK подтверждениями получения, следующий пакет Spine2 (10.0.3.5) шлет BGP UPDATE Message в сторону Leaf (10.0.3.4) и в следующем сообщении Leaf3 также шлет BGP UPDATE Message в сторону spine2. Пример ниже:   <br>
 <img width="928" height="1936" alt="image" src="https://github.com/user-attachments/assets/07a92b79-5c7c-4280-b2f7-c6fee1e6d8d4" /> <br><br>
+Ниже ответ UPDATE MEssage от Leaf3 (10.0.0.3) в сторону Spine2. <br>
+<img width="872" height="876" alt="image" src="https://github.com/user-attachments/assets/861e6119-18d2-44f8-aaec-498a0521fc0c" /> <br><br>
+На этом предлагаю разбор трейса закончить, подробно ознакомиться с трейсом можно самостоятельно, он находится в приложении. <br>
+
 
 
 
