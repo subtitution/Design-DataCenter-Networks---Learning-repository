@@ -304,7 +304,7 @@ https://nag.ru/material/36217
 
 Ниже пред
 ## 6. Попытка понять как работает ECMP
-'''
+```
  192.168.1.0/24
                         entries 2       announce 1      vtime:17
                         ip unicast BRIB last_best 451b8348
@@ -330,7 +330,7 @@ https://nag.ru/material/36217
                         Age: 4:10:45    Metric: 0       Metric2: 100    Tag: 0   Seq: 0
                         Task: BGP_65500.10.0.3.1+179
                         AS Path: i (HashID 10) Nexthop: 10.0.3.1 Or-ID: 10.0.0.1 C-LST: 10.1.1.1
-                  '''
+```
                   <br>
 <img width="712" height="199" alt="image" src="https://github.com/user-attachments/assets/e27540ed-8f59-49c2-b8b9-b96ffa32e42d" />
 
