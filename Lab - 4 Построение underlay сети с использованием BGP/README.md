@@ -297,6 +297,9 @@ Spine2(10.0.3.5) иницирует tcp сессию, отправив паке�
 ## 5. Просмотр информации вывода show команд <br>
 Ниже представлен вывод маршрутной информации с Leaf3: <br>
 <img width="1261" height="942" alt="image" src="https://github.com/user-attachments/assets/c825101a-5381-4545-a266-5fcb76f40b7c" /> <br><br>
+Удобно использовать команду show ip route bgp, с расширением detail, подставляется информация из description интерфейсов, и сразу становится понятно, пример снизу:<br>
+<img width="952" height="626" alt="image" src="https://github.com/user-attachments/assets/064540cc-9d54-41ec-8456-9732296b533d" /><br><br>
+
 
 
 
