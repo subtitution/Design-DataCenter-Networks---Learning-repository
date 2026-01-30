@@ -175,16 +175,13 @@ __router bgp 65500__ <br>
    address-family ipv4<br>
       neighbor UNDERLAY activate<br>
       __network 10.0.0.1/32__ <br>
-
-      Вывод команд bgp представлени ниже: <br>
-<img width="1250" height="597" alt="image" src="https://github.com/user-attachments/assets/b3f2b138-830e-42c3-a42c-26074b844df0" />
-<br><br>
-### 2.4. Конфигурация Leaf-2
-<br>
+ Вывод команд bgp представлени ниже: <br>
+<img width="1250" height="597" alt="image" src="https://github.com/user-attachments/assets/b3f2b138-830e-42c3-a42c-26074b844df0" /><br><br>
+### 2.4. Конфигурация Leaf-2 <br>
 hostname leaf2<br>
-!<br>
+! <br>
 spanning-tree mode mstp<br>
-!<br>
+! <br>
 interface Ethernet1<br>
    description Peer-to-peer link to Spine-1<br>
    no switchport<br>
@@ -220,8 +217,7 @@ router bgp 65500<br>
       neighbor UNDERLAY activate<br>
       network 10.0.0.2/32<br>
 <img width="1249" height="595" alt="image" src="https://github.com/user-attachments/assets/8df26f85-f78a-4b3d-9473-5ec832a38daa" /> <br><br>
-### 2.5. Конфигурация Leaf-3
-<br><br>
+## 2.5. Конфигурация Leaf-3 <br><br>
 __hostname leaf3__ <br>
 !<br>
 vlan 3<br>
@@ -264,8 +260,7 @@ __router bgp 65500__ <br>
       neighbor UNDERLAY activate<br>
       network 10.0.0.3/32<br>
 <br>
-<img width="1236" height="631" alt="image" src="https://github.com/user-attachments/assets/7cc12a5d-e0a8-434b-ad6f-4b6279ef606e" />
-<br>
+<img width="1236" height="631" alt="image" src="https://github.com/user-attachments/assets/7cc12a5d-e0a8-434b-ad6f-4b6279ef606e" /><br>
 ### 3. Меняем конфигурацию Spin-ов на "Best Practice" <br>
 В данном примере в настройках соседей в bgp со стороны Spine-ов, вместо команды __neighbor IP адрес LoopBack leaf-ов__, в данном примере введу одну строчку: "__bgp listen range 10.0.0.0/16 peer-group UNDERLAY remote-as 65500__ " <br>
 <img width="518" height="530" alt="image" src="https://github.com/user-attachments/assets/e1e40d71-df22-49d8-9ec0-df07d287fc8d" />
