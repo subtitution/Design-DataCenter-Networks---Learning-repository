@@ -294,6 +294,10 @@ Spine2(10.0.3.5) иницирует tcp сессию, отправив паке�
 Ниже ответ UPDATE MEssage от Leaf3 (10.0.0.3) в сторону Spine2. <br>
 <img width="872" height="876" alt="image" src="https://github.com/user-attachments/assets/861e6119-18d2-44f8-aaec-498a0521fc0c" /> <br><br>
 На этом предлагаю разбор трейса закончить, подробно ознакомиться с трейсом можно самостоятельно, он находится в приложении. <br>
+## 5. Просмотр информации вывода show команд <br>
+Ниже представлен вывод маршрутной информации с Leaf3: <br>
+<img width="1261" height="942" alt="image" src="https://github.com/user-attachments/assets/c825101a-5381-4545-a266-5fcb76f40b7c" /> <br><br>
+
 
 
 
