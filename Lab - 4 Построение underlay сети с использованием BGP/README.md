@@ -332,6 +332,15 @@ https://nag.ru/material/36217
                         AS Path: i (HashID 10) Nexthop: 10.0.3.1 Or-ID: 10.0.0.1 C-LST: 10.1.1.1
 ```
                   <br>
+```
+List of next hops in save queue:
+
+        ECMP Route Head 0x4b0ad580 (2 paths) 192.168.1.0/24
+                nhe-list ID: 3
+                #0 i (HashID 5) Nexthop: 10.0.3.5 Or-ID: 10.0.0.1 C-LST: 10.2.2.1 LinkBw 0.00
+                #1 i (HashID 10) Nexthop: 10.0.3.1 Or-ID: 10.0.0.1 C-LST: 10.1.1.1 LinkBw 0.00
+```
+<br>
 <img width="712" height="199" alt="image" src="https://github.com/user-attachments/assets/e27540ed-8f59-49c2-b8b9-b96ffa32e42d" />
 
 
