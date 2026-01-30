@@ -299,6 +299,11 @@ Spine2(10.0.3.5) иницирует tcp сессию, отправив паке�
 <img width="1261" height="942" alt="image" src="https://github.com/user-attachments/assets/c825101a-5381-4545-a266-5fcb76f40b7c" /> <br><br>
 Удобно использовать команду show ip route bgp, с расширением detail, подставляется информация из description интерфейсов, и сразу становится понятно, пример снизу:<br>
 <img width="952" height="626" alt="image" src="https://github.com/user-attachments/assets/064540cc-9d54-41ec-8456-9732296b533d" /><br><br>
+Далее, я хотел поразбираться с балансировкой трафика в ECMP, но тема оказалась на первый взгляд довольно сложной, данная статья поможет понять как она работаем, и почему балансировка per packet не применяется.
+https://nag.ru/material/36217
+
+Ниже пред
+<img width="712" height="199" alt="image" src="https://github.com/user-attachments/assets/e27540ed-8f59-49c2-b8b9-b96ffa32e42d" />
 
 
 
