@@ -303,6 +303,35 @@ Spine2(10.0.3.5) иницирует tcp сессию, отправив паке�
 https://nag.ru/material/36217
 
 Ниже пред
+## 6. Попытка понять как работает ECMP
+'''
+ 192.168.1.0/24
+                        entries 2       announce 1      vtime:17
+                        ip unicast BRIB last_best 451b8348
+                        TSI:
+                                BRIB task 192.168.1.0 ip unicast: 0x451be1b0, 2 entries
+                                BGP route modification:  no metrics 0x7f894a893090, results 0x0 0x0 XXX rth 0x7f894ae0dc80 rt 0x7f89451b8348
+
+                *BGP    7f89451b8348 Preference: 200    AttrId: 3               Source: 10.0.3.5
+                        Nhe: 10.0.3.5 (7f89451b9000)    Instance: 0/0   Resolution: Resolved
+                        Adjacency Id 130000010000000f   Refs 1 Hash 318, N_gw 2, Type IP
+                        State: <Int Ext BGPEcmp Gateway ActiveU Unicast Resolve NheAccessor AdjAccessor>
+                        Local AS: 65500 Peer AS: 65500
+                        Age: 4:10:45    Metric: 0       Metric2: 100    Tag: 0   Seq: 0
+                        Task: BGP_65500.10.0.3.5+179
+                        Announcement bits(3): 1-static_sync 5-bgp_sync 10-BGP.0.0.0.0+179
+                        AS Path: i (HashID 5) Nexthop: 10.0.3.5 Or-ID: 10.0.0.1 C-LST: 10.2.2.1
+
+                BGP     7f89451b8438 Preference: 200    AttrId: 8
+                        Nhe: 10.0.3.1 (7f89451b91c8)    Instance: 0/0   Resolution: Resolved
+                        Adjacency Id 130000010000000e   Refs 6 Hash 300, N_gw 1, Type IP
+                        State: <Int Ext BGPEcmp NoActiveU Gateway Unicast Resolve NheAccessor AdjAccessor>
+                        Local AS: 65500 Peer AS: 65500
+                        Age: 4:10:45    Metric: 0       Metric2: 100    Tag: 0   Seq: 0
+                        Task: BGP_65500.10.0.3.1+179
+                        AS Path: i (HashID 10) Nexthop: 10.0.3.1 Or-ID: 10.0.0.1 C-LST: 10.1.1.1
+                  '''
+                  <br>
 <img width="712" height="199" alt="image" src="https://github.com/user-attachments/assets/e27540ed-8f59-49c2-b8b9-b96ffa32e42d" />
 
 
