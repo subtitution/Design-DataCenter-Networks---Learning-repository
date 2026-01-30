@@ -340,6 +340,21 @@ List of next hops in save queue:
                 #0 i (HashID 5) Nexthop: 10.0.3.5 Or-ID: 10.0.0.1 C-LST: 10.2.2.1 LinkBw 0.00
                 #1 i (HashID 10) Nexthop: 10.0.3.1 Or-ID: 10.0.0.1 C-LST: 10.1.1.1 LinkBw 0.00
 ```
+Попробуем пингануть хост, который подключен к leaf1, leaf1 производит анонс подключенных сетей в bgp AS65500, у нас появился маршрут для сети 192.168.1.0.24
+```
+leaf3#
+ng 192.168.1.2 source 10.0.0.3
+PING 192.168.1.2 (192.168.1.2) from 10.0.0.3 : 72(100) bytes of data.
+80 bytes from 192.168.1.2: icmp_seq=1 ttl=62 time=374 ms
+80 bytes from 192.168.1.2: icmp_seq=2 ttl=62 time=379 ms
+80 bytes from 192.168.1.2: icmp_seq=3 ttl=62 time=377 ms
+80 bytes from 192.168.1.2: icmp_seq=4 ttl=62 time=366 ms
+80 bytes from 192.168.1.2: icmp_seq=5 ttl=62 time=357 ms
+
+--- 192.168.1.2 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 52ms
+```
+
 <br>
 <img width="712" height="199" alt="image" src="https://github.com/user-attachments/assets/e27540ed-8f59-49c2-b8b9-b96ffa32e42d" />
 
