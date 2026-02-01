@@ -11,6 +11,8 @@
 - убедиться в ip связности
 <br><br>
 ## 1. Начало <br>
+<img width="1053" height="651" alt="image" src="https://github.com/user-attachments/assets/5ec46fe4-a571-482c-bf30-4c06e91605c7" />
+
 <img width="527" height="326" alt="laba" src="https://github.com/user-attachments/assets/a7e00c82-9960-4a15-851a-bd3a9f01a8b0" />
 <br>
 Сверху, представлена схема используемой сети. <br>
