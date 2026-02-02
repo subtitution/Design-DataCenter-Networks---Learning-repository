@@ -319,10 +319,8 @@ PING 192.168.1.2 (192.168.1.2) from 10.0.0.3 : 72(100) bytes of data.
 
 --- 192.168.1.2 ping statistics ---
 5 packets transmitted, 5 received, 0% packet loss, time 52ms
-```
-<br>
+``` <br>
 Теперь давайте посмотрим информацию в fib на leaf 3 (10.0.0.3) касаемо работы ECMP, вывод ниже:<br>
-<br>
 ```
  192.168.1.0/24
                         entries 2       announce 1      vtime:17
@@ -350,7 +348,6 @@ PING 192.168.1.2 (192.168.1.2) from 10.0.0.3 : 72(100) bytes of data.
                         Task: BGP_65500.10.0.3.1+179
                         AS Path: i (HashID 10) Nexthop: 10.0.3.1 Or-ID: 10.0.0.1 C-LST: 10.1.1.1
 ```
-                  <br>
 ```
 List of next hops in save queue:
 
