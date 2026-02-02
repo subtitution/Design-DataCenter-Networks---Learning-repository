@@ -306,6 +306,22 @@ https://nag.ru/material/36217
 
 Ниже пред
 ## 6. Попытка понять как работает ECMP
+Попробуем пингануть хост, который подключен к leaf1, leaf1 производит анонс подключенных сетей в bgp AS65500, у нас появился маршрут для сети 192.168.1.0.24
+```
+leaf3#
+ng 192.168.1.2 source 10.0.0.3
+PING 192.168.1.2 (192.168.1.2) from 10.0.0.3 : 72(100) bytes of data.
+80 bytes from 192.168.1.2: icmp_seq=1 ttl=62 time=374 ms
+80 bytes from 192.168.1.2: icmp_seq=2 ttl=62 time=379 ms
+80 bytes from 192.168.1.2: icmp_seq=3 ttl=62 time=377 ms
+80 bytes from 192.168.1.2: icmp_seq=4 ttl=62 time=366 ms
+80 bytes from 192.168.1.2: icmp_seq=5 ttl=62 time=357 ms
+
+--- 192.168.1.2 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 52ms
+```
+<br>
+Теперь давайте посмотрим информацию в fib на leaf 3 (10.0.0.3) касаемо работы ECMP, вывод ниже:<br>
 ```
  192.168.1.0/24
                         entries 2       announce 1      vtime:17
@@ -344,27 +360,9 @@ List of next hops in save queue:
 ```
 <br>
 Вывод информации о bgp (представленный на скриншоте ниже), подтверждает, что в ECMP выберется приоритетный маршрут, обозначенный как __Ec__, next hope 10.0.3.5 (spine2), так же данная информация соответсвует выводам из FiB, которые приведены выше. К сожалению в данном лабораторно стенде нет возможности проверить прохождение трафика с учетом когда происходит поляризация сетевого трафика (разложенный по ecmp трафик приходит на железку с альтернативными путями и как он пойдет дальше? Предлагаю посмотреть в следующих работах....) <br>
-<img width="1246" height="876" alt="image" src="https://github.com/user-attachments/assets/d5e3d366-14cf-4882-bab8-9de0b21cf944" /><br>
 <img width="1849" height="750" alt="image" src="https://github.com/user-attachments/assets/3544efca-345d-4088-be4b-7d2cbfd81381" /> <br>
-
 Теперь ребята, давайте проверим, как же на самом деле пойдет трафик, и какой маршрут ECMP выберет? Из выше перечисленных выводов информации из fib и bgp, мы видим, что в сеть 192.168.1.0/24, трафик должен пойти через маршрут Spine 2(10.0.3.5). И так я одновременно запустил снифер на leaf1 интерфейс eth1 (смотрит в сторону Spine1) и  снифер на интерфейсе eth1 (Spine2) и запустил пинг с leaf3. С Leaf3 (10.0.0.3) пинговать будем хост 192.168.1.2 (живет за leaf1), трафик судя по ECMP должен пойти через Nexthop: 10.0.3.5 __(Spine2)__ <br>
-Одновременно 
-
-Попробуем пингануть хост, который подключен к leaf1, leaf1 производит анонс подключенных сетей в bgp AS65500, у нас появился маршрут для сети 192.168.1.0.24
-```
-leaf3#
-ng 192.168.1.2 source 10.0.0.3
-PING 192.168.1.2 (192.168.1.2) from 10.0.0.3 : 72(100) bytes of data.
-80 bytes from 192.168.1.2: icmp_seq=1 ttl=62 time=374 ms
-80 bytes from 192.168.1.2: icmp_seq=2 ttl=62 time=379 ms
-80 bytes from 192.168.1.2: icmp_seq=3 ttl=62 time=377 ms
-80 bytes from 192.168.1.2: icmp_seq=4 ttl=62 time=366 ms
-80 bytes from 192.168.1.2: icmp_seq=5 ttl=62 time=357 ms
-
---- 192.168.1.2 ping statistics ---
-5 packets transmitted, 5 received, 0% packet loss, time 52ms
-```
-
+Одновременно
 <br>
 <img width="712" height="199" alt="image" src="https://github.com/user-attachments/assets/e27540ed-8f59-49c2-b8b9-b96ffa32e42d" />
 
