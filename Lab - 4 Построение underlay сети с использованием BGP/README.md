@@ -12,8 +12,6 @@
 <br><br>
 ## 1. Начало <br>
 <img width="1053" height="651" alt="image" src="https://github.com/user-attachments/assets/5ec46fe4-a571-482c-bf30-4c06e91605c7" />
-
-<img width="527" height="326" alt="laba" src="https://github.com/user-attachments/assets/a7e00c82-9960-4a15-851a-bd3a9f01a8b0" />
 <br>
 Сверху, представлена схема используемой сети. <br>
 <br>
@@ -362,7 +360,10 @@ PING 192.168.1.2 (192.168.1.2) from 10.0.0.3 : 72(100) bytes of data.
 <br>
 <br>
 Далее я зашел на Leaf1, и __выключил интрефейс eth1__, который идет  в сторону Spine1. Все это время был запущен пинг хоста 192.168.1.2. Но на мое удивление, ECMP довольно быстро переключился на другой альтернативный канал, через spine2. В момент переключения потерялся всего ОДИН какой-то маленький, жалкий пакетик (картинга с ICMP пингом не сохранилась, так что придется вам поверить мне на слово). Хотя в прочем если посмотреть на трейс,  то по трейсу видно, что не получен ответ ICMP только для одного пакета:<br>
-<img width="963" height="651" alt="image" src="https://github.com/user-attachments/assets/0229de31-f6a3-4df6-a80f-ceff7783c9f3" />
+<img width="963" height="651" alt="image" src="https://github.com/user-attachments/assets/0229de31-f6a3-4df6-a80f-ceff7783c9f3" /><br>
+Далее Spine1 отправляет по eth1 в сторону leaf1 __BGP NOTIFICATION__ message:<br>
+<img width="1475" height="455" alt="image" src="https://github.com/user-attachments/assets/acc9d306-b9ef-4336-be89-947769b59f27" />
+
 
 
 
