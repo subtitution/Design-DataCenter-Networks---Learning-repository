@@ -365,7 +365,9 @@ PING 192.168.1.2 (192.168.1.2) from 10.0.0.3 : 72(100) bytes of data.
 Далее Spine1 отправляет по eth1 в сторону leaf1 __BGP NOTIFICATION__ message:<br>
 <img width="1475" height="455" alt="image" src="https://github.com/user-attachments/assets/acc9d306-b9ef-4336-be89-947769b59f27" /><br><br>
 Параллельно на стороне Spine 2 (10.0.1.5), мы видим leaf 1 (10.0.1.4) посылает __BGP WithdrawUpdate Message__. После чего Пинги продолжаются, но уже через Spine2, пример ниже:<br>
-<img width="964" height="924" alt="image" src="https://github.com/user-attachments/assets/3c802c28-4a58-419e-991c-2ecd80ac6c47" /><br>
+<img width="964" height="924" alt="image" src="https://github.com/user-attachments/assets/3c802c28-4a58-419e-991c-2ecd80ac6c47" /><br><br>
+__Итог:__ Информация из fib о ECMP для сети 192.168.1.0/24 и информация из bgp, не соответсвует действительности, и понять в моменте через какой линк пойдет трафик новый сессии, практически не возможно (по крайней мере я не знаю, как).
+
 
 
 
