@@ -457,6 +457,202 @@ router bgp 65503
       neighbor UNDERLAY activate
       network 10.0.0.3/32
 ```
+### Проверка и просмотр bgp статусов
+Spine 1<br>
+```
+spine1# sho ip bgp
+BGP routing table information for VRF default
+Router identifier 10.1.1.1, local AS number 65500
+Route status codes: * - valid, > - active, # - not installed, E - ECMP head, e - ECMP
+                    S - Stale, c - Contributing to ECMP, b - backup, L - labeled-unicast
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+         Network                Next Hop            Metric  LocPref Weight  Path
+ * >     10.0.0.1/32            10.0.1.0              0       100     0       65501 i
+ * >     10.0.0.2/32            10.0.2.0              0       100     0       65502 i
+ * >     10.1.1.1/32            -                     0       0       -       i
+spine1#
+spine1# sho ip bgp detail
+BGP routing table information for VRF default
+Router identifier 10.1.1.1, local AS number 65500
+BGP routing table entry for 10.0.0.1/32
+ Paths: 1 available
+  65501
+    10.0.1.0 from 10.0.1.0 (10.0.0.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:37:32 ago, valid, external, best
+      Rx SAFI: Unicast
+BGP routing table entry for 10.0.0.2/32
+ Paths: 1 available
+  65502
+    10.0.2.0 from 10.0.2.0 (10.0.0.2)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:37:30 ago, valid, external, best
+      Rx SAFI: Unicast
+BGP routing table entry for 10.1.1.1/32
+ Paths: 1 available
+  Local
+    - from - (10.1.1.1)
+      Origin IGP, metric 0, localpref 0, IGP metric -, weight -, received 07:55:54 ago, valid, local, best, redistributed (Connected)
+      Rx SAFI: Unicast
+spine1#
+spine1# sho ip bgp  summary
+BGP summary information for VRF default
+Router identifier 10.1.1.1, local AS number 65500
+Neighbor Status Codes: m - Under maintenance
+  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+  10.0.1.0         4  65501            766       765    0    0 00:37:58 Estab   1      1
+  10.0.2.0         4  65502            765       764    0    0 00:37:55 Estab   1      1
+spine1#
+spine1#sho ip route bgp
+
+VRF: default
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+ B E      10.0.0.1/32 [200/0] via 10.0.1.0, Ethernet1
+ B E      10.0.0.2/32 [200/0] via 10.0.2.0, Ethernet2
+
+spine1#
+spine1#sho ip route
+
+VRF: default
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ B E      10.0.0.1/32 [200/0] via 10.0.1.0, Ethernet1
+ B E      10.0.0.2/32 [200/0] via 10.0.2.0, Ethernet2
+ C        10.0.1.0/31 is directly connected, Ethernet1
+ C        10.0.2.0/31 is directly connected, Ethernet2
+ C        10.0.3.0/31 is directly connected, Ethernet3
+ C        10.1.1.1/32 is directly connected, Loopback1
+ C        10.1.1.2/32 is directly connected, Loopback2
+
+spine1#
+```
+Информация со Spine2 <br>
+```
+spine2#sho ip bgp
+BGP routing table information for VRF default
+Router identifier 10.2.2.1, local AS number 65500
+Route status codes: * - valid, > - active, # - not installed, E - ECMP head, e - ECMP
+                    S - Stale, c - Contributing to ECMP, b - backup, L - labeled-unicast
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+         Network                Next Hop            Metric  LocPref Weight  Path
+ * >     10.0.0.1/32            10.0.1.4              0       100     0       65501 i
+ * >     10.0.0.2/32            10.0.2.4              0       100     0       65502 i
+ * >     10.0.0.3/32            10.0.3.4              0       100     0       65503 i
+ * >     10.2.2.1/32            -                     0       0       -       i
+spine2#
+spine2#show ip bgp detail
+BGP routing table information for VRF default
+Router identifier 10.2.2.1, local AS number 65500
+BGP routing table entry for 10.0.0.1/32
+ Paths: 1 available
+  65501
+    10.0.1.4 from 10.0.1.4 (10.0.0.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:34:50 ago, valid, external, best
+      Rx SAFI: Unicast
+BGP routing table entry for 10.0.0.2/32
+ Paths: 1 available
+  65502
+    10.0.2.4 from 10.0.2.4 (10.0.0.2)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:34:32 ago, valid, external, best
+      Rx SAFI: Unicast
+BGP routing table entry for 10.0.0.3/32
+ Paths: 1 available
+  65503
+    10.0.3.4 from 10.0.3.4 (10.0.0.3)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:34:37 ago, valid, external, best
+      Rx SAFI: Unicast
+BGP routing table entry for 10.2.2.1/32
+ Paths: 1 available
+  Local
+    - from - (10.2.2.1)
+      Origin IGP, metric 0, localpref 0, IGP metric -, weight -, received 08:00:09 ago, valid, local, best, redistributed (Connected)
+      Rx SAFI: Unicast
+spine2#
+spine2#
+spine2#
+spine2#show ip bgp summary
+BGP summary information for VRF default
+Router identifier 10.2.2.1, local AS number 65500
+Neighbor Status Codes: m - Under maintenance
+  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+  10.0.1.4         4  65501            711       711    0    0 00:35:13 Estab   1      1
+  10.0.2.4         4  65502            705       705    0    0 00:34:55 Estab   1      1
+  10.0.3.4         4  65503            705       707    0    0 00:35:00 Estab   1      1
+spine2#
+spine2#sho ip route bgp
+
+VRF: default
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+ B E      10.0.0.1/32 [200/0] via 10.0.1.4, Ethernet1
+ B E      10.0.0.2/32 [200/0] via 10.0.2.4, Ethernet2
+ B E      10.0.0.3/32 [200/0] via 10.0.3.4, Ethernet3
+
+spine2#
+spine2#sho ip route
+
+VRF: default
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ B E      10.0.0.1/32 [200/0] via 10.0.1.4, Ethernet1
+ B E      10.0.0.2/32 [200/0] via 10.0.2.4, Ethernet2
+ B E      10.0.0.3/32 [200/0] via 10.0.3.4, Ethernet3
+ C        10.0.1.4/31 is directly connected, Ethernet1
+ C        10.0.2.4/31 is directly connected, Ethernet2
+ C        10.0.3.4/31 is directly connected, Ethernet3
+ C        10.2.2.1/32 is directly connected, Loopback1
+ C        10.2.2.2/32 is directly connected, Loopback2
+
+spine2#
+```
+
 
 
 
