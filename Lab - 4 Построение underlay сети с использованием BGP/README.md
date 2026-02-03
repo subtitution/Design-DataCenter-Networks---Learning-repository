@@ -979,8 +979,22 @@ Codes: C - connected, S - static, K - kernel,
 
 leaf3#
 ```
+### 7.2. Проверка связи
+```
+leaf2#
+leaf2#ping 10.0.0.1 source 10.0.0.2
+PING 10.0.0.1 (10.0.0.1) from 10.0.0.2 : 72(100) bytes of data.
+80 bytes from 10.0.0.1: icmp_seq=1 ttl=63 time=46.9 ms
+80 bytes from 10.0.0.1: icmp_seq=2 ttl=63 time=46.8 ms
+80 bytes from 10.0.0.1: icmp_seq=3 ttl=63 time=47.4 ms
+80 bytes from 10.0.0.1: icmp_seq=4 ttl=63 time=53.1 ms
+80 bytes from 10.0.0.1: icmp_seq=5 ttl=63 time=29.8 ms
 
-
+--- 10.0.0.1 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 90ms
+rtt min/avg/max/mdev = 29.827/44.840/53.131/7.869 ms, pipe 4, ipg/ewma 22.743/45.526 ms
+leaf2#
+```
 
 
 
