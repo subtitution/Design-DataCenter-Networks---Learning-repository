@@ -407,6 +407,57 @@ router bgp 65500
 end
 spine2#
 ```
+Конфигурация Leaf-ов:<br>
+```
+leaf1#
+router bgp 65501
+   router-id 10.0.0.1
+   timers bgp 3 9
+   maximum-paths 2 ecmp 2
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor 10.0.1.1 peer group UNDERLAY
+   neighbor 10.0.1.5 peer group UNDERLAY
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.0.0.1/32
+!
+end
+-----------------
+
+leaf2#
+router bgp 65502
+   maximum-paths 2 ecmp 2
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor 10.0.2.1 peer group UNDERLAY
+   neighbor 10.0.2.5 peer group UNDERLAY
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.0.0.2/32
+!
+-----------------
+
+leaf3#
+router bgp 65503
+   router-id 10.0.0.3
+   timers bgp 3 9
+   maximum-paths 2 ecmp 2
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor 10.0.3.1 peer group UNDERLAY
+   neighbor 10.0.3.5 peer group UNDERLAY
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.0.0.3/32
+```
+
 
 
 
