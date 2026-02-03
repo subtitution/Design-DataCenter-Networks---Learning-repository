@@ -24,10 +24,10 @@
 <br>
 Итак, мы видим IP Loopback адресов Leaf2,3, но __Next hop__ очевидно не похож на адреса spine 1 и spine 2. <br>
 И правильно, мой дорогой, внимательный читатель, все Верно, на Spine коммутаторах я забыл ввести вот такю вот команду: _neighbor UNDERLAY next-hop-self_ <br>
-И добавляем на spine 1,2 в настройки bgp команду: _neighbor UNDERLAY next-hop-self_ <br>
-После возвращаемся на leaf1, и проверяемб что поменялось: <br>
+Добавляем в настройки bgp на spine 1,2  команду: _neighbor UNDERLAY next-hop-self_ <br>
+После возвращаемся на leaf1, и проверяем изменился ли Next hope: <br>
 <img width="1235" height="449" alt="image" src="https://github.com/user-attachments/assets/ef2d9cf8-c54a-489f-8227-906895829f4a" /><br>
-Видно ТЕПЕРЬ видно, что адреса __Next-hop__ поменялись, на адреса Spine-ов, у Spine и leaf есть связь, через пиринговые каналы, теперь маршрутизация будет работать. <br> <br>
+После добавления команды _neighbor UNDERLAY next-hop-self_, мы видим, что адреса __Next-hop__ поменялись, на адреса Spine-ов, у Spine и leaf есть связь, через пиринговые каналы, теперь маршрутизация будет работать. <br> <br>
 Так же прошу обратить внимание, что нам доступны loopback адрес 10.0.0.2 через spine 1 (10.1.1.1) и Spine 2 (10.2.2.1) - эта информация отображается в Cluster-List в колонке Path. Но loopback leaf 3 (10.0.0.3) доступен только через Spine 2. В этом нет ничего страшного, т.к. после предыдущей лабы, я забыл включить ethernet интерфейс на Leaf-3, идущий в сторону spine1. <br>
 Конечно же проверим IP связность между loopback адресами, связь есть, ниже пример: <br>
 <img width="983" height="1116" alt="image" src="https://github.com/user-attachments/assets/da3d6896-f47e-40aa-8a27-7a80780764dc" />
