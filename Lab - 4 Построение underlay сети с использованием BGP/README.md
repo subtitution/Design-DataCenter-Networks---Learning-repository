@@ -457,8 +457,8 @@ router bgp 65503
       neighbor UNDERLAY activate
       network 10.0.0.3/32
 ```
-### Проверка и просмотр bgp статусов
-Spine 1<br>
+### 7.1. Проверка и просмотр bgp статусов
+### Spine 1<br>
 ```
 spine1# sho ip bgp
 BGP routing table information for VRF default
@@ -549,7 +549,7 @@ Gateway of last resort is not set
 
 spine1#
 ```
-Информация со Spine2 <br>
+### Информация со Spine2 <br>
 ```
 spine2#sho ip bgp
 BGP routing table information for VRF default
@@ -652,7 +652,7 @@ Gateway of last resort is not set
 
 spine2#
 ```
-### Информация с Leaf1,2,3:
+### Информация с Leaf1
 ```
 leaf1#
 leaf1#show ip bgp
