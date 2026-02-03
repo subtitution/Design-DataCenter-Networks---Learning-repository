@@ -652,8 +652,333 @@ Gateway of last resort is not set
 
 spine2#
 ```
+### Информация с Leaf1,2,3:
+```
+leaf1#
+leaf1#show ip bgp
+BGP routing table information for VRF default
+Router identifier 10.0.0.1, local AS number 65501
+Route status codes: * - valid, > - active, # - not installed, E - ECMP head, e - ECMP
+                    S - Stale, c - Contributing to ECMP, b - backup, L - labeled-unicast
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
 
+         Network                Next Hop            Metric  LocPref Weight  Path
+ * >     10.0.0.1/32            -                     0       0       -       i
+ * >Ec   10.0.0.2/32            10.0.1.1              0       100     0       65500 65502 i
+ *  ec   10.0.0.2/32            10.0.1.5              0       100     0       65500 65502 i
+ * >     10.0.0.3/32            10.0.1.5              0       100     0       65500 65503 i
+ * >     10.1.1.1/32            10.0.1.1              0       100     0       65500 i
+ * >     10.2.2.1/32            10.0.1.5              0       100     0       65500 i
+leaf1#
+leaf1#show ip bgp detail
+BGP routing table information for VRF default
+Router identifier 10.0.0.1, local AS number 65501
+BGP routing table entry for 10.0.0.1/32
+ Paths: 1 available
+  Local
+    - from - (10.0.0.1)
+      Origin IGP, metric 0, localpref 0, IGP metric -, weight -, received 08:04:26 ago, valid, local, best, redistributed (Connected)
+      Rx SAFI: Unicast
+BGP routing table entry for 10.0.0.2/32
+ Paths: 2 available
+  65500 65502
+    10.0.1.1 from 10.0.1.1 (10.1.1.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:46:29 ago, valid, external, ECMP head, best, ECMP contributor
+      Rx SAFI: Unicast
+  65500 65502
+    10.0.1.5 from 10.0.1.5 (10.2.2.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:39:06 ago, valid, external, ECMP, ECMP contributor
+      Rx SAFI: Unicast
+BGP routing table entry for 10.0.0.3/32
+ Paths: 1 available
+  65500 65503
+    10.0.1.5 from 10.0.1.5 (10.2.2.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:39:11 ago, valid, external, best
+      Rx SAFI: Unicast
+BGP routing table entry for 10.1.1.1/32
+ Paths: 1 available
+  65500
+    10.0.1.1 from 10.0.1.1 (10.1.1.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:46:31 ago, valid, external, best
+      Rx SAFI: Unicast
+BGP routing table entry for 10.2.2.1/32
+ Paths: 1 available
+  65500
+    10.0.1.5 from 10.0.1.5 (10.2.2.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:39:23 ago, valid, external, best
+      Rx SAFI: Unicast
+leaf1#
+leaf1#show ip bgp summary
+BGP summary information for VRF default
+Router identifier 10.0.0.1, local AS number 65501
+Neighbor Status Codes: m - Under maintenance
+  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+  10.0.1.1         4  65500           1077      1078    0    0 00:46:39 Estab   2      2
+  10.0.1.5         4  65500            987       989    0    0 00:39:31 Estab   3      3
+leaf1#
+leaf1#show  ip route bgp
 
+VRF: default
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+ B E      10.0.0.2/32 [200/0] via 10.0.1.1, Ethernet1
+                              via 10.0.1.5, Ethernet2
+ B E      10.0.0.3/32 [200/0] via 10.0.1.5, Ethernet2
+ B E      10.1.1.1/32 [200/0] via 10.0.1.1, Ethernet1
+ B E      10.2.2.1/32 [200/0] via 10.0.1.5, Ethernet2
+
+leaf1#
+leaf1#show ip route
+
+VRF: default
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ C        10.0.0.1/32 is directly connected, Loopback1
+ B E      10.0.0.2/32 [200/0] via 10.0.1.1, Ethernet1
+                              via 10.0.1.5, Ethernet2
+ B E      10.0.0.3/32 [200/0] via 10.0.1.5, Ethernet2
+ C        10.0.1.0/31 is directly connected, Ethernet1
+ C        10.0.1.4/31 is directly connected, Ethernet2
+ B E      10.1.1.1/32 [200/0] via 10.0.1.1, Ethernet1
+ B E      10.2.2.1/32 [200/0] via 10.0.1.5, Ethernet2
+ C        192.168.1.0/24 is directly connected, Vlan1
+
+leaf1#
+leaf1#
+-----------------------
+```
+### leaf2
+```
+leaf2#show ip bgp
+BGP routing table information for VRF default
+Router identifier 10.0.0.2, local AS number 65502
+Route status codes: * - valid, > - active, # - not installed, E - ECMP head, e - ECMP
+                    S - Stale, c - Contributing to ECMP, b - backup, L - labeled-unicast
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+         Network                Next Hop            Metric  LocPref Weight  Path
+ * >Ec   10.0.0.1/32            10.0.2.1              0       100     0       65500 65501 i
+ *  ec   10.0.0.1/32            10.0.2.5              0       100     0       65500 65501 i
+ * >     10.0.0.2/32            -                     0       0       -       i
+ * >     10.0.0.3/32            10.0.2.5              0       100     0       65500 65503 i
+ * >     10.1.1.1/32            10.0.2.1              0       100     0       65500 i
+ * >     10.2.2.1/32            10.0.2.5              0       100     0       65500 i
+leaf2#
+leaf2#show ip bgp detail
+BGP routing table information for VRF default
+Router identifier 10.0.0.2, local AS number 65502
+BGP routing table entry for 10.0.0.1/32
+ Paths: 2 available
+  65500 65501
+    10.0.2.1 from 10.0.2.1 (10.1.1.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:51:21 ago, valid, external, ECMP head, best, ECMP contributor
+      Rx SAFI: Unicast
+  65500 65501
+    10.0.2.5 from 10.0.2.5 (10.2.2.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:43:58 ago, valid, external, ECMP, ECMP contributor
+      Rx SAFI: Unicast
+BGP routing table entry for 10.0.0.2/32
+ Paths: 1 available
+  Local
+    - from - (10.0.0.2)
+      Origin IGP, metric 0, localpref 0, IGP metric -, weight -, received 08:09:53 ago, valid, local, best, redistributed (Connected)
+      Rx SAFI: Unicast
+BGP routing table entry for 10.0.0.3/32
+ Paths: 1 available
+  65500 65503
+    10.0.2.5 from 10.0.2.5 (10.2.2.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:43:58 ago, valid, external, best
+      Rx SAFI: Unicast
+BGP routing table entry for 10.1.1.1/32
+ Paths: 1 available
+  65500
+    10.0.2.1 from 10.0.2.1 (10.1.1.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:51:21 ago, valid, external, best
+      Rx SAFI: Unicast
+BGP routing table entry for 10.2.2.1/32
+ Paths: 1 available
+  65500
+    10.0.2.5 from 10.0.2.5 (10.2.2.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:43:58 ago, valid, external, best
+      Rx SAFI: Unicast
+leaf2#
+[K sum bgp detail
+% Invalid input
+leaf2#
+leaf2#show ip bgp summary
+BGP summary information for VRF default
+Router identifier 10.0.0.2, local AS number 65502
+Neighbor Status Codes: m - Under maintenance
+  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+  10.0.2.1         4  65500           1157      1158    0    0 00:51:35 Estab   2      2
+  10.0.2.5         4  65500           1069      1069    0    0 00:44:12 Estab   3      3
+leaf2#
+leaf2#
+leaf2#
+leaf2#
+leaf2#
+leaf2#show ip route
+
+VRF: default
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ C        2.2.2.2/32 is directly connected, Loopback0
+ B E      10.0.0.1/32 [200/0] via 10.0.2.1, Ethernet1
+                              via 10.0.2.5, Ethernet2
+ C        10.0.0.2/32 is directly connected, Loopback1
+ B E      10.0.0.3/32 [200/0] via 10.0.2.5, Ethernet2
+ C        10.0.2.0/31 is directly connected, Ethernet1
+ C        10.0.2.4/31 is directly connected, Ethernet2
+ B E      10.1.1.1/32 [200/0] via 10.0.2.1, Ethernet1
+ B E      10.2.2.1/32 [200/0] via 10.0.2.5, Ethernet2
+ C        192.168.2.0/24 is directly connected, Ethernet5
+
+leaf2#
+```
+### Leaf3
+```
+leaf3#
+leaf3#show ip bgp
+BGP routing table information for VRF default
+Router identifier 10.0.0.3, local AS number 65503
+Route status codes: * - valid, > - active, # - not installed, E - ECMP head, e - ECMP
+                    S - Stale, c - Contributing to ECMP, b - backup, L - labeled-unicast
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+         Network                Next Hop            Metric  LocPref Weight  Path
+ * >     10.0.0.1/32            10.0.3.5              0       100     0       65500 65501 i
+ * >     10.0.0.2/32            10.0.3.5              0       100     0       65500 65502 i
+ * >     10.0.0.3/32            -                     0       0       -       i
+ * >     10.2.2.1/32            10.0.3.5              0       100     0       65500 i
+leaf3#
+leaf3#show ip bgp su
+BGP summary information for VRF default
+Router identifier 10.0.0.3, local AS number 65503
+Neighbor Status Codes: m - Under maintenance
+  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+  10.0.3.1         4  65500              0         0    0    0 01:03:21 Idle(NoIf)
+  10.0.3.5         4  65500            996       994    0    0 00:41:34 Estab   3      3
+leaf3#
+leaf3#show ip bgp detail
+BGP routing table information for VRF default
+Router identifier 10.0.0.3, local AS number 65503
+BGP routing table entry for 10.0.0.1/32
+ Paths: 1 available
+  65500 65501
+    10.0.3.5 from 10.0.3.5 (10.2.2.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:42:19 ago, valid, external, best
+      Rx SAFI: Unicast
+BGP routing table entry for 10.0.0.2/32
+ Paths: 1 available
+  65500 65502
+    10.0.3.5 from 10.0.3.5 (10.2.2.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:42:14 ago, valid, external, best
+      Rx SAFI: Unicast
+BGP routing table entry for 10.0.0.3/32
+ Paths: 1 available
+  Local
+    - from - (10.0.0.3)
+      Origin IGP, metric 0, localpref 0, IGP metric -, weight -, received 08:08:31 ago, valid, local, best, redistributed (Connected)
+      Rx SAFI: Unicast
+BGP routing table entry for 10.2.2.1/32
+ Paths: 1 available
+  65500
+    10.0.3.5 from 10.0.3.5 (10.2.2.1)
+      Origin IGP, metric 0, localpref 100, IGP metric 1, weight 0, received 00:42:19 ago, valid, external, best
+      Rx SAFI: Unicast
+leaf3#
+leaf3#sho ip route
+
+VRF: default
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ B E      10.0.0.1/32 [200/0] via 10.0.3.5, Ethernet2
+ B E      10.0.0.2/32 [200/0] via 10.0.3.5, Ethernet2
+ C        10.0.0.3/32 is directly connected, Loopback1
+ C        10.0.3.4/31 is directly connected, Ethernet2
+ B E      10.2.2.1/32 [200/0] via 10.0.3.5, Ethernet2
+ C        192.168.3.0/24 is directly connected, Vlan3
+
+leaf3#
+leaf3#sho ip route bgp ?
+  detail     All routes
+  interface  Show only via on this interface
+  next-hop   Filter output by next hop
+  >          Redirect output to URL
+  >>         Append redirected output to URL
+  |          Command output pipe filters
+  <cr>
+
+leaf3#sho ip route bgp detail
+
+VRF: default
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+ B E      10.0.0.1/32 [200/0] via 10.0.3.5, Ethernet2 Peer-to-peer link to Spine-2
+ B E      10.0.0.2/32 [200/0] via 10.0.3.5, Ethernet2 Peer-to-peer link to Spine-2
+ B E      10.2.2.1/32 [200/0] via 10.0.3.5, Ethernet2 Peer-to-peer link to Spine-2
+
+leaf3#
+```
 
 
 
