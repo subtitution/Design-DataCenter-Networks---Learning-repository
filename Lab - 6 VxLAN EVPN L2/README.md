@@ -31,3 +31,12 @@
 
 ### Multicast
 - __Type-6,7,8__ - Для распространения PIM, IGMP Leave/Join по фабрике
+
+leaf1(config)#service routing protocols model multi-agent
+! Change will take effect only after switch reboot
+
+leaf1(config-if-Vx1)#vxlan vlan 1 vni ?
+  $                  list end
+  <0.1-65535.65534>  VXLAN Network Identifier (VNI) or range(s) of VNIs
+
+leaf1(config-if-Vx1)#vxlan vlan 1 vni 1
