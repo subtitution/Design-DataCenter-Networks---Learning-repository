@@ -27,7 +27,7 @@
 - __Type-1 Route__ - Ethernet Auto-Discovery Route (Для объявления Ethernet Segment Identifier (__ESI__) (Для конвергенции и балансировки))
 
 ### Связь с внешним миром
--__Type-5 Route__ - IP-prefix route advertisement (Для анонса внешних маршрутов в фабрику)
+- __Type-5 Route__ - IP-prefix route advertisement (Для анонса внешних маршрутов в фабрику)
 
 ### Multicast
--__Type-6,7,8__ - Для распространения PIM, IGMP Leave/Join по фабрике
+- __Type-6,7,8__ - Для распространения PIM, IGMP Leave/Join по фабрике
