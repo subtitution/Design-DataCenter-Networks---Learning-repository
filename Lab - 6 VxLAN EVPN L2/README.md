@@ -35,8 +35,98 @@
 leaf1(config)#service routing protocols model multi-agent
 ! Change will take effect only after switch reboot
 
-leaf1(config-if-Vx1)#vxlan vlan 1 vni ?
-  $                  list end
-  <0.1-65535.65534>  VXLAN Network Identifier (VNI) or range(s) of VNIs
+ Ниже конфигурация Leaf1:
+ leaf1#sho run
+! Command: show running-config
+! device: leaf1 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname leaf1
+!
+spanning-tree mode mstp
+!
+vlan 1
+   name Host_Network
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine-1
+   no switchport
+   ip address 10.0.1.0/31
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine-2
+   no switchport
+   ip address 10.0.1.4/31
+!
+interface Ethernet3
+   description -=Direction to host=-
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Loopback0
+   description for Underlay network
+   ip address 10.0.0.1/32
+!
+interface Loopback1
+   description for Overlay VxLAN loobback
+   ip address 10.1.0.1/32
+!
+interface Management1
+!
+interface Vlan1
+   ip address 192.168.1.1/24
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 1 vni 1
+!
+ip routing
+!
+router bgp 65501
+   router-id 10.0.0.1
+   timers bgp 3 9
+   maximum-paths 2 ecmp 2
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY update-source Loopback0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.1.1 peer group UNDERLAY
+   neighbor 10.0.1.1 remote-as 65500
+   neighbor 10.0.1.1 send-community extended
+   neighbor 10.0.1.5 peer group UNDERLAY
+   neighbor 10.0.1.5 remote-as 65500
+   neighbor 10.0.1.5 send-community extended
+   !
+   vlan 1
+      rd auto
+      route-target both 1:1
+      redistribute learned
+   !
+   address-family evpn
+      neighbor 10.0.1.1 activate
+      neighbor 10.0.1.5 activate
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.0.0.1/32
+!
+end
+leaf1#
 
-leaf1(config-if-Vx1)#vxlan vlan 1 vni 1
