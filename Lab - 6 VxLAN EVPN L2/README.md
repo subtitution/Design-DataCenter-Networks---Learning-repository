@@ -32,6 +32,8 @@
 ### Multicast
 - __Type-6,7,8__ - Для распространения PIM, IGMP Leave/Join по фабрике
 # 2. Практика - Настройка
+<img width="1053" height="599" alt="image" src="https://github.com/user-attachments/assets/bc6f1747-3d19-4fed-8168-db814ec7b5b2" />
+
 ## 2.1. Настройка leaf1
 ```
 leaf1(config)#service routing protocols model multi-agent
