@@ -15,7 +15,7 @@
 - __EVI__ - EVPN Instance - логический свитч в EVPN домене
 - __MAC-VRF__ - Virtual Routing and Forwarding table для MAC адресов
 
-# Теория
+# 1. Теория
 ## Типы маршрутов EVPN
 
 ### Основные операци
@@ -31,7 +31,9 @@
 
 ### Multicast
 - __Type-6,7,8__ - Для распространения PIM, IGMP Leave/Join по фабрике
-
+# 2. Практика - Настройка
+## 2.1. Настройка leaf1
+```
 leaf1(config)#service routing protocols model multi-agent
 ! Change will take effect only after switch reboot
 
@@ -129,4 +131,4 @@ router bgp 65501
 !
 end
 leaf1#
-
+```
