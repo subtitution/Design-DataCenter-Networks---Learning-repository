@@ -37,7 +37,6 @@
 leaf1(config)#service routing protocols model multi-agent
 ! Change will take effect only after switch reboot
 
- Ниже конфигурация Leaf1:
  leaf1#sho run
 ! Command: show running-config
 ! device: leaf1 (vEOS-lab, EOS-4.29.2F)
@@ -70,16 +69,7 @@ interface Ethernet2
 interface Ethernet3
    description -=Direction to host=-
 !
-interface Ethernet4
-!
-interface Ethernet5
-!
-interface Ethernet6
-!
-interface Ethernet7
-!
-interface Ethernet8
-!
+
 interface Loopback0
    description for Underlay network
    ip address 10.0.0.1/32
