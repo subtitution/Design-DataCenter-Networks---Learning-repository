@@ -410,3 +410,61 @@ router bgp 65500
       network 10.1.1.1/32
 !
 ```
+## Основные настройки Spine 2
+```
+spine2#
+!
+interface Ethernet1
+   description Peer-to-peer link to leaf-1
+   no switchport
+   ip address 10.0.1.5/31
+!
+interface Ethernet2
+   description Peer-to-peer link to leaf-2<br>
+   no switchport
+   ip address 10.0.2.5/31
+!
+interface Ethernet3
+   description Peer-to-peer link to leaf-3<br>
+   no switchport
+   ip address 10.0.3.5/31
+!
+interface Loopback1
+   description Overlay loopback
+   ip address 10.2.2.2/32
+!
+peer-filter fleaf-asn
+   1 match as-range 65500-65600 result accept
+!
+router bgp 65500
+   router-id 10.2.2.2
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.1.4 peer group UNDERLAY
+   neighbor 10.0.1.4 remote-as 65501
+   neighbor 10.0.2.4 peer group UNDERLAY
+   neighbor 10.0.2.4 remote-as 65502
+   neighbor 10.0.3.4 peer group UNDERLAY
+   neighbor 10.0.3.4 remote-as 65503
+   neighbor 10.1.0.1 peer group SPINE-EVPN
+   neighbor 10.1.0.1 remote-as 65501
+   neighbor 10.1.0.2 peer group SPINE-EVPN
+   neighbor 10.1.0.2 remote-as 65502
+   neighbor 10.1.0.3 peer group SPINE-EVPN
+   neighbor 10.1.0.3 remote-as 65503
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+      neighbor SPINE-EVPN next-hop-unchanged
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.2.2.2/32
+```
