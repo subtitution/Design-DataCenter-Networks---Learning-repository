@@ -534,3 +534,64 @@ router bgp 65501
       network 10.1.0.1/32
 ```
 ### 3.2.2. Настройка leaf2
+```
+service routing protocols model multi-agent
+!
+vlan 112
+   name Host_network_Vlan_112
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine-1
+   no switchport
+   ip address 10.0.2.0/31
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine-2
+   no switchport
+   ip address 10.0.2.4/31
+!
+interface Ethernet3
+   description to host 112 VLAN
+   switchport access vlan 112
+!
+interface Loopback1
+   description VTEP
+   ip address 10.1.0.2/32
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 112 vni 1112
+!
+router bgp 65502
+   router-id 10.1.0.2
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   maximum-paths 2 ecmp 2
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN remote-as 65500
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.2.1 peer group UNDERLAY
+   neighbor 10.0.2.5 peer group UNDERLAY
+   neighbor 10.1.1.1 peer group SPINE-EVPN
+   neighbor 10.2.2.2 peer group SPINE-EVPN
+   !
+   vlan 112
+      rd auto
+      route-target both 65500:1112
+      redistribute learned
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.1.0.2/32
+!
+```
