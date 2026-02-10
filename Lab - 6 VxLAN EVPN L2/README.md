@@ -348,15 +348,6 @@ leaf2#
 3. Ниже обновленная схема представлена на рисунке.
 ## Настройки Spine1
 ``` arista
-spine1#sho run
-! Command: show running-config
-! device: spine1 (vEOS-lab, EOS-4.29.2F)
-!
-! boot system flash:/vEOS-lab.swi
-!
-no aaa root
-!
-transceiver qsfp default-mode 4x10G
 !
 service routing protocols model multi-agent
 !
@@ -379,30 +370,12 @@ interface Ethernet3
    no switchport
    ip address 10.0.3.1/31
 !
-interface Ethernet4
-!
-interface Ethernet5
-!
-interface Ethernet6
-!
-interface Ethernet7
-!
-interface Ethernet8
-!
 interface Loopback1
    description IP for underlay -Router-ID
    ip address 10.1.1.1/32
 !
-interface Management1
-!
-ip routing
-!
 peer-filter fleaf-asn
    1 match as-range 65500-65600 result accept
-!
-peer-filter lea
-!
-peer-filter li
 !
 router bgp 65500
    router-id 10.1.1.1
