@@ -346,3 +346,94 @@ leaf2#
 1. Я избавился от loopback интерфесов на Leaf коммутаторах, на которых ранее пытался сделать UNDERLAY BGP сеть. Вместо loopbcak интерфейсов используются настоящие физические для построения и анонсирования.
 2. На leaf коммутаторах loopback адреса используются для построения EVPN BGP.
 3. Ниже обновленная схема представлена на рисунке.
+## Настройки Spine1
+``` arista
+spine1#sho run
+! Command: show running-config
+! device: spine1 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname spine1
+!
+spanning-tree mode mstp
+!
+interface Ethernet1
+   description Peer-to-peer link to leaf-1
+   no switchport
+   ip address 10.0.1.1/31
+!
+interface Ethernet2
+   description Peer-to-peer link to leaf-2
+   no switchport
+   ip address 10.0.2.1/31
+!
+interface Ethernet3
+   description Peer-to-peer link to leaf-3
+   no switchport
+   ip address 10.0.3.1/31
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Loopback1
+   description IP for underlay -Router-ID
+   ip address 10.1.1.1/32
+!
+interface Management1
+!
+ip routing
+!
+peer-filter fleaf-asn
+   1 match as-range 65500-65600 result accept
+!
+peer-filter lea
+!
+peer-filter li
+!
+router bgp 65500
+   router-id 10.1.1.1
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.1.0 peer group UNDERLAY
+   neighbor 10.0.1.0 remote-as 65501
+   neighbor 10.0.2.0 peer group UNDERLAY
+   neighbor 10.0.2.0 remote-as 65502
+   neighbor 10.0.3.0 peer group UNDERLAY
+   neighbor 10.0.3.0 remote-as 65503
+   neighbor 10.1.0.1 peer group SPINE-EVPN
+   neighbor 10.1.0.1 remote-as 65501
+   neighbor 10.1.0.2 peer group SPINE-EVPN
+   neighbor 10.1.0.2 remote-as 65502
+   neighbor 10.1.0.3 peer group SPINE-EVPN
+   neighbor 10.1.0.3 remote-as 65503
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+      neighbor SPINE-EVPN next-hop-unchanged
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.1.1.1/32
+!
+```
