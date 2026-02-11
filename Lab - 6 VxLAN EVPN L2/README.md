@@ -652,5 +652,11 @@ router bgp 65503
       network 10.1.0.3/32
 ```
 ## 4. Процесс установления BGP EVPN сессии
-И так дорогие мои мы дошли до самой магии, у нас уже есть установившиеся eBGP сессия, бегают пакетики туда-сюда. И вот Leaf1 становится инициатором в установке EVPN BGP сессии и соответсвенно, отправляет своим соседам (Spine 1 и 2) __BGP Open Message__, ниже пример:
+И так дорогие мои мы дошли до самой магии, у нас уже есть установившиеся eBGP сессия, бегают пакетики туда-сюда. И вот Leaf1 становится инициатором в установке EVPN BGP сессии и соответсвенно, отправляет своим соседам (Spine 1 и 2) __BGP Open Message__:
+Leaf1, d OPEN сообщении сообщает номер своей AS 65501, BGP Identifier 10.1.0.1, ниже пример:
 <img width="922" height="2094" alt="image" src="https://github.com/user-attachments/assets/0d7725af-e963-4a06-b007-10fc2882af6f" />
+Естественно аналогичным образом Spine1,2 отвечают с указанием своей AS и BGP Identifier.
+После черего происходит обмен keepalive-ами. Далее Leaf1 пробует установить EVPN BGP сессию, и в этот раз  посылает ~~OPEN~~ Update Message, в котором содержится следующая ключевая информация:
+в NLRI содержится Route Distinguisher, Path Attribute - Extended Communitties->Route target: 65500:1112, Type tunnel: Vxlan Encapsulation, снизу картинка:
+<img width="1044" height="2780" alt="image" src="https://github.com/user-attachments/assets/9823a405-8462-4657-9f1a-849387da255d" />
+
