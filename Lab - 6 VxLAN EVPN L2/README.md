@@ -659,4 +659,7 @@ Leaf1, d OPEN сообщении сообщает номер своей AS 65501
 После черего происходит обмен keepalive-ами. Далее Leaf1 пробует установить EVPN BGP сессию, и в этот раз  посылает ~~OPEN~~ Update Message, в котором содержится следующая ключевая информация:
 в NLRI содержится Route Distinguisher, Path Attribute - Extended Communitties->Route target: 65500:1112, Type tunnel: Vxlan Encapsulation, снизу картинка:
 <img width="1044" height="2780" alt="image" src="https://github.com/user-attachments/assets/9823a405-8462-4657-9f1a-849387da255d" />
+Через некоторое время leaf 1, получил BGP UPDATE от spine1, в котором указывались атрибуты для построения BGP EVPN туннеля с Leaf2, картинка снизу:
+<img width="1040" height="1588" alt="image" src="https://github.com/user-attachments/assets/5236eac9-dfe5-4e96-b0a7-fafcd959c6b2" />
+
 
