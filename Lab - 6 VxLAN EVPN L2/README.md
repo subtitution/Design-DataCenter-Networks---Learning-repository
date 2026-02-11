@@ -650,3 +650,6 @@ router bgp 65503
       neighbor UNDERLAY activate
       network 10.1.0.3/32
 ```
+## 4. Процесс установления BGP EVPN сессии
+И так дорогие мои мы дошли до самой магии, у нас уже есть установившиеся eBGP сессия, бегают пакетики туда-сюда. И вот Leaf1 становится инициатором в установке EVPN BGP сессии и соответсвенно, отправляет своим соседам (Spine 1 и 2) __BGP Open Message__, ниже пример:
+<img width="922" height="2094" alt="image" src="https://github.com/user-attachments/assets/0d7725af-e963-4a06-b007-10fc2882af6f" />
