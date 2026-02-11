@@ -595,3 +595,58 @@ router bgp 65502
       network 10.1.0.2/32
 !
 ```
+### 3.2.3. Настройка leaf3
+```
+! device: leaf3 (vEOS-lab, EOS-4.29.2F)
+!
+service routing protocols model multi-agent
+!
+vlan 3
+   name 3
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine-1
+   no switchport
+   ip address 10.0.3.0/31
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine-2
+   no switchport
+   ip address 10.0.3.4/31
+!
+interface Ethernet3
+   switchport access vlan 3
+!
+interface Loopback1
+   description VTEP
+   ip address 10.1.0.3/32
+!
+interface Vlan3
+   ip address 192.168.3.1/24
+!
+router bgp 65503
+   router-id 10.1.0.3
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   maximum-paths 2 ecmp 2
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN remote-as 65500
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.3.1 peer group UNDERLAY
+   neighbor 10.0.3.5 peer group UNDERLAY
+   neighbor 10.1.1.1 peer group SPINE-EVPN
+   neighbor 10.2.2.2 peer group SPINE-EVPN
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.1.0.3/32
+```
