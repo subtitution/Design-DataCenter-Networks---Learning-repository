@@ -347,7 +347,8 @@ leaf2#
 1. Я избавился от loopback интерфесов на Leaf коммутаторах, на которых ранее пытался сделать UNDERLAY BGP сеть. Вместо loopbcak интерфейсов используются настоящие физические для построения и анонсирования.
 2. На leaf коммутаторах loopback адреса используются для построения EVPN BGP.
 3. Ниже обновленная схема представлена на рисунке.
-<img width="1512" height="924" alt="image" src="https://github.com/user-attachments/assets/72bd7a94-5518-46a0-a80f-2f3eaa49c96f" />
+<img width="1512" height="924" alt="image" src="https://github.com/user-attachments/assets/105c1fa1-4ddc-4a4e-9ca8-c79249c59332" />
+
 
 
 ## 3.1. Настройки  Spine коммутаторов
