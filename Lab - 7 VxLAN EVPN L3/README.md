@@ -210,6 +210,90 @@ RHOST:PORT  : 127.0.0.1:30000
 MTU         : 1500
 
 VPCS>
+## Проверка на leaf1
+leaf1#
+ho bgp evpn route-type mac-ip
+BGP routing table information for VRF default
+Router identifier 10.1.0.1, local AS number 65501
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
 
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 10.1.0.1:112 mac-ip 0050.7966.6807
+                                 -                     -       -       0       i
+ * >      RD: 10.1.0.1:112 mac-ip 0050.7966.6807 192.168.112.2
+                                 -                     -       -       0       i
+ * >Ec    RD: 10.1.0.2:112 mac-ip 0050.7966.6808
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:112 mac-ip 0050.7966.6808
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >Ec    RD: 10.1.0.2:112 mac-ip 0050.7966.6808 192.168.112.3
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:112 mac-ip 0050.7966.6808 192.168.112.3
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >Ec    RD: 10.1.0.2:112 mac-ip 0050.7966.6808 192.168.112.112
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:112 mac-ip 0050.7966.6808 192.168.112.112
+                                 10.1.0.2              -       100     0       65500 65502 i
+leaf1#
+leaf1#
+
+## ТОже самое но детально
+leaf1#sho bgp evpn route-type mac-ip detail
+BGP routing table information for VRF default
+Router identifier 10.1.0.1, local AS number 65501
+BGP routing table entry for mac-ip 0050.7966.6807, Route Distinguisher: 10.1.0.1:112
+ Paths: 1 available
+  Local
+    - from - (0.0.0.0)
+      Origin IGP, metric -, localpref -, weight 0, tag 0, valid, local, best
+      Extended Community: Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan
+      VNI: 1112 ESI: 0000:0000:0000:0000:0000
+BGP routing table entry for mac-ip 0050.7966.6807 192.168.112.2, Route Distinguisher: 10.1.0.1:112
+ Paths: 1 available
+  Local
+    - from - (0.0.0.0)
+      Origin IGP, metric -, localpref -, weight 0, tag 0, valid, local, best
+      Extended Community: Route-Target-AS:1:666 Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan
+      VNI: 1112 L3 VNI: 666 ESI: 0000:0000:0000:0000:0000
+BGP routing table entry for mac-ip 0050.7966.6808, Route Distinguisher: 10.1.0.2:112
+ Paths: 2 available
+  65500 65502
+    10.1.0.2 from 10.2.2.2 (10.2.2.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan
+      VNI: 1112 ESI: 0000:0000:0000:0000:0000
+  65500 65502
+    10.1.0.2 from 10.1.1.1 (10.1.1.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan
+      VNI: 1112 ESI: 0000:0000:0000:0000:0000
+BGP routing table entry for mac-ip 0050.7966.6808 192.168.112.3, Route Distinguisher: 10.1.0.2:112
+ Paths: 2 available
+  65500 65502
+    10.1.0.2 from 10.2.2.2 (10.2.2.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:1:666 Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:cb:38:c2
+      VNI: 1112 L3 VNI: 666 ESI: 0000:0000:0000:0000:0000
+  65500 65502
+    10.1.0.2 from 10.1.1.1 (10.1.1.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:1:666 Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:cb:38:c2
+      VNI: 1112 L3 VNI: 666 ESI: 0000:0000:0000:0000:0000
+BGP routing table entry for mac-ip 0050.7966.6808 192.168.112.112, Route Distinguisher: 10.1.0.2:112
+ Paths: 2 available
+  65500 65502
+    10.1.0.2 from 10.2.2.2 (10.2.2.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:1:666 Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:cb:38:c2
+      VNI: 1112 L3 VNI: 666 ESI: 0000:0000:0000:0000:0000
+  65500 65502
+    10.1.0.2 from 10.1.1.1 (10.1.1.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:1:666 Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:cb:38:c2
+      VNI: 1112 L3 VNI: 666 ESI: 0000:0000:0000:0000:0000
+leaf1#
 
 
