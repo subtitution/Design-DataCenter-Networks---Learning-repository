@@ -842,6 +842,57 @@ Neighbor Status Codes: m - Under maintenance
   10.1.1.1 4 65500         149289    149343    0    0    4d10h Estab   3      3
   10.2.2.2 4 65500         149219    149275    0    0    4d10h Estab   3      3
 ```
+## Просмотр bgp с leaf3
+```
+leaf3#sho bgp summary
+BGP summary information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+Neighbor          AS Session State AFI/SAFI                AFI/SAFI State   NLRI Rcd   NLRI Acc
+-------- ----------- ------------- ----------------------- -------------- ---------- ----------
+10.0.3.1       65500 Established   IPv4 Unicast            Negotiated              3          3
+10.0.3.5       65500 Established   IPv4 Unicast            Negotiated              3          3
+10.1.1.1       65500 Established   L2VPN EVPN              Negotiated              6          6
+10.2.2.2       65500 Established   L2VPN EVPN              Negotiated              6          6
+leaf3#
+```
+## Просмотр BGP EVPN на spine2
+```
+spine2#sho bgp evpn
+BGP routing table information for VRF default
+Router identifier 10.2.2.2, local AS number 65500
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 10.1.0.1:1 imet 10.1.0.1
+                                 10.1.0.1              -       100     0       65501 i
+ * >      RD: 10.1.0.1:2 imet 10.1.0.1
+                                 10.1.0.1              -       100     0       65501 i
+ * >      RD: 10.1.0.2:112 imet 10.1.0.2
+                                 10.1.0.2              -       100     0       65502 i
+ * >      RD: 10.1.0.2:113 imet 10.1.0.2
+                                 10.1.0.2              -       100     0       65502 i
+ * >      RD: 10.1.0.3:112 imet 10.1.0.3
+                                 10.1.0.3              -       100     0       65503 i
+spine2#
+```
+## Просмотр bgp на spine2
+```
+spine2#sho bgp summary
+BGP summary information for VRF default
+Router identifier 10.2.2.2, local AS number 65500
+Neighbor          AS Session State AFI/SAFI                AFI/SAFI State   NLRI Rcd   NLRI Acc
+-------- ----------- ------------- ----------------------- -------------- ---------- ----------
+10.0.1.4       65501 Established   IPv4 Unicast            Negotiated              1          1
+10.0.2.4       65502 Established   IPv4 Unicast            Negotiated              1          1
+10.0.3.4       65503 Established   IPv4 Unicast            Negotiated              1          1
+10.1.0.1       65501 Established   L2VPN EVPN              Negotiated              2          2
+10.1.0.2       65502 Established   L2VPN EVPN              Negotiated              2          2
+10.1.0.3       65503 Established   L2VPN EVPN              Negotiated              1          1
+```
+
 ## Просмотр интерфейса Vxlan
 ```
 leaf2#
