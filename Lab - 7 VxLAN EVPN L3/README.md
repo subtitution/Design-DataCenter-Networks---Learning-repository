@@ -181,3 +181,35 @@ Gateway of last resort is not set
  C        192.168.113.0/24 is directly connected, Vlan113
 
 leaf1#
+
+
+## Смотрим дампы пинга
+<img width="925" height="380" alt="image" src="https://github.com/user-attachments/assets/c8c08dc0-02d9-4459-bed9-798a400005bd" />
+
+VPCS> ping 192.168.112.112
+
+84 bytes from 192.168.112.112 icmp_seq=1 ttl=64 time=88.546 ms
+84 bytes from 192.168.112.112 icmp_seq=2 ttl=64 time=112.694 ms
+84 bytes from 192.168.112.112 icmp_seq=3 ttl=64 time=49.601 ms
+84 bytes from 192.168.112.112 icmp_seq=4 ttl=64 time=60.305 ms
+84 bytes from 192.168.112.112 icmp_seq=5 ttl=64 time=44.472 ms
+
+VPCS>
+VPCS>
+VPCS>
+VPCS>
+VPCS> show ip
+
+NAME        : VPCS[1]
+IP/MASK     : 192.168.112.2/24
+GATEWAY     : 192.168.112.1
+DNS         :
+MAC         : 00:50:79:66:68:07
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+VPCS>
+
+
+
