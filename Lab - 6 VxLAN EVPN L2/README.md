@@ -974,4 +974,105 @@ router bgp 65502
 end
 leaf2#
 ```
+## Пример конфига lEAF3
+```
+leaf3#sho run
+! Command: show running-config
+! device: leaf3 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname leaf3
+!
+spanning-tree mode mstp
+!
+vlan 3
+   name 3
+!
+vlan 112
+   name 112
+!
+vlan 113
+   name 113
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine-1
+   no switchport
+   ip address 10.0.3.0/31
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine-2
+   no switchport
+   ip address 10.0.3.4/31
+!
+interface Ethernet3
+   switchport access vlan 112
+!
+interface Ethernet4
+   switchport access vlan 112
+!
+interface Loopback1
+   description VTEP
+   ip address 10.1.0.3/32
+!
+interface Management1
+!
+interface Vlan112
+   ip address 192.168.112.1/24
+!
+interface Vlan113
+   ip address 192.168.113.2/24
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 112 vni 1112
+!
+ip routing
+!
+router bgp 65503
+   router-id 10.1.0.3
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   maximum-paths 2 ecmp 2
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN remote-as 65500
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.3.1 peer group UNDERLAY
+   neighbor 10.0.3.5 peer group UNDERLAY
+   neighbor 10.1.1.1 peer group SPINE-EVPN
+   neighbor 10.2.2.2 peer group SPINE-EVPN
+   !
+   vlan 112
+      rd auto
+      route-target both 65500:1112
+      redistribute learned
+   !
+   vlan 113
+      rd auto
+      route-target both 65500:1113
+      redistribute learned
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.1.0.3/32
+!
+end
+leaf3#
+```
 Кто дочитал, тот молодец:) Всем пока.
