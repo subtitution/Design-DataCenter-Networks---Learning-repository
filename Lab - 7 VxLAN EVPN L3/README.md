@@ -296,4 +296,6 @@ BGP routing table entry for mac-ip 0050.7966.6808 192.168.112.112, Route Disting
       VNI: 1112 L3 VNI: 666 ESI: 0000:0000:0000:0000:0000
 leaf1#
 
+<img width="1150" height="496" alt="image" src="https://github.com/user-attachments/assets/53178607-d742-41fd-8128-8272c5a6c190" />
+
 
