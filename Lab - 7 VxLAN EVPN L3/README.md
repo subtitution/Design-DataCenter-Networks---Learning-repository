@@ -99,7 +99,7 @@ VTEP           Tunnel Type(s)
 10.1.0.3       flood
 
 Total number of remote VTEPS:  2
-```
+
 VPCS> ping 192.168.112.112
 
 84 bytes from 192.168.112.112 icmp_seq=1 ttl=64 time=99.696 ms
@@ -118,24 +118,21 @@ MAC         : 00:50:79:66:68:07
 LPORT       : 20000
 RHOST:PORT  : 127.0.0.1:30000
 MTU         : 1500
+```
 
 
-## IP Адрес pc2-1
-VPCS> show ip
+## Просмотр mac Адреса pc2-1
+```
+pc2-1> show ip
 
 NAME        : VPCS[1]
 IP/MASK     : 192.168.112.112/24
 GATEWAY     : 192.168.112.1
-DNS         :
-MAC         : 00:50:79:66:68:08
-LPORT       : 20000
-RHOST:PORT  : 127.0.0.1:30000
-MTU         : 1500
+```
+__MAC         : 00:50:79:66:68:08__
 
-VPCS>
-leaf2#
-leaf2#
 ## Просмотр vrf routing on Leaf2
+```
 leaf2#sho ip route vrf vrf1
 
 VRF: vrf1
@@ -157,9 +154,10 @@ Gateway of last resort is not set
  C        192.168.113.0/24 is directly connected, Vlan113
 
 leaf2#
-
+```
 
 ## Просмотр vrf маршрутизации на leaf1
+```
 leaf1#sho ip route vrf vrf1
 
 VRF: vrf1
@@ -181,11 +179,11 @@ Gateway of last resort is not set
  C        192.168.113.0/24 is directly connected, Vlan113
 
 leaf1#
-
+```
 
 ## Смотрим дампы пинга
 <img width="925" height="380" alt="image" src="https://github.com/user-attachments/assets/c8c08dc0-02d9-4459-bed9-798a400005bd" />
-
+```
 VPCS> ping 192.168.112.112
 
 84 bytes from 192.168.112.112 icmp_seq=1 ttl=64 time=88.546 ms
@@ -194,23 +192,17 @@ VPCS> ping 192.168.112.112
 84 bytes from 192.168.112.112 icmp_seq=4 ttl=64 time=60.305 ms
 84 bytes from 192.168.112.112 icmp_seq=5 ttl=64 time=44.472 ms
 
-VPCS>
-VPCS>
-VPCS>
-VPCS>
 VPCS> show ip
 
 NAME        : VPCS[1]
 IP/MASK     : 192.168.112.2/24
 GATEWAY     : 192.168.112.1
-DNS         :
-MAC         : 00:50:79:66:68:07
-LPORT       : 20000
-RHOST:PORT  : 127.0.0.1:30000
-MTU         : 1500
+```
+__MAC         : 00:50:79:66:68:07__
 
-VPCS>
+
 ## Проверка на leaf1
+```
 leaf1#
 ho bgp evpn route-type mac-ip
 BGP routing table information for VRF default
@@ -239,8 +231,9 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
                                  10.1.0.2              -       100     0       65500 65502 i
 leaf1#
 leaf1#
-
-## ТОже самое но детально
+```
+## Просмотр BGP EVPN route mac-ip детально c Leaf1
+```
 leaf1#sho bgp evpn route-type mac-ip detail
 BGP routing table information for VRF default
 Router identifier 10.1.0.1, local AS number 65501
@@ -295,7 +288,7 @@ BGP routing table entry for mac-ip 0050.7966.6808 192.168.112.112, Route Disting
       Extended Community: Route-Target-AS:1:666 Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:cb:38:c2
       VNI: 1112 L3 VNI: 666 ESI: 0000:0000:0000:0000:0000
 leaf1#
-
+```
 <img width="1150" height="496" alt="image" src="https://github.com/user-attachments/assets/53178607-d742-41fd-8128-8272c5a6c190" />
 
 
