@@ -284,5 +284,44 @@ BGP routing table entry for mac-ip 0050.7966.6808 192.168.112.112, Route Disting
 leaf1#
 ```
 <img width="1150" height="496" alt="image" src="https://github.com/user-attachments/assets/53178607-d742-41fd-8128-8272c5a6c190" />
+## Информация с leaf3
+Снизу представлена информация об интерфейсе Vxlan1, он "поднят", для своей работы и использует IP адрес Loopback 1 (10.1.0.3), для расспространение mac информации о 112 VLAN использует следующие ip адреса Vtep-ов :  10.1.0.1        10.1.0.2
+```
+Vxlan1 is up, line protocol is up (connected)
+  Hardware is Vxlan
+  Source interface is Loopback1 and is active with 10.1.0.3
+  Listening on UDP port 4789
+  Replication/Flood Mode is headend with Flood List Source: EVPN
+  Remote MAC learning via EVPN
+  VNI mapping to VLANs
+  Static VLAN to VNI mapping is
+    [112, 1112]
+  Dynamic VLAN to VNI mapping for 'evpn' is
+    [4094, 666]
+  Note: All Dynamic VLANs used by VCS are internal VLANs.
+        Use 'show vxlan vni' for details.
+  Static VRF to VNI mapping is not configured
+  Headend replication flood vtep list is:
+   112 10.1.0.1        10.1.0.2
+  Shared Router MAC is 0000.0000.0000
+leaf3#
+```
+## Просмотр имеющихся VNI на leaf3
+```
+leaf3#
+leaf3# sho vxlan vni
+VNI to VLAN Mapping for Vxlan1
+VNI        VLAN       Source       Interface       802.1Q Tag
+---------- ---------- ------------ --------------- ----------
+1112       112        static       Ethernet3       untagged
+                                   Ethernet4       untagged
+                                   Vxlan1          112
+
+VNI to dynamic VLAN Mapping for Vxlan1
+VNI       VLAN       VRF       Source
+--------- ---------- --------- ------------
+666       4094                 evpn
+```
+
 
 
