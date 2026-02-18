@@ -9,9 +9,9 @@
 Настроите каждого клиента в своем VNI
 Настроите маршрутизацию между клиентами.
 Зафиксируете в документации - план работы, адресное пространство, схему сети, конфигурацию устройств
-
-
-ho bgp evpn route-type mac-ip
+## Просмотр маршрутов mac-ip
+```
+sho bgp evpn route-type mac-ip
 BGP routing table information for VRF default
 Router identifier 10.1.0.1, local AS number 65501
 Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
@@ -44,6 +44,9 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
                                  -                     -       -       0       i
  * >      RD: 10.1.0.1:113 mac-ip 0050.7966.680a 192.168.113.2
                                  -                     -       -       0       i
+```
+## Просмотр BGP EVPN маршрутов MAC-IP с LEaf1
+```
 leaf1#
 
 leaf2#sho bgp evpn route-type mac-ip
@@ -70,8 +73,9 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
  * >      RD: 10.1.0.2:112 mac-ip 0050.7966.6808 192.168.112.112
                                  -                     -       -       0       i
 leaf2#
-
-
+```
+## Просмотр Vxlan vtep на leaf1
+```
 
 leaf1#sho vxlan vtep
 Remote VTEPS for Vxlan1:
@@ -82,10 +86,9 @@ VTEP           Tunnel Type(s)
 10.1.0.3       flood
 
 Total number of remote VTEPS:  2
-
-
-
-
+```
+## Просмотр Vxlan vtep на leaf2
+```
 
 leaf2#sho vxlan vtep
 Remote VTEPS for Vxlan1:
@@ -96,10 +99,7 @@ VTEP           Tunnel Type(s)
 10.1.0.3       flood
 
 Total number of remote VTEPS:  2
-
-
-
-
+```
 VPCS> ping 192.168.112.112
 
 84 bytes from 192.168.112.112 icmp_seq=1 ttl=64 time=99.696 ms
