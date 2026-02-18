@@ -180,7 +180,8 @@ leaf1#
 ```
 
 ## Смотрим дампы пинга
-<img width="925" height="380" alt="image" src="https://github.com/user-attachments/assets/c8c08dc0-02d9-4459-bed9-798a400005bd" />
+<img width="925" height="380" alt="image" src="https://github.com/user-attachments/assets/c8c08dc0-02d9-4459-bed9-798a400005bd" /> <br>
+
 ```
 VPCS> ping 192.168.112.112
 
@@ -226,7 +227,6 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
                                  10.1.0.2              -       100     0       65500 65502 i
  *  ec    RD: 10.1.0.2:112 mac-ip 0050.7966.6808 192.168.112.112
                                  10.1.0.2              -       100     0       65500 65502 i
-leaf1#
 leaf1#
 ```
 ## Просмотр BGP EVPN route mac-ip детально c Leaf1
