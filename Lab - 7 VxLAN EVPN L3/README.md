@@ -152,8 +152,6 @@ Gateway of last resort is not set
 
  C        192.168.112.0/24 is directly connected, Vlan112
  C        192.168.113.0/24 is directly connected, Vlan113
-
-leaf2#
 ```
 
 ## Просмотр vrf маршрутизации на leaf1
