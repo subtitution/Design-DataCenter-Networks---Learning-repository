@@ -42,6 +42,13 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
  * >      RD: 10.1.0.1:113 mac-ip 0050.7966.680a 192.168.113.2
                                  -                     -       -       0       i
 ```
+## MAC адрес pc3-1
+```
+PC3-1> show ip
+MAC         : 00:50:79:66:68:05
+```
+
+VPCS>
 ## Просмотр BGP EVPN маршрутов MAC-IP с LEaf1
 ```
 leaf1#
