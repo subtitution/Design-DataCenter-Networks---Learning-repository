@@ -302,6 +302,10 @@ BGP routing table entry for mac-ip 0050.7966.6808 192.168.112.112, Route Disting
       VNI: 1112 L3 VNI: 666 ESI: 0000:0000:0000:0000:0000
 leaf1#
 ```
+Теперь мы видим, что до pc2-1 (mac *6808) c leaf1, существует 2-ва маршрута, через spine1 и spine2, ниже подсветил фломастером:
+<img width="1610" height="405" alt="image" src="https://github.com/user-attachments/assets/c830b4d7-f621-442a-bb1a-1e92c3970910" />
+<img width="1610" height="405" alt="image" src="https://github.com/user-attachments/assets/c830b4d7-f621-442a-bb1a-1e92c3970910" />
+
 <img width="1150" height="496" alt="image" src="https://github.com/user-attachments/assets/53178607-d742-41fd-8128-8272c5a6c190" />
 ## Информация с leaf3
 Снизу представлена информация об интерфейсе Vxlan1, он "поднят", для своей работы и использует IP адрес Loopback 1 (10.1.0.3), для расспространение mac информации о 112 VLAN использует следующие ip адреса Vtep-ов :  10.1.0.1        10.1.0.2
