@@ -194,11 +194,11 @@ Gateway of last resort is not set
 leaf1#
 ```
 
-## Смотрим дампы пинга
+## Пингуем и смотрим Смотрим дампы пинга
 <img width="925" height="380" alt="image" src="https://github.com/user-attachments/assets/c8c08dc0-02d9-4459-bed9-798a400005bd" /> <br>
-
+И так с хоста pc1-1 ping-уем хост pc2-1, который находится за leaf2
 ```
-VPCS> ping 192.168.112.112
+PC1-1> ping 192.168.112.112
 
 84 bytes from 192.168.112.112 icmp_seq=1 ttl=64 time=88.546 ms
 84 bytes from 192.168.112.112 icmp_seq=2 ttl=64 time=112.694 ms
@@ -206,14 +206,14 @@ VPCS> ping 192.168.112.112
 84 bytes from 192.168.112.112 icmp_seq=4 ttl=64 time=60.305 ms
 84 bytes from 192.168.112.112 icmp_seq=5 ttl=64 time=44.472 ms
 
-VPCS> show ip
+PC1-1> show ip
 
-NAME        : VPCS[1]
+NAME        : PC1-1
 IP/MASK     : 192.168.112.2/24
 GATEWAY     : 192.168.112.1
 MAC         : 00:50:79:66:68:07
 ```
-
+Как мы видим из картинки выше, для IP адрессации используются адрес интерфейса  Loopback1, который был создан специально для Vxlan Overlay сети.
 ## Проверка на leaf1
 ```
 leaf1#
