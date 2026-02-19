@@ -17,7 +17,7 @@ Origin codes: i - IGP, e - EGP, ? - incomplete
 AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
 
           Network                Next Hop              Metric  LocPref Weight  Path
- * >Ec    RD: 10.1.0.3:112 mac-ip 0050.7966.**6805**
+ * >Ec    RD: 10.1.0.3:112 mac-ip 0050.7966.`**6805`**
                                  10.1.0.3              -       100     0       65500 65503 i
  *  ec    RD: 10.1.0.3:112 mac-ip 0050.7966.6805
                                  10.1.0.3              -       100     0       65500 65503 i
