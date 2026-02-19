@@ -41,6 +41,7 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
                                  -                     -       -       0       i
  * >      RD: 10.1.0.1:113 mac-ip 0050.7966.680a 192.168.113.2
                                  -                     -       -       0       i
+leaf1#
 ```
 ## MAC адрес pc3-1  и разбор вывода bgp evpn route-type mac-ip
 ```
@@ -61,10 +62,8 @@ MAC         : 00:50:79:66:68:08
 
 <img width="1215" height="415" alt="image" src="https://github.com/user-attachments/assets/98686f20-bf56-4938-9e31-989a72feaf30" />
 
-## Просмотр BGP EVPN маршрутов MAC-IP с LEaf1
+## Просмотр BGP EVPN маршрутов MAC-IP с Leaf2
 ```
-leaf1#
-
 leaf2#sho bgp evpn route-type mac-ip
 BGP routing table information for VRF default
 Router identifier 10.1.0.2, local AS number 65502
