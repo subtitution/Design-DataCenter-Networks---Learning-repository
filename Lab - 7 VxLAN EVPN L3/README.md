@@ -69,6 +69,7 @@ MAC         : 00:50:79:66:68:08
 <img width="1215" height="415" alt="image" src="https://github.com/user-attachments/assets/98686f20-bf56-4938-9e31-989a72feaf30" /> <br>
 ## Просмотр интерфейса Vxlan1
 <br>
+
 ```
 leaf1#sho interfaces vxlan 1
 Vxlan1 is up, line protocol is up (connected)
@@ -91,7 +92,8 @@ Vxlan1 is up, line protocol is up (connected)
    113 10.1.0.2
   Shared Router MAC is 0000.0000.0000
 leaf1#
-``` <br>
+```
+<br>
 
 ## Просмотр BGP evpn ip в.4 маршрутов
 ```
