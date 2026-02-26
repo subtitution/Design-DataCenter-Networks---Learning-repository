@@ -63,7 +63,55 @@ MAC         : 00:50:79:66:68:08
 ```
 
 <img width="1215" height="415" alt="image" src="https://github.com/user-attachments/assets/98686f20-bf56-4938-9e31-989a72feaf30" />
+## Просмотр интерфейса Vxlan1
+```
+leaf1#sho interfaces vxlan 1
+Vxlan1 is up, line protocol is up (connected)
+  Hardware is Vxlan
+  Source interface is Loopback1 and is active with 10.1.0.1
+  Listening on UDP port 4789
+  Replication/Flood Mode is headend with Flood List Source: EVPN
+  Remote MAC learning via EVPN
+  VNI mapping to VLANs
+  Static VLAN to VNI mapping is
+    [112, 1112]       [113, 1113]
+  Dynamic VLAN to VNI mapping for 'evpn' is
+    [4094, 666]
+  Note: All Dynamic VLANs used by VCS are internal VLANs.
+        Use 'show vxlan vni' for details.
+  Static VRF to VNI mapping is
+   [vrf1, 666]
+  Headend replication flood vtep list is:
+   112 10.1.0.2        10.1.0.3
+   113 10.1.0.2
+  Shared Router MAC is 0000.0000.0000
+leaf1#
+```
+## Просмотр BGP evpn ip в.4 маршрутов
+```
+leaf1#sho bgp evpn route-type ip-prefix ipv4
+BGP routing table information for VRF default
+Router identifier 10.1.0.1, local AS number 65501
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
 
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 65501:1 ip-prefix 192.168.112.0/24
+                                 -                     -       -       0       i
+ * >Ec    RD: 65502:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 65502:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >      RD: 65501:1 ip-prefix 192.168.113.0/24
+                                 -                     -       -       0       i
+ * >Ec    RD: 65502:1 ip-prefix 192.168.113.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 65502:1 ip-prefix 192.168.113.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+leaf1#
+```
 ## Просмотр BGP EVPN маршрутов MAC-IP с Leaf2
 ```
 leaf2#sho bgp evpn route-type mac-ip
