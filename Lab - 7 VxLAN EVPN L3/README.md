@@ -7,7 +7,8 @@ __План работ:__ <br>
 - Настроить каждого клиента в своем VNI
 - Настроить маршрутизацию между клиентами
 Схема стенда снизу:
-<img width="1419" height="918" alt="image" src="https://github.com/user-attachments/assets/41a28932-1225-4398-b215-edbfde218565" />
+<img width="1419" height="918" alt="image" src="https://github.com/user-attachments/assets/c7295b7c-d77d-44c4-a71e-046a72faf794" />
+
 
 ## Просмотр диагностических команд
 Начну с того, что все уже настроено, и давайте посмотрим на выводы команд, и что интересного мы можем  увидеть, по сравнению с предыдущей лабораторной работой. Пример конфигурации устройств, представлен в эпилоге данной статьи. Рисунок схемы лабораторного стенда, представлен снизу:
@@ -246,7 +247,33 @@ Gateway of last resort is not set
 
 leaf1#
 ```
-## Просмотр vrf маршрутов
+## Просмотр vrf маршрутов после пинга с pc1-1 pc2-2
+```
+pc1-1> ping 192.168.113.3
+
+84 bytes from 192.168.113.3 icmp_seq=1 ttl=63 time=162.578 ms
+84 bytes from 192.168.113.3 icmp_seq=2 ttl=63 time=67.794 ms
+84 bytes from 192.168.113.3 icmp_seq=3 ttl=63 time=91.946 ms
+84 bytes from 192.168.113.3 icmp_seq=4 ttl=63 time=121.316 ms
+84 bytes from 192.168.113.3 icmp_seq=5 ttl=63 time=85.178 ms
+
+pc1-1> sho ip
+
+NAME        : pc1-1[1]
+IP/MASK     : 192.168.112.2/24
+GATEWAY     : 192.168.112.1
+DNS         :
+MAC         : 00:50:79:66:68:07
+
+leaf1#
+how ip route vrf vrf1
+C        192.168.112.0/24 is directly connected, Vlan112
+ B E      192.168.113.3/32 [200/0] via VTEP 10.1.0.2 VNI 666 router-mac 50:00:00:cb:38:c2 local-interface Vxlan1
+ C        192.168.113.0/24 is directly connected, Vlan113
+```
+Видим, что добавился маршрут между до pc2-1
+<img width="1238" height="143" alt="image" src="https://github.com/user-attachments/assets/91a85ec9-83c2-4074-8b0a-3cb4131a6f2c" />
+
 ```
 leaf1#
 how ip route vrf vrf1
