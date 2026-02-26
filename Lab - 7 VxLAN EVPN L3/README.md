@@ -17,16 +17,17 @@ __План работ:__ <br>
 ## L3VNI (VRF → VNI)
 Для symmetric IRB используется выделенный VRF и отдельный VNI:
 
-| VRF |	L3VNI	| RT (EVPN) |
-|vrf1	| 666	 | 1:666 |
+- VRF  -vrf1|
+- L3VNI	 - 666
+-  RT (EVPN) - 1:666 
 
 Leaf’ы экспортируют connected-prefix’ы (SVI подсети) в EVPN как __Type-5__ маршруты.
 ## Anycast Default Gateway
 Для клиентов в каждом VLAN используется Anycast GW на Leaf:
 
-VLAN	Anycast GW IP
-112	192.168.112.254
-113	192.168.113.254
+VLAN	Anycast GW IP <br>
+112	192.168.112.254 <br> 
+113	192.168.113.254 <br>
 На всех Leaf задан общий виртуальный MAC:
 ```
 ip virtual-router mac-address 02:00:00:00:00:00
