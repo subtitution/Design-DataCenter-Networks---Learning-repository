@@ -243,7 +243,31 @@ Gateway of last resort is not set
 
 leaf1#
 ```
+## Просмотр vrf маршрутов
+```
+leaf1#
+how ip route vrf vrf1
 
+VRF: vrf1
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ C        192.168.112.0/24 is directly connected, Vlan112
+ C        192.168.113.0/24 is directly connected, Vlan113
+
+leaf1#
+```
 ## Пингуем и смотрим Смотрим дампы пинга
 <img width="925" height="380" alt="image" src="https://github.com/user-attachments/assets/c8c08dc0-02d9-4459-bed9-798a400005bd" /> <br>
 И так с хоста pc1-1 ping-уем хост pc2-1, который находится за leaf2
