@@ -7,7 +7,8 @@ __План работ:__ <br>
 - Настроить каждого клиента в своем VNI
 - Настроить маршрутизацию между клиентами
 Схема стенда снизу:
-<img width="1419" height="918" alt="image" src="https://github.com/user-attachments/assets/c7295b7c-d77d-44c4-a71e-046a72faf794" />
+<img width="1419" height="918" alt="image" src="https://github.com/user-attachments/assets/c7295b7c-d77d-44c4-a71e-046a72faf794" /> <br>
+
 ## Архитектура
 - Underlay: eBGP — обеспечивает IP reachability между VTEP 
 - Overlay: BGP EVPN
