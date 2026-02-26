@@ -274,28 +274,25 @@ C        192.168.112.0/24 is directly connected, Vlan112
 Видим, что добавился маршрут между до pc2-1
 <img width="1238" height="143" alt="image" src="https://github.com/user-attachments/assets/91a85ec9-83c2-4074-8b0a-3cb4131a6f2c" />
 
+
 ```
-leaf1#
-how ip route vrf vrf1
+leaf1#sho bgp evpn route-type mac-ip
+BGP routing table information for VRF default
+Router identifier 10.1.0.1, local AS number 65501
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
 
-VRF: vrf1
-Codes: C - connected, S - static, K - kernel,
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
-       N2 - OSPF NSSA external type2, B - Other BGP Routes,
-       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
-       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
-       A O - OSPF Summary, NG - Nexthop Group Static Route,
-       V - VXLAN Control Service, M - Martian,
-       DH - DHCP client installed default route,
-       DP - Dynamic Policy Route, L - VRF Leaked,
-       G  - gRIBI, RC - Route Cache Route
-
-Gateway of last resort is not set
-
- C        192.168.112.0/24 is directly connected, Vlan112
- C        192.168.113.0/24 is directly connected, Vlan113
-
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 10.1.0.1:112 mac-ip 0050.7966.6807
+                                 -                     -       -       0       i
+ * >      RD: 10.1.0.1:112 mac-ip 0050.7966.6807 192.168.112.2
+                                 -                     -       -       0       i
+ * >Ec    RD: 10.1.0.2:113 mac-ip 0050.7966.680b 192.168.113.3
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:113 mac-ip 0050.7966.680b 192.168.113.3
+                                 10.1.0.2              -       100     0       65500 65502 i
 leaf1#
 ```
 ## Пингуем и смотрим Смотрим дампы пинга
