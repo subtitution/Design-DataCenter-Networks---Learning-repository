@@ -41,6 +41,20 @@ loopback - /32
 Разработанный адресный план для приведенной схемы сети приведен далее по тексту:
 ### Конфигурация коммутаторов уровня Spine
 # Конфигурация spine 1
+🆙 Spine-1 (Первый кирпичик фабрики)
+
+bash
+interface Loopback1
+ description **Underlay / Router-ID**  <--- Важно для OSPF/ISIS/BGP
+ ip address 10.1.1.1/32
+!
+interface Loopback2
+ description **Overlay / VTEP IP**  <--- Отсюда будем туннели VXLAN строить
+ ip address 10.1.1.2/32
+!
+interface Ethernet1
+ ip address 10.0.1.1/31
+ description **to Leaf-1**
    
 #### interface Loopback1<br>
   description IP for underlay -Router-ID <br>
