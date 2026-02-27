@@ -485,6 +485,18 @@ __VTEP-серверы изучают__ сопоставление __MAC/IP-ад�
 <img width="1560" height="1122" alt="image" src="https://github.com/user-attachments/assets/3a305ffb-7510-4bbf-ad26-d8103636d853" />
 Leaf1 отправляет Gratius ARP replay в сторону spine1, согласно RFC 9135/9136, пример ниже:
 <img width="1343" height="813" alt="image" src="https://github.com/user-attachments/assets/d48e1940-85fe-4bdf-95a0-ba432ab1fc18" />
+и ВОТ ПРИЛЕТЕЛ ответ на вопрос, Кто ты такой: 192.168.113.3 ? снизу картинка:
+<img width="884" height="435" alt="image" src="https://github.com/user-attachments/assets/d64cde46-b286-4a61-af52-1a5ead4840ea" />
+И в RFC сказано, что должен последовать Gratius ARP Replay, собственно вот он следующим сообшением...(картинка снизу)
+<img width="887" height="428" alt="image" src="https://github.com/user-attachments/assets/9f541040-da01-4944-a806-7406b5f837af" />
+Ну и соответсвенно после всех этих прилюдий, ну наконецто, пошел наш первый ICMP пакет, картинка снизу:
+<img width="791" height="278" alt="image" src="https://github.com/user-attachments/assets/e8ecacc5-76f1-454c-a137-3b870eb6896b" />
+Следом за пингом на Leaf1 от Spine1 прилетает BGP Update:
+<img width="774" height="563" alt="image" src="https://github.com/user-attachments/assets/c11d0ff9-9b0c-4bf7-8a47-65e222ca5bf4" />
+В свою очередь, Leaf1 шлет BGP Update в spine1, говорит какие у него теперь есть маршруты, и даже EVPN!
+<img width="764" height="765" alt="image" src="https://github.com/user-attachments/assets/d1263d44-fa5d-4426-9a67-9fe9d961bcda" />
+И вот наконец-то мы получили первый ответ ICMP Replay, Ура!!! Ура Товарищи, лаба закончена, снизу приведен перечень конфигураций устройств.
+<img width="799" height="286" alt="image" src="https://github.com/user-attachments/assets/4aaa7e95-ddfe-4613-8b0d-2bd746264198" />
 
 # Конфигурация устройств
 ## Leaf1
