@@ -506,10 +506,106 @@ Leaf1 отправляет Gratius ARP replay в сторону spine1, согл
 <img width="764" height="765" alt="image" src="https://github.com/user-attachments/assets/d1263d44-fa5d-4426-9a67-9fe9d961bcda" />
 <br>
 И вот наконец-то мы получили первый ответ ICMP Replay, Ура!!! Ура Товарищи, лаба закончена, снизу приведен перечень конфигураций устройств.
-<img width="799" height="286" alt="image" src="https://github.com/user-attachments/assets/4aaa7e95-ddfe-4613-8b0d-2bd746264198" />
+<img width="799" height="286" alt="image" src="https://github.com/user-attachments/assets/4aaa7e95-ddfe-4613-8b0d-2bd746264198" /> <br>
 # Работа над ошибками
 И так, если повнимательней посмотреть на картинки с верху с трейсами, видно что трафик не инкапсулируются в VLAN 666. Если честно я сам на это внимания не обратил, Большое спасибо моему преподавателю, который мне на это указал и дал рекомендации, избавитсья от Vlan 113 (leaf1) и Vlan 112 (leaf2) и попробовать добиться IP связности между хостами живущих в разных Vlan-ах 112(за leaf1) и 113 pf Leaf 2, и которые не подозревают о наличии друг друга, чтож давай-те так и сделаем, обновленная схема стенда снизу:
-<img width="1419" height="918" alt="image" src="https://github.com/user-attachments/assets/88566a2d-1b05-43c2-acab-3f55f3bbd4a4" />
+<img width="1419" height="918" alt="image" src="https://github.com/user-attachments/assets/88566a2d-1b05-43c2-acab-3f55f3bbd4a4" /> <br>
+## Проверка после работы над ошибками
+И так Пинги успешно прошли, между PC1-1 и PC2-2, предлагаю посмотреть, что поменялось в трейсах и в выводе команд:
+## leaf2
+```
+ vxlan vni 666
+VNI to VLAN Mapping for Vxlan1
+VNI        VLAN       Source       Interface       802.1Q Tag
+---------- ---------- ------------ --------------- ----------
+1113       113        static       Ethernet4       untagged
+                                   Vxlan1          113
+
+VNI to dynamic VLAN Mapping for Vxlan1
+VNI       VLAN       VRF        Source
+--------- ---------- ---------- ------------
+666       4094       vrf1       evpn
+
+leaf2#sho vxlan vtep
+Remote VTEPS for Vxlan1:
+
+VTEP           Tunnel Type(s)
+-------------- --------------
+10.1.0.1       unicast
+
+Total number of remote VTEPS:  1
+
+leaf2#
+leaf2#show  ip route vrf vrf1
+
+VRF: vrf1
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ B E      192.168.112.2/32 [200/0] via VTEP 10.1.0.1 VNI 666 router-mac 50:00:00:d7:ee:0b local-interface Vxlan1
+ B E      192.168.112.0/24 [200/0] via VTEP 10.1.0.1 VNI 666 router-mac 50:00:00:d7:ee:0b local-interface Vxlan1
+ C        192.168.113.0/24 is directly connected, Vlan113
+```
+## Leaf1
+```
+leaf1#sho ip route vrf vrf1
+
+VRF: vrf1
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ C        192.168.112.0/24 is directly connected, Vlan112
+ B E      192.168.113.3/32 [200/0] via VTEP 10.1.0.2 VNI 666 router-mac 50:00:00:cb:38:c2 local-interface Vxlan1
+ B E      192.168.113.0/24 [200/0] via VTEP 10.1.0.2 VNI 666 router-mac 50:00:00:cb:38:c2 local-interface Vxlan1
+
+leaf1#
+
+
+leaf1#sho vxlan vni
+VNI to VLAN Mapping for Vxlan1
+VNI        VLAN       Source       Interface       802.1Q Tag
+---------- ---------- ------------ --------------- ----------
+1112       112        static       Ethernet3       untagged
+                                   Vxlan1          112
+
+VNI to dynamic VLAN Mapping for Vxlan1
+VNI       VLAN       VRF        Source
+--------- ---------- ---------- ------------
+666       4094       vrf1       evpn
+
+```
+Как мы видим особо вроде ничего не поменялось, только исчезли Vlan 112 Vlan 113, на соответсвующих Leaf-ах.
+## Что поменялось в трейсах?
+<img width="1158" height="426" alt="image" src="https://github.com/user-attachments/assets/2b66885d-b943-4f20-a62f-24eedab1ac7f" />
+<img width="1178" height="437" alt="image" src="https://github.com/user-attachments/assets/e7f2b60a-9265-4f3b-a138-bdfd49374f2c" />
+<br>
+Как видно из трейсов симметричный роутинг заворачивается в VNI 666.
+<br>
+<br>
+На этом пожалуй все, обновленные конфиги leaf1 и 2, в конец данной статьи. А как сделать симметричный routing если на leaf-ах есть одинаковые Vlan-ы?, смотрите в продолжении в следующих постах...)
+
 
 # Конфигурация устройств
 ## Leaf1
@@ -1049,4 +1145,213 @@ router bgp 65500
 !
 end
 spine2#
+```
+# Конфиги после удаления Vlan
+## Leaf2
+```
+
+! Command: show running-config
+! device: leaf2 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname leaf2
+!
+spanning-tree mode mstp
+!
+vlan 113
+!
+vrf instance vrf1
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine-1
+   no switchport
+   ip address 10.0.2.0/31
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine-2
+   no switchport
+   ip address 10.0.2.4/31
+!
+interface Ethernet4
+   description to pc-host 2-2
+   switchport access vlan 113
+!
+interface Ethernet5
+   description -=Direction to hosts=-
+   no switchport
+   ip address 192.168.2.1/24
+!
+interface Loopback1
+   description VTEP
+   ip address 10.1.0.2/32
+!
+interface Management1
+!
+interface Vlan113
+   vrf vrf1
+   ip address 192.168.113.2/24
+   ip virtual-router address 192.168.113.254
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 113 vni 1113
+   vxlan vrf vrf1 vni 666
+!
+ip virtual-router mac-address 02:00:00:00:00:00
+!
+ip routing
+ip routing vrf vrf1
+!
+router bgp 65502
+   router-id 10.1.0.2
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   maximum-paths 2 ecmp 2
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN remote-as 65500
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.2.1 peer group UNDERLAY
+   neighbor 10.0.2.5 peer group UNDERLAY
+   neighbor 10.1.1.1 peer group SPINE-EVPN
+   neighbor 10.2.2.2 peer group SPINE-EVPN
+   !
+   vlan 113
+      rd auto
+      route-target both 65500:1113
+      redistribute learned
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.1.0.2/32
+   !
+   vrf vrf1
+      rd 65502:1
+      route-target import evpn 1:666
+      route-target export 1:666
+      redistribute connected
+!
+end
+leaf2#
+```
+## Leaf1
+```
+leaf1#
+leaf1#sho run
+! Command: show running-config
+! device: leaf1 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname leaf1
+!
+spanning-tree mode mstp
+!
+vlan 1
+   name Host_Network
+!
+vlan 2
+   name 2
+!
+vlan 112
+!
+vrf instance vrf1
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine-1
+   no switchport
+   ip address 10.0.1.0/31
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine-2
+   no switchport
+   ip address 10.0.1.4/31
+!
+interface Ethernet3
+   description -=Direction to host=-
+   switchport access vlan 112
+!
+interface Loopback1
+   description VTEP
+   ip address 10.1.0.1/32
+!
+interface Management1
+!
+interface Vlan112
+   vrf vrf1
+   ip address 192.168.112.1/24
+   ip virtual-router address 192.168.112.254/24
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 112 vni 1112
+   vxlan vrf vrf1 vni 666
+!
+ip virtual-router mac-address 02:00:00:00:00:00
+!
+ip routing
+ip routing vrf vrf1
+!
+router bgp 65501
+   router-id 10.1.0.1
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   maximum-paths 2 ecmp 2
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN remote-as 65500
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.1.1 peer group UNDERLAY
+   neighbor 10.0.1.5 peer group UNDERLAY
+   neighbor 10.1.1.1 peer group SPINE-EVPN
+   neighbor 10.2.2.2 peer group SPINE-EVPN
+   !
+   vlan 112
+      rd auto
+      route-target both 65500:1112
+      redistribute learned
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.1.0.1/32
+   !
+   vrf vrf1
+      rd 65501:1
+      route-target import evpn 1:666
+      route-target export evpn 1:666
+      redistribute connected
+!
+end
+leaf1#
 ```
