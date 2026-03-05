@@ -32,8 +32,17 @@ vxlan1 - это логический интерфейс, который буде
 ```
 interface Vxlan1
    vxlan source-interface Loopback1
-   vxlan udp-port 4789
+```
+### 1.2. Настройка службы EVPN Layer 2 на leaf3 коммутаторе
+#### 1.2.1. Добавим локальные Vlan, с идентификаторами 112, 113
+Команда:
+```
+vlan 112-113
+```
+#### 1.2.2. Сопоставим Vlan 2-го уровня c соответсвующими VNI
+Команда:
+```
+interface Vxlan1
    vxlan vlan 112 vni 1112
    vxlan vlan 113 vni 1113
-   vxlan vrf vrf1 vni 666
 ```
