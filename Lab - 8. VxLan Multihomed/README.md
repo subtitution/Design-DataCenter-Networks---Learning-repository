@@ -27,8 +27,8 @@ interface Loopback1
    ip address 10.1.0.1/32
 ```
 #### 1.1.2. Настроим интерфейс vxlan1, указав loopback1 в качестве источника.
-vxlan1 - это логический интерфейс, который будет обеспечивать функции инкапсуляции и декапсуляции заголовков VXLAN
-Команды:
+vxlan1 - это логический интерфейс, который будет обеспечивать функции инкапсуляции и декапсуляции заголовков VXLAN <br>
+Команда (__vxlan source-interface Loopback1__):
 ```
 interface Vxlan1
    vxlan source-interface Loopback1
