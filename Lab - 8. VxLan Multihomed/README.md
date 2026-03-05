@@ -111,3 +111,17 @@ router bgp 65501
       route-target export evpn 1:666
       redistribute connected
 ```
+### 1.2.5. Настраиваем порт-канал EVPN, обращенный к хосту
+Здесь мы настраиваем идентификатор сегмента Ethernet ( ESI) , а также значение RT для сегмента Ethernet. Мы увидим, как плоскость управления EVPN использует их для согласования характеристик и состояния канала порта AA. Мы также настраиваем статический идентификатор системы LACP. Это необходимо для того, чтобы все члены сегмента Ethernet отображались как одна система LACP для нижестоящего устройства. Обратите внимание, что все эти значения должны совпадать для членов одного и того же сегмента Ethernet (или канала порта). <br>
+Команды:
+```
+interface Port-Channel1
+   description EVPN A-A DownLink S1-Host1-Eth7
+   switchport trunk allowed vlan 112-113
+   switchport mode trunk
+     !
+   interface Ethernet3
+   description EVPN A-A Downlink -host
+   switchport access vlan 112
+   channel-group 1 mode active
+```
