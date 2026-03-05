@@ -79,11 +79,13 @@ ip routing vrf vrf1
 ip virtual-router mac-address 02:00:00:00:00:00
 !
 interface Vlan112
+   description Host Network 112
    vrf vrf1
    ip address 192.168.112.1/24
    ip virtual-router address 192.168.112.254/24
 !
 interface Vlan113
+   description Host Network 113
    vrf vrf1
    ip address 192.168.113.1/24
    ip virtual-router address 192.168.113.254/24
