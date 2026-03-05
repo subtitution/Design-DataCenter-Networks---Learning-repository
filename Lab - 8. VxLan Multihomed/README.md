@@ -125,3 +125,7 @@ interface Port-Channel1
    switchport access vlan 112
    channel-group 1 mode active
 ```
+## 1.2.6. Настроим аналогично leaf2
+Пример настроек снизу:
+```
+```
