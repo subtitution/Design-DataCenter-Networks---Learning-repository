@@ -17,4 +17,23 @@
 ```
 <img width="596" height="103" alt="image" src="https://github.com/user-attachments/assets/ca39f740-72b3-4fad-8268-bb9f11e15078" />
 По выводу команды, мы понимаем, что Leaf2/3 доступны через spine 1/2.
-
+## 1. Настройка
+### 1.1. Настройка плоскости данных VxLAN
+#### 1.1.1. Настроим loopback интерфейс 
+VTEP, в отличие от MLAG VTEP, в EVPN все VTEP имеют уникальный IP-адрес. Позже мы увидим, чем отличаются отказоустойчивость и балансировка нагрузки в этой конфигурации. 
+```
+interface Loopback1
+   description VTEP
+   ip address 10.1.0.1/32
+```
+#### 1.1.2. Настроим интерфейс vxlan1, указав loopback1 в качестве источника.
+vxlan1 - это логический интерфейс, который будет обеспечивать функции инкапсуляции и декапсуляции заголовков VXLAN
+Команды:
+```
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 112 vni 1112
+   vxlan vlan 113 vni 1113
+   vxlan vrf vrf1 vni 666
+```
