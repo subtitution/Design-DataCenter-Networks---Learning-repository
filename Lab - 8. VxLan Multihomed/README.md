@@ -730,4 +730,29 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
                                  10.1.0.2              -       100     0       65500 65502 i
 leaf3#
 ```
+## 2.7. На leaf1 проверим таблицу BGP, чтобы убедиться, что сети "арендаторов/хостов" на leaf3 были изучены в оверлейной сети.
+В приведенном ниже выводе показаны изученные маршруты IP-префиксов из EVPN. Они называются __маршрутами EVPN типа 5__. Аналогично маршрутам __типа 2 и типа 3__, __другие VTEP оценивают RT, чтобы проверить наличие соответствующей конфигурации, и, если она есть, импортируют содержащийся префикс в свою таблицу маршрутизации VRF__. <br><br>
 
+В подробном выводе мы можем увидеть конкретные маршруты от leaf3,  Мы видим информацию о RT, MAC-адресе маршрутизатора EVPN. Ниже представлен основной вывод, касающийся сетИ 192.168.112.0/24
+```
+leaf3#show bgp evpn route-type ip-prefix ipv4
+BGP routing table information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >Ec    RD: 65501:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 65501:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 65502:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 65502:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >      RD: 65503:1 ip-prefix 192.168.113.0/24
+                                 -                     -       -       0       i
+leaf3#
+```
