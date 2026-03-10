@@ -130,5 +130,16 @@ interface Port-Channel1
 ```
 ```
 ## 2. Проверка 
-Ну вот естественно не работает.) В общем сквозь, боль, слезы и страдания, получилось добиться работающей конфигурации, собственно у вас все должно быть легче, т.к. она проверена мной.
+Командой __show interfaces__ выполненной на leaf1, посмотрим состояние интерфейса Port-Channel1 <br>
+```
+Port-Channel1 is up, line protocol is up (connected)
+  Hardware is Port-Channel, address is 5000.0001.0003
+  Description: EVPN A-A DownLink S1-Host1-Eth7
+   Active members in this channel: 1
+  ... Ethernet3 , Full-duplex, 1Gb/s
+  Up 4 days, 2 hours, 15 minutes, 3 seconds
+  2 link status changes since last clear
+```
+Видим Channel 1 is UP - поднят(работает)!
+
 
