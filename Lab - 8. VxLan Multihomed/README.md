@@ -143,7 +143,7 @@ Port-Channel1 is up, line protocol is up (connected)
   2 link status changes since last clear
 ```
 Видим Channel 1 is UP - поднят(работает)!
-### 2.1. Проверим bgp EVPN
+### 2.1. Проверим bgp EVPN Leaf1
 ```
 leaf1#sho bgp evpn
 BGP routing table information for VRF default
@@ -197,4 +197,128 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
  *  ec    RD: 65503:1 ip-prefix 192.168.113.0/24
                                  10.1.0.3              -       100     0       65500 65503 i
 leaf1#
+```
+### 2.2. Проверим bgp EVPN Leaf2
+```
+leaf2#sho bgp evpn
+BGP routing table information for VRF default
+Router identifier 10.1.0.2, local AS number 65502
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >Ec    RD: 10.1.0.1:112 auto-discovery 0 0034:0000:0000:0000:0001
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:112 auto-discovery 0 0034:0000:0000:0000:0001
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >      RD: 10.1.0.2:112 auto-discovery 0 0034:0000:0000:0000:0001
+                                 -                     -       -       0       i
+ * >Ec    RD: 10.1.0.1:1 auto-discovery 0034:0000:0000:0000:0001
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:1 auto-discovery 0034:0000:0000:0000:0001
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >      RD: 10.1.0.2:1 auto-discovery 0034:0000:0000:0000:0001
+                                 -                     -       -       0       i
+ * >Ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >      RD: 10.1.0.2:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 -                     -       -       0       i
+ * >Ec    RD: 10.1.0.1:112 imet 10.1.0.1
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:112 imet 10.1.0.1
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >      RD: 10.1.0.2:112 imet 10.1.0.2
+                                 -                     -       -       0       i
+ * >Ec    RD: 10.1.0.1:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.1
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.1
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >      RD: 10.1.0.2:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.2
+                                 -                     -       -       0       i
+ * >Ec    RD: 65501:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 65501:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >      RD: 65502:1 ip-prefix 192.168.112.0/24
+                                 -                     -       -       0       i
+ * >Ec    RD: 65503:1 ip-prefix 192.168.113.0/24
+                                 10.1.0.3              -       100     0       65500 65503 i
+ *  ec    RD: 65503:1 ip-prefix 192.168.113.0/24
+                                 10.1.0.3              -       100     0       65500 65503 i
+leaf2#
+```
+### 2.3. Проверим bgp EVPN Leaf3
+```
+leaf3#sho bgp evpn
+BGP routing table information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >Ec    RD: 10.1.0.1:112 auto-discovery 0 0034:0000:0000:0000:0001
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:112 auto-discovery 0 0034:0000:0000:0000:0001
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 10.1.0.2:112 auto-discovery 0 0034:0000:0000:0000:0001
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:112 auto-discovery 0 0034:0000:0000:0000:0001
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >Ec    RD: 10.1.0.1:1 auto-discovery 0034:0000:0000:0000:0001
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:1 auto-discovery 0034:0000:0000:0000:0001
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 10.1.0.2:1 auto-discovery 0034:0000:0000:0000:0001
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:1 auto-discovery 0034:0000:0000:0000:0001
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >Ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 10.1.0.2:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >Ec    RD: 10.1.0.1:112 imet 10.1.0.1
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:112 imet 10.1.0.1
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 10.1.0.2:112 imet 10.1.0.2
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:112 imet 10.1.0.2
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >Ec    RD: 10.1.0.1:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.1
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.1
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 10.1.0.2:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.2
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.2
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >Ec    RD: 65501:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 65501:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 65502:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 65502:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >      RD: 65503:1 ip-prefix 192.168.113.0/24
+                                 -                     -       -       0       i
+leaf3#
 ```
