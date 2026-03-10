@@ -559,3 +559,175 @@ BGP routing table entry for imet 10.1.0.1, Route Distinguisher: 10.1.0.1:112
       PMSI Tunnel: Ingress Replication, MPLS Label: 1112, Leaf Information Required: false, Tunnel ID: 10.1.0.1
 leaf3#
 ```
+ Это (replication flood vtep list is:   112 10.1.0.2)  можно узнать из команды ниже:
+ ```  
+leaf1# sho interfaces vxlan 1
+Vxlan1 is up, line protocol is up (connected)
+  Hardware is Vxlan
+  Source interface is Loopback1 and is active with 10.1.0.1
+  Listening on UDP port 4789
+  Replication/Flood Mode is headend with Flood List Source: EVPN
+  Remote MAC learning via EVPN
+  VNI mapping to VLANs
+  Static VLAN to VNI mapping is
+    [112, 1112]
+  Dynamic VLAN to VNI mapping for 'evpn' is
+    [4094, 666]
+  Note: All Dynamic VLANs used by VCS are internal VLANs.
+        Use 'show vxlan vni' for details.
+  Static VRF to VNI mapping is
+   [vrf1, 666]
+  Headend replication flood vtep list is:
+   112 10.1.0.2
+  Shared Router MAC is 0000.0000.0000
+  ```
+## 2.5 На leaf 3 проверим плоскость управления EVPN на наличие соответствующего MAC/IP хоста. 
+
+Мы видим MAC s1-host1 __(5000.001b.5e8d)__ несколько раз в плоскости управления из-за нашей резервной архитектуры MLAG и ECMP. Оба leaf1 и leaf2 имеют подключения от s1-host1 в VLAN 112, следовательно, будут генерировать эти __маршруты EVPN типа 2__ для своего MAC __после обнаружения хоста__. Затем каждый из них отправляет этот маршрут на резервные магистральные коммутаторы (или серверы маршрутизации EVPN), которые обеспечивают путь ECMP к хосту.
+<br><br>
+Команда: __show bgp evpn route-type mac-ip__
+Для наглядности решил оставить вывод команды для leaf1/2 и посмотрите на leaf3, куда приходят резервные маршруты от leaf1/2
+<br>
+__Leaf1__
+  ```
+leaf1#show bgp evpn route-type mac-ip
+BGP routing table information for VRF default
+Router identifier 10.1.0.1, local AS number 65501
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d
+                                 -                     -       -       0       i
+ * >      RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 -                     -       -       0       i
+ * >Ec    RD: 10.1.0.2:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 10.1.0.2              -       100     0       65500 65502 i
+leaf1#
+ ```
+__Leaf2__
+ ```
+leaf2#show bgp evpn route-type mac-ip
+BGP routing table information for VRF default
+Router identifier 10.1.0.2, local AS number 65502
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >Ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >      RD: 10.1.0.2:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 -                     -       -       0       i
+leaf2#
+ ```
+Соответсвенно на Leaf3 мы видим резервные маршруты
+ ```
+leaf3#show bgp evpn route-type mac-ip
+BGP routing table information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >Ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 10.1.0.2:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:112 mac-ip 5000.001b.5e8d 192.168.112.112
+                                 10.1.0.2              -       100     0       65500 65502 i
+leaf3#
+ ```
+## 2.5.1. Посмотрим более детально 
+ ```
+leaf3#show bgp evpn route-type mac-ip  vni 1112 detail
+BGP routing table information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+BGP routing table entry for mac-ip 5000.001b.5e8d, Route Distinguisher: 10.1.0.1:112
+ Paths: 2 available
+  65500 65501
+    10.1.0.1 from 10.2.2.2 (10.2.2.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan
+      VNI: 1112 ESI: 0034:0000:0000:0000:0001
+  65500 65501
+    10.1.0.1 from 10.1.1.1 (10.1.1.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan
+      VNI: 1112 ESI: 0034:0000:0000:0000:0001
+BGP routing table entry for mac-ip 5000.001b.5e8d 192.168.112.112, Route Distinguisher: 10.1.0.1:112
+ Paths: 2 available
+  65500 65501
+    10.1.0.1 from 10.2.2.2 (10.2.2.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:1:666 Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:d7:ee:0b EvpnNdFlags:pflag
+      VNI: 1112 L3 VNI: 666 ESI: 0034:0000:0000:0000:0001
+  65500 65501
+    10.1.0.1 from 10.1.1.1 (10.1.1.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:1:666 Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:d7:ee:0b EvpnNdFlags:pflag
+      VNI: 1112 L3 VNI: 666 ESI: 0034:0000:0000:0000:0001
+BGP routing table entry for mac-ip 5000.001b.5e8d 192.168.112.112, Route Distinguisher: 10.1.0.2:112
+ Paths: 2 available
+  65500 65502
+    10.1.0.2 from 10.2.2.2 (10.2.2.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:1:666 Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:cb:38:c2
+      VNI: 1112 L3 VNI: 666 ESI: 0034:0000:0000:0000:0001
+  65500 65502
+    10.1.0.2 from 10.1.1.1 (10.1.1.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:1:666 Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:cb:38:c2
+      VNI: 1112 L3 VNI: 666 ESI: 0034:0000:0000:0000:0001
+leaf3#
+ ```
+## 2.6. На leaf3 проверим плоскость управления EVPN на наличие сигналов EVPN AA связанных с s1-host1.
+Выше мы видели, что __маршруты типа 2 содержали значение ESI__. Затем мы можем определить все VTEP, являющиеся членами этого __ES, проверив маршруты автоматического обнаружения, или маршруты EVPN типа 1__.<br><br>
+Команда:      show bgp evpn route-type auto-discovery <br><br>
+```
+BGP routing table information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >Ec    RD: 10.1.0.1:112 auto-discovery 0 0034:0000:0000:0000:0001
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:112 auto-discovery 0 0034:0000:0000:0000:0001
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 10.1.0.2:112 auto-discovery 0 0034:0000:0000:0000:0001
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:112 auto-discovery 0 0034:0000:0000:0000:0001
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >Ec    RD: 10.1.0.1:1 auto-discovery 0034:0000:0000:0000:0001
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:1 auto-discovery 0034:0000:0000:0000:0001
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 10.1.0.2:1 auto-discovery 0034:0000:0000:0000:0001
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:1 auto-discovery 0034:0000:0000:0000:0001
+                                 10.1.0.2              -       100     0       65500 65502 i
+leaf3#
+```
+
