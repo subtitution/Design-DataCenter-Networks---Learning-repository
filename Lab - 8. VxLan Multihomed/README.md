@@ -756,3 +756,161 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
                                  -                     -       -       0       i
 leaf3#
 ```
+Мы видим информацию о RT, MAC-адресе маршрутизатора EVPN (совместно используемом с leaf3) и VNI уровня L3
+```
+leaf3#show bgp evpn route-type ip-prefix ipv4 detail
+BGP routing table information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+BGP routing table entry for ip-prefix 192.168.112.0/24, Route Distinguisher: 65501:1
+ Paths: 2 available
+  65500 65501
+    10.1.0.1 from 10.2.2.2 (10.2.2.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:1:666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:d7:ee:0b
+      VNI: 666
+  65500 65501
+    10.1.0.1 from 10.1.1.1 (10.1.1.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:1:666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:d7:ee:0b
+      VNI: 666
+BGP routing table entry for ip-prefix 192.168.112.0/24, Route Distinguisher: 65502:1
+ Paths: 2 available
+  65500 65502
+    10.1.0.2 from 10.2.2.2 (10.2.2.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:1:666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:cb:38:c2
+      VNI: 666
+  65500 65502
+    10.1.0.2 from 10.1.1.1 (10.1.1.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:1:666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:cb:38:c2
+      VNI: 666
+BGP routing table entry for ip-prefix 192.168.113.0/24, Route Distinguisher: 65503:1
+ Paths: 1 available
+  Local
+    - from - (0.0.0.0)
+      Origin IGP, metric -, localpref -, weight 0, tag 0, valid, local, best, redistributed (Connected)
+      Extended Community: Route-Target-AS:1:666 TunnelEncap:tunnelTypeVxlan EvpnRouterMac:50:00:00:72:8b:31
+      VNI: 666
+```
+## 2.8. Проверка локальных ARP/MAC
+```
+leaf2#sho mac address-table dynamic
+          Mac Address Table
+------------------------------------------------------------------
+
+Vlan    Mac Address       Type        Ports      Moves   Last Move
+----    -----------       ----        -----      -----   ---------
+ 112    5000.001b.5e8d    DYNAMIC     Po1        1       1:32:49 ago
+4094    5000.0072.8b31    DYNAMIC     Vx1        1       1 day, 14:09:25 ago
+4094    5000.00d7.ee0b    DYNAMIC     Vx1        1       5 days, 12:22:13 ago
+Total Mac Addresses for this criterion: 3
+
+          Multicast Mac Address Table
+------------------------------------------------------------------
+
+Vlan    Mac Address       Type        Ports
+----    -----------       ----        -----
+Total Mac Addresses for this criterion: 0
+```
+__На Leaf3__
+```
+leaf3#sho mac address-table dynamic
+          Mac Address Table
+------------------------------------------------------------------
+
+Vlan    Mac Address       Type        Ports      Moves   Last Move
+----    -----------       ----        -----      -----   ---------
+4094    5000.00cb.38c2    DYNAMIC     Vx1        1       4 days, 7:20:48 ago
+4094    5000.00d7.ee0b    DYNAMIC     Vx1        1       4 days, 7:20:48 ago
+Total Mac Addresses for this criterion: 2
+```
+## 2.9. На leaf1 проверим плоскость данных VXLAN на наличие MAC-адреса
+Напомним, что выше маршрут EVPN типа 2 для  был связан с ESI, и наши маршруты EVPN типа 1 показали, что leaf1 и leaf2 являются членами этого ES. Таким образом, мы видим два возможных пункта назначения для этого MAC-адреса хоста. Затем команда show l2rib output mac позволяет нам увидеть информацию о VTEP в оборудовании, показывающую, какая балансировка нагрузки будет происходить. Наконец, мы можем проверить путь ECMP к удаленному VTEP leaf3 через Spine 1 и Spine2.
+```
+leaf1#
+how vxlan address-table evpn
+          Vxlan Mac Address Table
+----------------------------------------------------------------------
+
+VLAN  Mac Address     Type      Prt  VTEP             Moves   Last Move
+----  -----------     ----      ---  ----             -----   ---------
+4094  5000.0072.8b31  EVPN      Vx1  10.1.0.3         1       1 day, 14:12:46 ago
+4094  5000.00cb.38c2  EVPN      Vx1  10.1.0.2         1       5 days, 12:25:35 ago
+Total Remote Mac Addresses for this criterion: 2
+
+leaf2#
+how vxlan address-table evpn
+          Vxlan Mac Address Table
+----------------------------------------------------------------------
+
+VLAN  Mac Address     Type      Prt  VTEP             Moves   Last Move
+----  -----------     ----      ---  ----             -----   ---------
+ 112  5000.001b.5e8d  EVPN      Vx1  0.0.0.0          1       1:36:28 ago
+4094  5000.0072.8b31  EVPN      Vx1  10.1.0.3         1       1 day, 14:13:03 ago
+4094  5000.00d7.ee0b  EVPN      Vx1  10.1.0.1         1       5 days, 12:25:52 ago
+Total Remote Mac Addresses for this criterion: 3
+
+leaf3#
+how vxlan address-table evpn
+          Vxlan Mac Address Table
+----------------------------------------------------------------------
+
+VLAN  Mac Address     Type      Prt  VTEP             Moves   Last Move
+----  -----------     ----      ---  ----             -----   ---------
+4094  5000.00cb.38c2  EVPN      Vx1  10.1.0.2         1       4 days, 7:25:04 ago
+4094  5000.00d7.ee0b  EVPN      Vx1  10.1.0.1         1       4 days, 7:25:04 ago
+Total Remote Mac Addresses for this criterion: 2
+```
+## 2.10 Просмотр Ip route
+__leaf1__
+```
+leaf1#sho ip route vrf vrf1
+
+VRF: vrf1
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ C        192.168.112.0/24 is directly connected, Vlan112
+ B E      192.168.113.0/24 [200/0] via VTEP 10.1.0.3 VNI 666 router-mac 50:00:00:72:8b:31 local-interface Vxlan1
+
+```
+__leaf3__
+```
+ leaf3#
+leaf3#sho ip route vrf vrf1
+
+VRF: vrf1
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ B E      192.168.112.112/32 [200/0] via VTEP 10.1.0.2 VNI 666 router-mac 50:00:00:cb:38:c2 local-interface Vxlan1
+                                     via VTEP 10.1.0.1 VNI 666 router-mac 50:00:00:d7:ee:0b local-interface Vxlan1
+ B E      192.168.112.0/24 [200/0] via VTEP 10.1.0.2 VNI 666 router-mac 50:00:00:cb:38:c2 local-interface Vxlan1
+                                   via VTEP 10.1.0.1 VNI 666 router-mac 50:00:00:d7:ee:0b local-interface Vxlan1
+ C        192.168.113.0/24 is directly connected, Vlan113
+
+leaf3#
+```
