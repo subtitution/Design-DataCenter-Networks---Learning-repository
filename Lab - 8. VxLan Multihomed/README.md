@@ -322,3 +322,240 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
                                  -                     -       -       0       i
 leaf3#
 ```
+### 2.4. Определим, кто является назначенным пересыльщиком (Designated Forwarder, DF) для канала EVPN AA Port-Channel 
+В сегменте Ethernet EVPN AA только один участник ES выбирается в качестве назначенного пересыльщика (DF). DF отвечает за пересылку трафика BUM подключенному нижестоящему устройству. По умолчанию все участники ES выполняют операцию модуля для равномерного выбора DF на основе полученных маршрутов сегмента Ethernet (EVPN Type-4). Ниже показаны полученные маршруты EVPN Type-4.
+__leaf1__
+```
+leaf1#show bgp evpn route-type ethernet-segment
+BGP routing table information for VRF default
+Router identifier 10.1.0.1, local AS number 65501
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 10.1.0.1:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.1
+                                 -                     -       -       0       i
+ * >Ec    RD: 10.1.0.2:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.2
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.2
+                                 10.1.0.2              -       100     0       65500 65502 i
+leaf1#
+```
+__leaf2__
+```
+leaf2#show bgp evpn route-type ethernet-segment
+BGP routing table information for VRF default
+Router identifier 10.1.0.2, local AS number 65502
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >Ec    RD: 10.1.0.1:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.1
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.1
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >      RD: 10.1.0.2:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.2
+                                 -                     -       -       0       i
+```
+__leaf3__
+```
+leaf3#show bgp evpn route-type ethernet-segment
+BGP routing table information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >Ec    RD: 10.1.0.1:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.1
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.1
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 10.1.0.2:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.2
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:1 ethernet-segment 0034:0000:0000:0000:0001 10.1.0.2
+                                 10.1.0.2              -       100     0       65500 65502 i
+leaf3#
+```
+__show bgp evpn route-type ethernet-segment esi 0034:0000:0000:0000:0001 detail__
+```
+leaf2#
+ail bgp evpn route-type ethernet-segment esi 0034:0000:0000:0000:0001 det
+BGP routing table information for VRF default
+Router identifier 10.1.0.2, local AS number 65502
+BGP routing table entry for ethernet-segment 0034:0000:0000:0000:0001 10.1.0.1, Route Distinguisher: 10.1.0.1:1
+ Paths: 2 available
+  65500 65501
+    10.1.0.1 from 10.2.2.2 (10.2.2.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: TunnelEncap:tunnelTypeVxlan EvpnEsImportRt:00:03:04:00:00:05
+  65500 65501
+    10.1.0.1 from 10.1.1.1 (10.1.1.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: TunnelEncap:tunnelTypeVxlan EvpnEsImportRt:00:03:04:00:00:05
+BGP routing table entry for ethernet-segment 0034:0000:0000:0000:0001 10.1.0.2, Route Distinguisher: 10.1.0.2:1
+ Paths: 1 available
+  Local
+    - from - (0.0.0.0)
+      Origin IGP, metric -, localpref -, weight 0, tag 0, valid, local, best
+      Extended Community: TunnelEncap:tunnelTypeVxlan EvpnEsImportRt:00:03:04:00:00:05
+```
+__На стороне Leaf3__
+```
+leaf3#show bgp evpn route-type ethernet-segment esi 0034:0000:0000:0000:0001 det
+BGP routing table information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+BGP routing table entry for ethernet-segment 0034:0000:0000:0000:0001 10.1.0.1, Route Distinguisher: 10.1.0.1:1
+ Paths: 2 available
+  65500 65501
+    10.1.0.1 from 10.2.2.2 (10.2.2.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: TunnelEncap:tunnelTypeVxlan EvpnEsImportRt:00:03:04:00:00:05
+  65500 65501
+    10.1.0.1 from 10.1.1.1 (10.1.1.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: TunnelEncap:tunnelTypeVxlan EvpnEsImportRt:00:03:04:00:00:05
+BGP routing table entry for ethernet-segment 0034:0000:0000:0000:0001 10.1.0.2, Route Distinguisher: 10.1.0.2:1
+ Paths: 2 available
+  65500 65502
+    10.1.0.2 from 10.2.2.2 (10.2.2.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: TunnelEncap:tunnelTypeVxlan EvpnEsImportRt:00:03:04:00:00:05
+  65500 65502
+    10.1.0.2 from 10.1.1.1 (10.1.1.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: TunnelEncap:tunnelTypeVxlan EvpnEsImportRt:00:03:04:00:00:05
+leaf3#
+```
+__На leaf1__
+```
+leaf1#
+leaf1#show bgp evpn route-type ethernet-segment esi 0034:0000:0000:0000:0001 det
+BGP routing table information for VRF default
+Router identifier 10.1.0.1, local AS number 65501
+BGP routing table entry for ethernet-segment 0034:0000:0000:0000:0001 10.1.0.1, Route Distinguisher: 10.1.0.1:1
+ Paths: 1 available
+  Local
+    - from - (0.0.0.0)
+      Origin IGP, metric -, localpref -, weight 0, tag 0, valid, local, best
+      Extended Community: TunnelEncap:tunnelTypeVxlan EvpnEsImportRt:00:03:04:00:00:05
+BGP routing table entry for ethernet-segment 0034:0000:0000:0000:0001 10.1.0.2, Route Distinguisher: 10.1.0.2:1
+ Paths: 2 available
+  65500 65502
+    10.1.0.2 from 10.2.2.2 (10.2.2.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: TunnelEncap:tunnelTypeVxlan EvpnEsImportRt:00:03:04:00:00:05
+  65500 65502
+    10.1.0.2 from 10.1.1.1 (10.1.1.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: TunnelEncap:tunnelTypeVxlan EvpnEsImportRt:00:03:04:00:00:05
+leaf1#
+```
+### sho bgp  evpn instance
+__leaf1__
+```
+leaf1#sho bgp  evpn instance
+EVPN instance: VLAN 112
+  Route distinguisher: 0:0
+  Route target import: Route-Target-AS:65500:1112
+  Route target export: Route-Target-AS:65500:1112
+  Service interface: VLAN-based
+  Local VXLAN IP address: 10.1.0.1
+  VXLAN: enabled
+  MPLS: disabled
+  Local ethernet segment:
+    ESI: 0034:0000:0000:0000:0001
+      Interface: Port-Channel1
+      Mode: all-active
+      State: up
+      ES-Import RT: 00:03:04:00:00:05
+      DF election algorithm: modulus
+      Designated forwarder: 10.1.0.1
+      Non-Designated forwarder: 10.1.0.2
+leaf1#
+```
+__Leaf2__
+```
+leaf2#sho bgp  evpn instance
+EVPN instance: VLAN 112
+  Route distinguisher: 0:0
+  Route target import: Route-Target-AS:65500:1112
+  Route target export: Route-Target-AS:65500:1112
+  Service interface: VLAN-based
+  Local VXLAN IP address: 10.1.0.2
+  VXLAN: enabled
+  MPLS: disabled
+  Local ethernet segment:
+    ESI: 0034:0000:0000:0000:0001
+      Interface: Port-Channel1
+      Mode: all-active
+      State: up
+      ES-Import RT: 00:03:04:00:00:05
+      DF election algorithm: modulus
+      Designated forwarder: 10.1.0.1
+      Non-Designated forwarder: 10.1.0.2
+leaf2#
+```
+__Leaf3__
+```
+leaf3#sho bgp  evpn instance
+EVPN instance: VLAN 113
+  Route distinguisher: 0:0
+  Route target import: Route-Target-AS:65500:1113
+  Route target export: Route-Target-AS:65500:1113
+  Service interface: VLAN-based
+  Local VXLAN IP address: 10.1.0.3
+  VXLAN: enabled
+  MPLS: disabled
+leaf3#
+```
+## 2.4. На leaf3 проверем таблицу IMET, чтобы убедиться, что leaf1 и leaf2 обнаружены в оверлейной сети. 
+Маршрут __Inclusive Multicast Ethernet Tag (IMET)__ — это способ, которым VTEP объявляет о своем участии в данной службе Layer 2 или сегменте VXLAN. Он также известен как __маршрут EVPN Type-3__. Другие коммутаторы Leaf получают этот маршрут, оценивают __RT__, чтобы проверить, есть ли у них соответствующая конфигурация, и, если есть, импортируют объявляющий VTEP в свой список рассылки для трафика BUM. Обратите внимание, что __это делается для каждой VLAN отдельно__.…
+Комманда: __show bgp evpn route-type imet__
+```
+leaf3#show bgp evpn route-type imet
+BGP routing table information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >Ec    RD: 10.1.0.1:112 imet 10.1.0.1
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 10.1.0.1:112 imet 10.1.0.1
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 10.1.0.2:112 imet 10.1.0.2
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 10.1.0.2:112 imet 10.1.0.2
+                                 10.1.0.2              -       100     0       65500 65502 i
+leaf3#
+```
+## 2.4.1. Посмотрим детальнее IMET (Inclusive Multicast Ethernet Tag)
+Команда: show bgp evpn route-type imet rd 10.1.0.1:112 detail
+```
+leaf3#show bgp evpn route-type imet rd 10.1.0.1:112 detail
+BGP routing table information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+BGP routing table entry for imet 10.1.0.1, Route Distinguisher: 10.1.0.1:112
+ Paths: 2 available
+  65500 65501
+    10.1.0.1 from 10.2.2.2 (10.2.2.2)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP head, ECMP, best, ECMP contributor
+      Extended Community: Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan
+      VNI: 1112
+      PMSI Tunnel: Ingress Replication, MPLS Label: 1112, Leaf Information Required: false, Tunnel ID: 10.1.0.1
+  65500 65501
+    10.1.0.1 from 10.1.1.1 (10.1.1.1)
+      Origin IGP, metric -, localpref 100, weight 0, tag 0, valid, external, ECMP, ECMP contributor
+      Extended Community: Route-Target-AS:65500:1112 TunnelEncap:tunnelTypeVxlan
+      VNI: 1112
+      PMSI Tunnel: Ingress Replication, MPLS Label: 1112, Leaf Information Required: false, Tunnel ID: 10.1.0.1
+leaf3#
+```
