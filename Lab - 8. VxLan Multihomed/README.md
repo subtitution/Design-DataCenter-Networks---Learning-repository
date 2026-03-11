@@ -914,3 +914,8 @@ Gateway of last resort is not set
 
 leaf3#
 ```
+## 3. Просмотр информации Wireshark
+При выполнении команды ping c S1-host1, leaf1 послал в сторону Spine 1 и Spine2, BGP UPDATE MEssage, пример ниже:
+<img width="1576" height="838" alt="image" src="https://github.com/user-attachments/assets/ad290372-d334-43cb-befc-2a34c3d772a0" /><br>
+
+
