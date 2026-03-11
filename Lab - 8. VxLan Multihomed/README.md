@@ -1,7 +1,7 @@
 # VXLAN. Multihoming
 
 ## Цель:
-Настроить отказоустойчивое подключение клиентов с использованием EVPN Multihoming
+Настроить отказоустойчивое подключение клиентов с использованием EVPN Multihoming <br>
 Схема стенда:
 <img width="1155" height="871" alt="image" src="https://github.com/user-attachments/assets/63e0fa82-a496-40e9-84b8-3dcc2e453966" /> <br>
 ## Проверка предварительной базовой работоспособности 
@@ -917,7 +917,7 @@ Gateway of last resort is not set
 leaf3#
 ```
 ## 3. Просмотр информации Wireshark
-При выполнении команды ping c S1-host1, leaf1 послал в сторону Spine 1 и Spine2, BGP UPDATE MEssage, пример ниже:
+При выполнении команды ping c S1-host1, leaf1 послал в сторону Spine 1 и Spine2, BGP UPDATE MEssage Route type 2 (MAC Advertisement), пример ниже:
 <img width="1118" height="1782" alt="image" src="https://github.com/user-attachments/assets/1b2c4eb4-4fbc-4e5e-bde3-c9819efe3414" />
 <br>
 
