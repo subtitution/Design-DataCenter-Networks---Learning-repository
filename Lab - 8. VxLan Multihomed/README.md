@@ -934,6 +934,12 @@ leaf3#
 Как мы видим, leaf2, не получив ICMP Replay пакета, понимает, что что-то тут не ладно, и отправляет в сторону Спайнов BGP Update Withdrawn сообщение <br>
 Далее, мы видим от Spine 1, на leaf2 приходит BGP UPdate, с указанием какой IP адрес использовать <br>
 <img width="1580" height="1368" alt="image" src="https://github.com/user-attachments/assets/04dd95c8-93a3-4297-9e15-88b1e3bce312" /> <br>
+Далее, для MAC адреса хоста S1-host1, leaf2 отправляет в сторону spine1, MAC Advertisement:<br>
+<img width="1134" height="1348" alt="image" src="https://github.com/user-attachments/assets/a32561ff-af22-40ad-8848-a4ef4c6ea281" /> <br>
+Давайте взглянем на это с другой стороны, что происходило на стороне Leaf3, в момент когда отключили порт на хосте 1? Каритинка представлена снизу:
+<img width="1668" height="1090" alt="image" src="https://github.com/user-attachments/assets/5af72854-f6a9-4a20-a6da-4bfe70edf68c" />
+<br>
+
 
 
 
