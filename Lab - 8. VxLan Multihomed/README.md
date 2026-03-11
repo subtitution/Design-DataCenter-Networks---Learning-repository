@@ -3,7 +3,8 @@
 ## Цель:
 Настроить отказоустойчивое подключение клиентов с использованием EVPN Multihoming <br>
 Схема стенда:
-<img width="1155" height="871" alt="image" src="https://github.com/user-attachments/assets/63e0fa82-a496-40e9-84b8-3dcc2e453966" /> <br>
+<img width="1166" height="871" alt="image" src="https://github.com/user-attachments/assets/8f848c80-219a-4329-be8d-47a0cf2d40fe" />
+ <br>
 ## Проверка предварительной базовой работоспособности 
 На leaf1 выполним команду: ``` show ip route ```
 ```
@@ -920,6 +921,12 @@ leaf3#
 При выполнении команды ping c S1-host1, leaf1 послал в сторону Spine 1 и Spine2, BGP UPDATE MEssage Route type 2 (MAC Advertisement), пример ниже:
 <img width="1118" height="1782" alt="image" src="https://github.com/user-attachments/assets/1b2c4eb4-4fbc-4e5e-bde3-c9819efe3414" />
 <br>
+## 3.1. Просмотр где какие Mac адреса отображаются при передачи трафика
+<img width="1608" height="449" alt="image" src="https://github.com/user-attachments/assets/63d25382-62bc-48e5-b94e-2fb7adfe4ec2" /> <br>
+На рисунке выше представлен пример пинга выполненного с хоста S1-host1 до pc3. Трейс снимался на leaf2. Прошу обратить внимание какие MAC адреса присутвуют на Underlay и Overlay уровнях.<br> <br>
+нА РИСУНКЕ ниже представлен Replay ответ от 113 до 112. Прошу обратить внимание на мак адреса и самостоятельно проанализировать где и на что меняются мак адреса.<br>
+<img width="1599" height="422" alt="image" src="https://github.com/user-attachments/assets/6258f5dd-0b26-4bd5-81af-5c9bbf5b7b4f" />
+
 
 
 
