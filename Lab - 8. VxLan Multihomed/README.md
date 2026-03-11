@@ -948,10 +948,10 @@ leaf3#
 ### 4.2. Тестирование отказа BGP
 И так, при отказе интерфейса на хосте, технология мультихоминг работает, в предыдущем тесте, мы это проверили, а давайте, попробуем положить BGP например на leaf1, давайте удалим BGP UNDERLAY пиры? Здорово я придумал?  и посмотрим, что произойдет? <br><br>
 ....................ПАРУ минут Спустя ............................. <br><br>
-Вот собственно,  и ожидаемый результат, не работает в этом случае мультихоминг. К сожалению, я и так потратил довольно много времени на разбор данной лабы, и проверять поведение в конфигурации с горизонтальными линками (MLAG) я  не буду.
+Вот собственно,  и ожидаемый результат, не работает в этом случае мультихоминг. К сожалению, я и так потратил довольно много времени на разбор данной лабы, и проверять поведение в конфигурации с горизонтальными линками (MLAG) я  не буду. <br>
 <img width="718" height="383" alt="image" src="https://github.com/user-attachments/assets/bfeffb6e-8b8a-4846-90bb-e5976c08c631" /><br>
 ## 5 Итог и выводы
-В ходе выполнения лабораторной работы мы успешно настроили и проверили отказоустойчивое подключение клиентов с использованием технологии EVPN Multihoming в фабрике VXLAN. На основе проделанной работы можно сделать следующие ключевые выводы:
+В ходе выполнения лабораторной работы мы успешно настроили и проверили отказоустойчивое подключение клиентов с использованием технологии EVPN Multihoming в фабрике VXLAN (*_кроме случая с падением BGP_). На основе проделанной работы можно сделать следующие ключевые выводы:
 
 ## 5.1. Принципиальные отличия от MLAG
 EVPN Multihoming принципиально отличается от традиционного MLAG (MC-LAG) подходом к организации отказоустойчивости:
@@ -965,24 +965,24 @@ ECMP-балансировка — уникальные IP-адреса VTEP по
 ## 5.2. Роль Ethernet Segment (ES) и Designated Forwarder (DF)
 Ключевым элементом технологии является концепция сегмента Ethernet (ES):
 <br><br>
-ESI (Ethernet Segment Identifier) — уникальный идентификатор, который связывает два лифа (leaf1 и leaf2) в единый логический сегмент для подключения нижестоящего устройства.
+__ESI (Ethernet Segment Identifier)__ — уникальный идентификатор, который связывает два лифа (leaf1 и leaf2) в единый логический сегмент для подключения нижестоящего устройства.
 <br><br>
-Режим all-active — в нашей конфигурации использовался режим all-active, при котором оба лифа могут передавать трафик от хоста, что обеспечивает акти<br><br>вное использование обоих uplink-каналов.
+__Режим all-active__ — в нашей конфигурации использовался режим all-active, при котором оба лифа могут передавать трафик от хоста, что обеспечивает акти<br><br>вное использование обоих uplink-каналов.
 
 Выборы DF — протокол DF (Designated Forwarder) автоматически определяет, какой из лифов отвечает за пересылку BUM-трафика (Broadcast, Unknown unicast, Multicast) в сегмент Ethernet. В нашем случае DF был выбран leaf1 (Designated forwarder: 10.1.0.1), а leaf2 находится в режиме Non-Designated forwarder для BUM-трафика.
 
 ## 5.3. Распределение служебных функций в плоскости управления EVPN
 В ходе проверок мы наблюдали, как плоскость управления EVPN обеспечивает работу мультихоминга:
 <br><br>
-Маршруты Type-1 (Auto-Discovery) — информируют удаленные VTEP о членах одного Ethernet Segment, создавая основу для резервирования.
+__Маршруты Type-1 (Auto-Discovery)__ — информируют удаленные VTEP о членах одного Ethernet Segment, создавая основу для резервирования.
 <br><br>
-Маршруты Type-2 (MAC/IP) — содержат информацию о MAC-адресах и IP-адресах хостов, привязанную к конкретному ESI, что позволяет удаленным лифам видеть оба пути к хосту.
+__Маршруты Type-2 (MAC/IP)__ — содержат информацию о MAC-адресах и IP-адресах хостов, привязанную к конкретному ESI, что позволяет удаленным лифам видеть оба пути к хосту.
 <br><br>
-Маршруты Type-3 (IMET) — обеспечивают доставку BUM-трафика между всеми участниками VXLAN-сегмента.
+__Маршруты Type-3 (IMET)__ — обеспечивают доставку BUM-трафика между всеми участниками VXLAN-сегмента.
 <br><br>
-Маршруты Type-4 (Ethernet Segment) — используются для выборов DF и синхронизации состояния сегмента между его участниками.
+__Маршруты Type-4 (Ethernet Segment)__ — используются для выборов DF и синхронизации состояния сегмента между его участниками.
 <br><br>
-Маршруты Type-5 (IP Prefix) — обеспечивают маршрутизацию между разными VNI на L3-уровне.
+__Маршруты Type-5 (IP Prefix)__ — обеспечивают маршрутизацию между разными VNI на L3-уровне.
 <br><br>
 ## 5.4. Балансировка нагрузки и отказоустойчивость
 Проверка подтвердила, что:
@@ -1015,9 +1015,620 @@ EVPN Multihoming представляет собой современное ре
 <br><br>
 Таким образом, цель лабораторной работы достигнута: мы подтвердили работоспособность отказоустойчивого подключения клиентов с использованием EVPN Multihoming и продемонстрировали ключевые механизмы, обеспечивающие его функционирование.
 <br><br>
+## 6. Конфигурация устройств
+### 6.1. Spine
+```
+spine1#sho run
+! Command: show running-config
+! device: spine1 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname spine1
+!
+spanning-tree mode mstp
+!
+interface Ethernet1
+   description Peer-to-peer link to leaf-1
+   no switchport
+   ip address 10.0.1.1/31
+!
+interface Ethernet2
+   description Peer-to-peer link to leaf-2
+   no switchport
+   ip address 10.0.2.1/31
+!
+interface Ethernet3
+   description Peer-to-peer link to leaf-3
+   no switchport
+   ip address 10.0.3.1/31
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Loopback1
+   description IP for underlay -Router-ID
+   ip address 10.1.1.1/32
+!
+interface Management1
+!
+ip routing
+!
+peer-filter fleaf-asn
+   1 match as-range 65500-65600 result accept
+!
+router bgp 65500
+   router-id 10.1.1.1
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.1.0 peer group UNDERLAY
+   neighbor 10.0.1.0 remote-as 65501
+   neighbor 10.0.2.0 peer group UNDERLAY
+   neighbor 10.0.2.0 remote-as 65502
+   neighbor 10.0.3.0 peer group UNDERLAY
+   neighbor 10.0.3.0 remote-as 65503
+   neighbor 10.1.0.1 peer group SPINE-EVPN
+   neighbor 10.1.0.1 remote-as 65501
+   neighbor 10.1.0.2 peer group SPINE-EVPN
+   neighbor 10.1.0.2 remote-as 65502
+   neighbor 10.1.0.3 peer group SPINE-EVPN
+   neighbor 10.1.0.3 remote-as 65503
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+      neighbor SPINE-EVPN next-hop-unchanged
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.1.1.1/32
+!
+end
+spine1#
+```
+__Spine2__
+```
+spine2#sho run
+! Command: show running-config
+! device: spine2 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname spine2
+!
+spanning-tree mode mstp
+!
+interface Ethernet1
+   description Peer-to-peer link to leaf-1
+   no switchport
+   ip address 10.0.1.5/31
+!
+interface Ethernet2
+   description Peer-to-peer link to leaf-2<br>
+   no switchport
+   ip address 10.0.2.5/31
+!
+interface Ethernet3
+   description Peer-to-peer link to leaf-3<br>
+   no switchport
+   ip address 10.0.3.5/31
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Loopback1
+   description Overlay loopback
+   ip address 10.2.2.2/32
+!
+interface Management1
+!
+ip routing
+!
+peer-filter fleaf-asn
+   1 match as-range 65500-65600 result accept
+!
+router bgp 65500
+   router-id 10.2.2.2
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.1.4 peer group UNDERLAY
+   neighbor 10.0.1.4 remote-as 65501
+   neighbor 10.0.2.4 peer group UNDERLAY
+   neighbor 10.0.2.4 remote-as 65502
+   neighbor 10.0.3.4 peer group UNDERLAY
+   neighbor 10.0.3.4 remote-as 65503
+   neighbor 10.1.0.1 peer group SPINE-EVPN
+   neighbor 10.1.0.1 remote-as 65501
+   neighbor 10.1.0.2 peer group SPINE-EVPN
+   neighbor 10.1.0.2 remote-as 65502
+   neighbor 10.1.0.3 peer group SPINE-EVPN
+   neighbor 10.1.0.3 remote-as 65503
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+      neighbor SPINE-EVPN next-hop-unchanged
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.2.2.2/32
+!
+end
+spine2#
+```
+### 6.3. Leaf
+__leaf1__
+```
+leaf1#sho run
+! Command: show running-config
+! device: leaf1 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname leaf1
+!
+spanning-tree mode mstp
+!
+vlan 1
+   name Host_Network
+!
+vlan 2
+   name 2
+!
+vlan 112
+!
+vrf instance vrf1
+!
+interface Port-Channel1
+   description EVPN A-A DownLink S1-Host1-Eth7
+   switchport trunk allowed vlan 112-113
+   switchport mode trunk
+   !
+   evpn ethernet-segment
+      identifier 0034:0000:0000:0000:0001
+      route-target import 00:03:04:00:00:05
+   lacp system-id 1234.5678.0304
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine-1
+   no switchport
+   ip address 10.0.1.0/31
+!
+interface Ethernet1/3
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine-2
+   no switchport
+   ip address 10.0.1.4/31
+!
+interface Ethernet3
+   description EVPN A-A Downlink -host
+   switchport trunk allowed vlan 112-113
+   channel-group 1 mode active
+!
+interface Ethernet4
+   description to pc 1-2
+   switchport access vlan 113
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Loopback1
+   description VTEP
+   ip address 10.1.0.1/32
+!
+interface Management1
+!
+interface Vlan112
+   description Host Network 112
+   vrf vrf1
+   ip address 192.168.112.1/24
+   ip virtual-router address 192.168.112.254/24
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 112 vni 1112
+   vxlan vrf vrf1 vni 666
+!
+ip virtual-router mac-address 02:00:00:00:00:00
+!
+ip routing
+ip routing vrf vrf1
+!
+router bgp 65501
+   router-id 10.1.0.1
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   rd auto
+   maximum-paths 2 ecmp 2
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN remote-as 65500
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.1.1 peer group UNDERLAY
+   neighbor 10.0.1.5 peer group UNDERLAY
+   neighbor 10.1.1.1 peer group SPINE-EVPN
+   neighbor 10.2.2.2 peer group SPINE-EVPN
+   !
+   vlan 112
+      rd auto
+      route-target both 65500:1112
+      redistribute learned
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.1.0.1/32
+   !
+   vrf vrf1
+      rd 65501:1
+      route-target import evpn 1:666
+      route-target export evpn 1:666
+      redistribute connected
+!
+end
+leaf1#
+```
+__Leaf2__
+```
+leaf2#sho run
+! Command: show running-config
+! device: leaf2 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname leaf2
+!
+spanning-tree mode mstp
+!
+vlan 112
+   name Host_network_Vlan_112
+!
+vrf instance vrf1
+!
+interface Port-Channel1
+   description EVPN A-A DownLink S1-Host1-Eth8
+   switchport trunk allowed vlan 112-113
+   switchport mode trunk
+   !
+   evpn ethernet-segment
+      identifier 0034:0000:0000:0000:0001
+      route-target import 00:03:04:00:00:05
+   lacp system-id 1234.5678.0304
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine-1
+   no switchport
+   ip address 10.0.2.0/31
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine-2
+   no switchport
+   ip address 10.0.2.4/31
+!
+interface Ethernet3
+   description EVPN A-A DownLink S1-host
+   switchport trunk allowed vlan 112-113
+   channel-group 1 mode active
+!
+interface Ethernet4
+   description to pc-host 2-2
+   switchport access vlan 113
+!
+interface Ethernet5
+   description -=Direction to hosts=-
+   no switchport
+   ip address 192.168.2.1/24
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Loopback1
+   description VTEP
+   ip address 10.1.0.2/32
+!
+interface Management1
+!
+interface Vlan112
+   vrf vrf1
+   ip address 192.168.112.2/24
+   ip virtual-router address 192.168.112.254
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 112 vni 1112
+   vxlan vrf vrf1 vni 666
+!
+ip virtual-router mac-address 02:00:00:00:00:00
+!
+ip routing
+ip routing vrf vrf1
+!
+router bgp 65502
+   router-id 10.1.0.2
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   rd auto
+   maximum-paths 2 ecmp 2
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN remote-as 65500
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.2.1 peer group UNDERLAY
+   neighbor 10.0.2.5 peer group UNDERLAY
+   neighbor 10.1.1.1 peer group SPINE-EVPN
+   neighbor 10.2.2.2 peer group SPINE-EVPN
+   !
+   vlan 112
+      rd auto
+      route-target both 65500:1112
+      redistribute learned
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.1.0.2/32
+   !
+   vrf vrf1
+      rd 65502:1
+      route-target import evpn 1:666
+      route-target export 1:666
+      redistribute connected
+!
+end
+leaf2#
+```
+__Leaf3__
 
-
-
+```
+leaf3#sho run
+! Command: show running-config
+! device: leaf3 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname leaf3
+!
+spanning-tree mode mstp
+!
+vlan 3
+   name 3
+!
+vlan 113
+   name 113
+!
+vrf instance vrf1
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine-1
+   no switchport
+   ip address 10.0.3.0/31
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine-2
+   no switchport
+   ip address 10.0.3.4/31
+!
+interface Ethernet3
+   description downlink to host
+   switchport access vlan 113
+!
+interface Ethernet4
+   switchport access vlan 112
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Loopback1
+   description VTEP
+   ip address 10.1.0.3/32
+!
+interface Management1
+!
+interface Vlan113
+   description Host Network 113
+   vrf vrf1
+   ip address 192.168.113.1/24
+   ip virtual-router address 192.168.113.254/24
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 112 vni 1112
+   vxlan vrf vrf1 vni 666
+   vxlan learn-restrict any
+!
+ip virtual-router mac-address 02:00:00:00:00:00
+!
+ip routing
+ip routing vrf vrf1
+!
+router bgp 65503
+   router-id 10.1.0.3
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   rd auto
+   maximum-paths 2 ecmp 2
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN remote-as 65500
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.3.1 peer group UNDERLAY
+   neighbor 10.0.3.5 peer group UNDERLAY
+   neighbor 10.1.1.1 peer group SPINE-EVPN
+   neighbor 10.2.2.2 peer group SPINE-EVPN
+   !
+   vlan 113
+      rd auto
+      route-target both 65500:1113
+      redistribute learned
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.1.0.3/32
+   !
+   vrf vrf1
+      rd 65503:1
+      route-target import evpn 1:666
+      route-target export evpn 1:666
+      redistribute connected
+!
+end
+leaf3#
+```
+### 6.4. Host level
+```
+S1-Host1#sho run
+! Command: show running-config
+! device: S1-Host1 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model ribd
+!
+hostname S1-Host1
+!
+spanning-tree mode mstp
+!
+vlan 2,112
+!
+interface Port-Channel1
+   switchport trunk allowed vlan 112-113
+   switchport mode trunk
+!
+interface Ethernet1
+!
+interface Ethernet2
+!
+interface Ethernet3
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+   switchport access vlan 112
+   switchport mode trunk
+   channel-group 1 mode active
+!
+interface Ethernet8
+   switchport mode trunk
+   channel-group 1 mode active
+!
+interface Management1
+!
+interface Vlan112
+   ip address 192.168.112.112/24
+!
+interface Vlan113
+   ip address 192.168.113.113/24
+!
+ip routing
+!
+ip route 0.0.0.0/0 192.168.112.254
+!
+end
+S1-Host1#
+```
 
 
 
