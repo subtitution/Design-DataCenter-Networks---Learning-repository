@@ -936,9 +936,15 @@ leaf3#
 <img width="1580" height="1368" alt="image" src="https://github.com/user-attachments/assets/04dd95c8-93a3-4297-9e15-88b1e3bce312" /> <br>
 Далее, для MAC адреса хоста S1-host1, leaf2 отправляет в сторону spine1, MAC Advertisement:<br>
 <img width="1134" height="1348" alt="image" src="https://github.com/user-attachments/assets/a32561ff-af22-40ad-8848-a4ef4c6ea281" /> <br>
-Давайте взглянем на это с другой стороны, что происходило на стороне Leaf3, в момент когда отключили порт на хосте 1? Каритинка представлена снизу:
+Давайте взглянем на это с другой стороны, что происходило на стороне Leaf3, в момент когда отключили порт на хосте 1? Со спайна 1 прилетел BGP Update Withdrawn Meaasage. <br>
+Каритинка представлена снизу:<br>
 <img width="1668" height="1090" alt="image" src="https://github.com/user-attachments/assets/5af72854-f6a9-4a20-a6da-4bfe70edf68c" />
 <br>
+Далее, лиф 3 и спайн 1 еще обменивались сообщениями, я их не стал приводить, вот крайнее сообщение, после которого в пакетах пинга, поменялись IP адреса назначения, вместа лиф2 был указан лиф1. <br>
+И так BGP Withdrawn от спайн 1<br>
+<img width="1150" height="1356" alt="image" src="https://github.com/user-attachments/assets/61692e4a-8a8d-4647-b82f-903fd4759c79" /> <br>
+
+
 
 
 
