@@ -2,6 +2,8 @@
 
 ## Цель:
 Настроить отказоустойчивое подключение клиентов с использованием EVPN Multihoming
+Схема стенда:
+<img width="1155" height="871" alt="image" src="https://github.com/user-attachments/assets/63e0fa82-a496-40e9-84b8-3dcc2e453966" /> <br>
 ## Проверка предварительной базовой работоспособности 
 На leaf1 выполним команду: ``` show ip route ```
 ```
@@ -916,6 +918,9 @@ leaf3#
 ```
 ## 3. Просмотр информации Wireshark
 При выполнении команды ping c S1-host1, leaf1 послал в сторону Spine 1 и Spine2, BGP UPDATE MEssage, пример ниже:
-<img width="1576" height="838" alt="image" src="https://github.com/user-attachments/assets/ad290372-d334-43cb-befc-2a34c3d772a0" /><br>
+<img width="1118" height="1782" alt="image" src="https://github.com/user-attachments/assets/1b2c4eb4-4fbc-4e5e-bde3-c9819efe3414" />
+<br>
+
+
 
 
