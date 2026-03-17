@@ -5,6 +5,29 @@
 
 ## Краткое содержание
 - разберем передачу маршрутной инфомарции EVPN type-5 и настройку EVPN для передачи маршрутной информации через type-5 анонсы.
+## Cхема стенда
+<img width="1717" height="871" alt="image" src="https://github.com/user-attachments/assets/70667e94-2921-4b76-927a-86884e000260" /> <br>
+как видно из схемы,  к предыдущей топологии мы "присобачили" собаке хвост справа, называется "EdgeRouter"
+<br>
+Просмотр Route type 5 маршрутов, но ново подключенном устройстве
+```
+EdgeRouter#show bgp evpn route-type ip-prefix ipv4
+BGP routing table information for VRF default
+Router identifier 5.5.5.6, local AS number 65504
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >      RD: 65501:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.1              -       100     0       65503 65500 65501 i
+ * >      RD: 65502:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.2              -       100     0       65503 65500 65502 i
+ * >      RD: 65503:1 ip-prefix 192.168.113.0/24
+                                 10.1.0.3              -       100     0       65503 i
+EdgeRouter#
+```
 ho ip route
 
 VRF: default
