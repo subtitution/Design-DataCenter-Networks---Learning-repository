@@ -9,7 +9,7 @@
 <img width="1717" height="871" alt="image" src="https://github.com/user-attachments/assets/70667e94-2921-4b76-927a-86884e000260" /> <br>
 как видно из схемы,  к предыдущей топологии мы "присобачили" собаке хвост справа, называется "EdgeRouter"
 <br>
-## Просмотр Route type 5 маршрутов, но ново подключенном устройстве
+## Просмотр Route type 5 маршрутов, на новом подключенном устройстве
 ```
 EdgeRouter#show bgp evpn route-type ip-prefix ipv4
 BGP routing table information for VRF default
