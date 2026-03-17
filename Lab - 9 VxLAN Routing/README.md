@@ -80,7 +80,8 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
 
 <details>
   <summary>leaf3 конфигурация</summary>
-  ```
+       
+```
 leaf3#sho run
 
 
@@ -241,7 +242,7 @@ router bgp 65503
 end
 ```
 </details>
-  <summary>msk-sp-02 configuration</summary>
+ 
   
 
 Маршрут до 8.8.8.0/24 уже есть на leaf3 через BGP от EdgeRouter. Нужно "за leaking" этот маршрут в EVPN route type 5 на leaf3, чтобы другие листья (leaf1, leaf2) увидели его.
