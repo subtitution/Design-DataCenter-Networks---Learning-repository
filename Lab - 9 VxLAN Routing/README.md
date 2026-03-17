@@ -120,8 +120,10 @@ EdgeRouter#
 
   <details>
   <summary>Leaf3 конфигурация</summary>
+  
 
-    ```
+```
+    
 leaf3#sho run
 ! Command: show running-config
 ! device: leaf3 (vEOS-lab, EOS-4.29.2F)
@@ -316,7 +318,9 @@ router bgp 65503
 end
 leaf3#
 
+
 ```
+
   </details>
 
   И так как мы видели выше, на EdgeRouter прилетели маршруты Route type 5 из нашей фабрики.
