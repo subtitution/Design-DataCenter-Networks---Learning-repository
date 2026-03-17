@@ -30,7 +30,8 @@ EdgeRouter#
 ```
 <details>
   <summary>EdgeRouter конфигурация</summary>
-```
+
+  ```
 EdgeRouter#sho run
 ! Command: show running-config
 ! device: EdgeRouter (vEOS-lab, EOS-4.29.2F)
@@ -112,11 +113,15 @@ router bgp 65504
 !
 end
 EdgeRouter#
+
 ```
+
 </details>
+
   <details>
   <summary>Leaf3 конфигурация</summary>
-```
+
+    ```
 leaf3#sho run
 ! Command: show running-config
 ! device: leaf3 (vEOS-lab, EOS-4.29.2F)
@@ -310,6 +315,7 @@ router bgp 65503
 !
 end
 leaf3#
+
 ```
   </details>
 
@@ -318,6 +324,7 @@ leaf3#
   Давайте, попробуем завернуть теперь маршруты полученные leaf3 от RouterEdge  обратно в фабрику как __Route Type 5 - маршруты__ <br>
   
 Ниже представлен вывод глобальной таблицы маршрутизации на leaf3 <br>
+
 ```
 sho ip route
 
