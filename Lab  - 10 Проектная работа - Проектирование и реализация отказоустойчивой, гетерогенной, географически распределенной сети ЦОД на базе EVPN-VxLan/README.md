@@ -297,6 +297,7 @@ leaf3#
   <summary>Конфигурация leaf3 (borderLeaf) перед тем как я собираюсь все сломать</summary>
  
 ```
+
  leaf3#sho run
 ! Command: show running-config
 ! device: leaf3 (vEOS-lab, EOS-4.29.2F)
@@ -682,7 +683,8 @@ leaf1#
 </details>
 <details>
   <summary>конфигурация leaf1</summary>
-   ```
+  
+  ```
   leaf1#sho run
 ! Command: show running-config
 ! device: leaf1 (vEOS-lab, EOS-4.29.2F)
