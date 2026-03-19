@@ -61,7 +61,46 @@ AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Li
 EdgeRouter#
 ```
 ## Мои поиски решения по простому вопросу, как из IPV4 маршрута пришедшего на leaf, анонсировать его в bgp evpn route-type 5?
+И так ниже пойдет описание сугубо личных переживаний, скажем так не для всех, но у кого такие же были проблемы, могут почитать тут:
+ <details>
+  <summary>Какие маршруты имеются на leaf3?</summary>
+ Базовый маршрут
+   ```
+   leaf3#sho ip route
 
+VRF: default
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ C        5.5.5.4/30 is directly connected, Ethernet8
+ B E      8.8.8.0/24 [200/0] via 5.5.5.6, Ethernet8
+ B E      10.0.0.4/32 [200/0] via 5.5.5.6, Ethernet8
+ C        10.0.3.0/31 is directly connected, Ethernet1
+ C        10.0.3.4/31 is directly connected, Ethernet2
+ B E      10.1.0.1/32 [200/0] via 10.0.3.1, Ethernet1
+                              via 10.0.3.5, Ethernet2
+ B E      10.1.0.2/32 [200/0] via 10.0.3.1, Ethernet1
+                              via 10.0.3.5, Ethernet2
+ C        10.1.0.3/32 is directly connected, Loopback1
+ B E      10.1.1.1/32 [200/0] via 10.0.3.1, Ethernet1
+ B E      10.2.2.2/32 [200/0] via 10.0.3.5, Ethernet2
+ C        192.168.100.3/32 is directly connected, Loopback100
+
+leaf3#
+```
+   </details>
+   
 ## Заключение: L3VPN с использованием статических маршрутов
 Хотя конфигурация проста, масштабируемость оставляет желать лучшего. Каждый раз, когда маршрут добавляется или удаляется, его необходимо удалять со всех маршрутизаторов в VPN. Если в VPN 100 маршрутизаторов, это станет довольно утомительной задачей. Было бы лучше, если бы маршруты обменивались динамически с использованием протокола маршрутизации. Поэтому далее в статье мы рассмотрим, как улучшить масштабируемость, используя BGP внутри каждого VRF.
 ## L3VPN с BGP для каждого VRF
