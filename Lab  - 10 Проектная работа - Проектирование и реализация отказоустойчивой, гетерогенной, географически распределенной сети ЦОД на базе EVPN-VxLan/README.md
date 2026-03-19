@@ -65,7 +65,8 @@ EdgeRouter#
 И так ниже пойдет описание сугубо личных переживаний, скажем так не для всех, но у кого такие же были проблемы, могут почитать тут:
  <details>
   <summary>Какие маршруты имеются на leaf3?</summary>
- Базовый маршрут
+   
+ ## Базовый ip маршрут
    
    ```
    leaf3#sho ip route
@@ -101,6 +102,193 @@ Gateway of last resort is not set
 
 leaf3#
 
+```
+## Просмотр vrf маршрутов
+
+```
+leaf3#sho ip route vrf all
+
+VRF: default
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ C        5.5.5.4/30 is directly connected, Ethernet8
+ B E      8.8.8.0/24 [200/0] via 5.5.5.6, Ethernet8
+ B E      10.0.0.4/32 [200/0] via 5.5.5.6, Ethernet8
+ C        10.0.3.0/31 is directly connected, Ethernet1
+ C        10.0.3.4/31 is directly connected, Ethernet2
+ B E      10.1.0.1/32 [200/0] via 10.0.3.1, Ethernet1
+                              via 10.0.3.5, Ethernet2
+ B E      10.1.0.2/32 [200/0] via 10.0.3.1, Ethernet1
+                              via 10.0.3.5, Ethernet2
+ C        10.1.0.3/32 is directly connected, Loopback1
+ B E      10.1.1.1/32 [200/0] via 10.0.3.1, Ethernet1
+ B E      10.2.2.2/32 [200/0] via 10.0.3.5, Ethernet2
+ C        192.168.100.3/32 is directly connected, Loopback100
+
+
+VRF: VRF_GOOGLE
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+
+
+VRF: v
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+
+! IP routing not enabled
+
+VRF: vrf1
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+ B E      192.168.112.112/32 [200/0] via VTEP 10.1.0.1 VNI 666 router-mac 50:00:00:d7:ee:0b local-interface Vxlan1
+                                     via VTEP 10.1.0.2 VNI 666 router-mac 50:00:00:cb:38:c2 local-interface Vxlan1
+ B E      192.168.112.0/24 [200/0] via VTEP 10.1.0.1 VNI 666 router-mac 50:00:00:d7:ee:0b local-interface Vxlan1
+                                   via VTEP 10.1.0.2 VNI 666 router-mac 50:00:00:cb:38:c2 local-interface Vxlan1
+ C        192.168.113.0/24 is directly connected, Vlan113
+
+
+VRF: vrf2
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
+       N2 - OSPF NSSA external type2, B - Other BGP Routes,
+       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
+       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
+       A O - OSPF Summary, NG - Nexthop Group Static Route,
+       V - VXLAN Control Service, M - Martian,
+       DH - DHCP client installed default route,
+       DP - Dynamic Policy Route, L - VRF Leaked,
+       G  - gRIBI, RC - Route Cache Route
+
+Gateway of last resort is not set
+
+```
+## Просмотр bgp маршрутов
+
+```
+[Kaf3#sho ip bgp e
+BGP routing table information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+Route status codes: s - suppressed contributor, * - valid, > - active, E - ECMP head, e - ECMP
+                    S - Stale, c - Contributing to ECMP, b - backup, L - labeled-unicast
+                    % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI Origin Validation codes: V - valid, I - invalid, U - unknown
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  AIGP       LocPref Weight  Path
+ * >      5.5.5.4/30             -                     -       -          -       0       i
+ *        5.5.5.4/30             5.5.5.6               0       -          100     0       65504 i
+          5.5.5.6/32             5.5.5.6               0       -          100     0       65504 i
+ * >      8.8.8.0/24             5.5.5.6               0       -          100     0       65504 i
+ * >      10.0.0.4/32            5.5.5.6               0       -          100     0       65504 i
+ * >      10.0.3.0/31            -                     -       -          -       0       i
+ * >      10.0.3.4/31            -                     -       -          -       0       i
+ * >Ec    10.1.0.1/32            10.0.3.1              0       -          100     0       65500 65501 i
+ *  ec    10.1.0.1/32            10.0.3.5              0       -          100     0       65500 65501 i
+ * >Ec    10.1.0.2/32            10.0.3.1              0       -          100     0       65500 65502 i
+ *  ec    10.1.0.2/32            10.0.3.5              0       -          100     0       65500 65502 i
+ * >E     10.1.0.3/32            -                     -       -          -       0       i
+ *  e     10.1.0.3/32            -                     -       -          -       0       i
+ * >      10.1.1.1/32            10.0.3.1              0       -          100     0       65500 i
+ * >      10.2.2.2/32            10.0.3.5              0       -          100     0       65500 i
+ * >      192.168.100.3/32       -                     -       -          -       0       i
+leaf3#
+```
+## Просмотр bgp route type-5
+```
+leaf3#sho bgp evpn route-type ip-prefix ipv4
+BGP routing table information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
+                    c - Contributing to ECMP, % - Pending BGP convergence
+Origin codes: i - IGP, e - EGP, ? - incomplete
+AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
+
+          Network                Next Hop              Metric  LocPref Weight  Path
+ * >Ec    RD: 65501:10100 ip-prefix 192.168.10.0/24
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 65501:10100 ip-prefix 192.168.10.0/24
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 65502:10100 ip-prefix 192.168.10.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 65502:10100 ip-prefix 192.168.10.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >Ec    RD: 65501:10100 ip-prefix 192.168.20.0/24
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 65501:10100 ip-prefix 192.168.20.0/24
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 65502:10100 ip-prefix 192.168.20.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 65502:10100 ip-prefix 192.168.20.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >Ec    RD: 65501:10200 ip-prefix 192.168.30.0/24
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 65501:10200 ip-prefix 192.168.30.0/24
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 65502:10200 ip-prefix 192.168.30.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 65502:10200 ip-prefix 192.168.30.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >Ec    RD: 65501:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.1              -       100     0       65500 65501 i
+ *  ec    RD: 65501:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.1              -       100     0       65500 65501 i
+ * >Ec    RD: 65502:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ *  ec    RD: 65502:1 ip-prefix 192.168.112.0/24
+                                 10.1.0.2              -       100     0       65500 65502 i
+ * >      RD: 65503:1 ip-prefix 192.168.113.0/24
+                                 -                     -       -       0       i
+leaf3#
 ```
 
  </details>
