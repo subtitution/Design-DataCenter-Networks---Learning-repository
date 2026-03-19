@@ -292,6 +292,207 @@ leaf3#
 ```
 
  </details>
+<details> 
+  <sammary>Конфигурация leaf3 (borderLeaf) перед тем как я собираюсь все сломать</sammary>
+ 
+```
+ leaf3#sho run
+! Command: show running-config
+! device: leaf3 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname leaf3
+!
+spanning-tree mode mstp
+!
+vlan 3
+   name 3
+!
+vlan 113
+   name 113
+!
+vlan 4000
+   name BGP-INTERCONNECT
+!
+vrf instance VRF_GOOGLE
+   rd 65503:100
+!
+vrf instance v
+!
+vrf instance vrf1
+!
+vrf instance vrf2
+   description VRF ROute-6 IP Advertise Option A BGP to Edgge Router
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine-1
+   no switchport
+   ip address 10.0.3.0/31
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine-2
+   no switchport
+   ip address 10.0.3.4/31
+!
+interface Ethernet3
+   description downlink to host
+   switchport access vlan 113
+!
+interface Ethernet4
+   switchport access vlan 112
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+   description to EDGE router
+   no switchport
+   ip address 5.5.5.5/30
+!
+interface Loopback1
+   description VTEP
+   ip address 10.1.0.3/32
+!
+interface Loopback100
+   description For BGP between VRF
+   ip address 192.168.100.3/32
+!
+interface Management1
+!
+interface Vlan101
+   vrf vrf2
+   ip address 10.10.10.2/29
+!
+interface Vlan113
+   description Host Network 113
+   vrf vrf1
+   ip address 192.168.113.1/24
+   ip virtual-router address 192.168.113.254/24
+!
+interface Vlan4000
+   description BGP interconnect between default and VRF_GOOGLE
+   vrf VRF_GOOGLE
+   ip address 10.254.254.2/30
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 101 vni 101
+   vxlan vlan 112 vni 1112
+   vxlan vrf vrf1 vni 666
+   vxlan learn-restrict any
+!
+ip virtual-router mac-address 02:00:00:00:00:00
+!
+ip routing
+ip routing vrf VRF_GOOGLE
+no ip routing vrf v
+ip routing vrf vrf1
+ip routing vrf vrf2
+!
+ip prefix-list GOOGLE-NET seq 10 permit 8.8.8.0/24
+!
+route-map IMPORT-GOOGLE permit 10
+   match ip address prefix-list GOOGLE-NET
+!
+route-map SELECT-GOOGLE permit 10
+   match ip address prefix-list GOOGLE-NET
+!
+router bgp 65503
+   router-id 10.1.0.3
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   rd auto
+   maximum-paths 3 ecmp 3
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN remote-as 65500
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor test peer group
+   neighbor test remote-as 65504
+   neighbor test update-source Ethernet8
+   neighbor 5.5.5.6 peer group test
+   neighbor 10.0.3.1 peer group UNDERLAY
+   neighbor 10.0.3.5 peer group UNDERLAY
+   neighbor 10.1.1.1 peer group SPINE-EVPN
+   neighbor 10.2.2.2 peer group SPINE-EVPN
+   neighbor 10.254.254.2 remote-as 65503
+   neighbor 10.254.254.2 next-hop-self
+   neighbor 10.254.254.2 update-source Vlan4000
+   !
+   vlan 101
+      rd auto
+      route-target both 65503:101
+      redistribute learned
+   !
+   vlan 113
+      rd auto
+      route-target both 65500:1113
+      redistribute learned
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+      neighbor test activate
+      neighbor 5.5.5.6 activate
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      neighbor test activate
+      network 8.8.8.0/24
+      network 10.1.0.3/32
+      redistribute connected
+   !
+   vrf VRF_GOOGLE
+      rd 65503:100
+      route-target import evpn 65503:100
+      route-target export evpn 65503:100
+      neighbor 10.254.254.1 remote-as 65503
+      neighbor 10.254.254.1 update-source Vlan4000
+      !
+      address-family ipv4
+         bgp route install-map IMPORT-GOOGLE
+         neighbor 10.254.254.1 activate
+         network 8.8.8.0/24
+         redistribute connected
+   !
+   vrf vrf1
+      rd 65503:1
+      route-target import evpn 1:666
+      route-target export evpn 1:666
+      redistribute connected
+   !
+   vrf vrf2
+      rd 65504:1
+      route-target import evpn 2:666
+      route-target import evpn 65504:1
+      route-target export evpn 2:666
+      route-target export evpn 65504:1
+      neighbor 5.5.5.6 remote-as 65504
+      redistribute connected
+      !
+      address-family ipv4
+         neighbor 5.5.5.6 activate
+         redistribute connected
+!
+end
+leaf3#
+```
+</details>
    
 ## Заключение: L3VPN с использованием статических маршрутов
 Хотя конфигурация проста, масштабируемость оставляет желать лучшего. Каждый раз, когда маршрут добавляется или удаляется, его необходимо удалять со всех маршрутизаторов в VPN. Если в VPN 100 маршрутизаторов, это станет довольно утомительной задачей. Было бы лучше, если бы маршруты обменивались динамически с использованием протокола маршрутизации. Поэтому далее в статье мы рассмотрим, как улучшить масштабируемость, используя BGP внутри каждого VRF.
