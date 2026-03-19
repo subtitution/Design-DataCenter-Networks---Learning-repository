@@ -496,6 +496,93 @@ leaf3#
 ```
 </details>
 <details>
+  <summary>Конфигурация Edge Router</summary>
+ 
+  ```
+EdgeRouter#sho run
+! Command: show running-config
+! device: EdgeRouter (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname EdgeRouter
+!
+spanning-tree mode mstp
+!
+vrf instance VRF_GOOGLE
+   rd 65504:1
+!
+interface Ethernet1
+!
+interface Ethernet2
+!
+interface Ethernet3
+   description rouiting port to google
+   no switchport
+   ip address 8.8.8.254/24
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+   description Interconnect to BorderLeaf3
+   no switchport
+   ip address 5.5.5.6/30
+!
+interface Loopback1
+   ip address 10.0.0.4/32
+!
+interface Management1
+!
+interface Vlan101
+!
+ip routing
+ip routing vrf VRF_GOOGLE
+!
+router bgp 65504
+   router-id 5.5.5.6
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   neighbor test peer group
+   neighbor test remote-as 65503
+   neighbor test next-hop-self
+   neighbor test update-source Ethernet8
+   neighbor test route-reflector-client
+   neighbor test send-community standard extended
+   neighbor 5.5.5.5 peer group test
+   redistribute connected
+   !
+   address-family evpn
+      neighbor test activate
+   !
+   address-family ipv4
+      neighbor test activate
+      network 5.5.5.6/32
+      network 8.8.8.8/32
+      network 10.3.3.3/32
+   !
+   vrf VRF_GOOGLE
+      rd 65504:1
+      route-target import evpn 65504:1
+      route-target export evpn 65504:1
+      network 8.8.8.8/32
+!
+end
+EdgeRouter#
+  ```
+</details>
+<details>
   <summary>Просмотр маршрутов на leaf1 </summary>
   
 ```
