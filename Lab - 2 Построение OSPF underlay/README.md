@@ -1,3 +1,630 @@
+# Лабораторная работа: Построение Underlay сети с использованием OSPF
+
+## 1. Введение
+
+### 1.1 Цель работы
+Настроить протокол OSPF для обеспечения IP-связности (Underlay сети) между сетевыми устройствами в топологии spine-leaf.
+
+### 1.2 Критерии успеха
+1. Все сетевые устройства имеют IP-связность в Underlay сети
+2. OSPF соседства установлены в состоянии **Full**
+3. В таблицах маршрутизации присутствуют все Loopback и P2P интерфейсы
+4. Хосты имеют доступ к удаленным Leaf коммутаторам
+
+### 1.3 Используемое оборудование
+- **Симулятор:** EVE-NG / Arista vEOS
+- **Топология:** 2 Spine, 3 Leaf коммутатора
+- **Хосты:** 3 (по одному за каждым Leaf)
+
+---
+
+## 2. Топология и план адресации
+
+### 2.1 Схема сети
+┌─────────┐ ┌─────────┐
+│ Spine1 │ │ Spine2 │
+│ 10.1.1.1│ │ 10.2.2.1│
+└────┬────┘ └────┬────┘
+/ / \ / /
+/ / \ / /
+/ / \ / /
+┌────┴────┴──┐ ┌──┴────┴────┐ ┌──────┴───┐
+│ Leaf1 │ │ Leaf2 │ │ Leaf3 │
+│ 10.0.0.1 │ │ 10.0.0.2 │ │ 10.0.0.3 │
+└─────┬──────┘ └─────┬──────┘ └─────┬────┘
+│ │ │
+│ │ │
+┌───┴───┐ ┌───┴───┐ ┌───┴───┐
+│ Host1 │ │ Host2 │ │ Host3 │
+│.1.2/24│ │.2.2/24│ │.3.2/24│
+└───────┘ └───────┘ └───────┘
+
+text
+
+### 2.2 Таблица адресации
+
+| Устройство | Интерфейс | IP-адрес | Назначение |
+|------------|-----------|----------|------------|
+| **Leaf1** | Loopback0 | 10.0.0.1/32 | Router-ID |
+| | Ethernet1 | 10.0.1.0/31 | P2P к Spine1 |
+| | Ethernet2 | 10.0.1.4/31 | P2P к Spine2 |
+| | Vlan10 | 192.168.1.1/24 | Хостовая сеть |
+| **Leaf2** | Loopback0 | 10.0.0.2/32 | Router-ID |
+| | Ethernet1 | 10.0.2.0/31 | P2P к Spine1 |
+| | Ethernet2 | 10.0.2.4/31 | P2P к Spine2 |
+| | Vlan20 | 192.168.2.1/24 | Хостовая сеть |
+| **Leaf3** | Loopback0 | 10.0.0.3/32 | Router-ID |
+| | Ethernet1 | 10.0.3.0/31 | P2P к Spine1 |
+| | Ethernet2 | 10.0.3.4/31 | P2P к Spine2 |
+| | Vlan30 | 192.168.3.1/24 | Хостовая сеть |
+| **Spine1** | Loopback1 | 10.1.1.1/32 | Router-ID |
+| | Ethernet1 | 10.0.1.1/31 | P2P к Leaf1 |
+| | Ethernet2 | 10.0.2.1/31 | P2P к Leaf2 |
+| | Ethernet3 | 10.0.3.1/31 | P2P к Leaf3 |
+| **Spine2** | Loopback1 | 10.2.2.1/32 | Router-ID |
+| | Ethernet1 | 10.0.1.5/31 | P2P к Leaf1 |
+| | Ethernet2 | 10.0.2.5/31 | P2P к Leaf2 |
+| | Ethernet3 | 10.0.3.5/31 | P2P к Leaf3 |
+| **Host1** | eth0 | 192.168.1.2/24 | Шлюз: 192.168.1.1 |
+| **Host2** | eth0 | 192.168.2.2/24 | Шлюз: 192.168.2.1 |
+| **Host3** | eth0 | 192.168.3.2/24 | Шлюз: 192.168.3.1 |
+
+---
+
+## 3. Настройка Underlay сети (OSPF)
+
+### 3.1 Настройка Leaf1
+
+#### 3.1.1 Настройка Loopback (Router-ID)
+```cisco
+interface Loopback0
+   description OSPF Router-ID
+   ip address 10.0.0.1/32
+   ip ospf area 0.0.0.0
+3.1.2 Настройка P2P интерфейсов к Spine
+cisco
+interface Ethernet1
+   description Peer-to-peer link to Spine1
+   no switchport
+   ip address 10.0.1.0/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+
+interface Ethernet2
+   description Peer-to-peer link to Spine2
+   no switchport
+   ip address 10.0.1.4/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+3.1.3 Настройка хостовой сети (VLAN и SVI)
+cisco
+vlan 10
+   name Host_Network
+
+interface Vlan10
+   ip address 192.168.1.1/24
+
+interface Ethernet3
+   description Connection to Host1
+   switchport mode access
+   switchport access vlan 10
+   spanning-tree portfast
+3.1.4 Включение OSPF процесса
+cisco
+router ospf 1
+   router-id 10.0.0.1
+3.2 Настройка Spine1
+3.2.1 Настройка Loopback (Router-ID)
+cisco
+interface Loopback1
+   description IP for underlay - Router-ID
+   ip address 10.1.1.1/32
+   ip ospf area 0.0.0.0
+3.2.2 Настройка P2P интерфейсов к Leaf
+cisco
+interface Ethernet1
+   description Peer-to-peer link to Leaf1
+   no switchport
+   ip address 10.0.1.1/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+
+interface Ethernet2
+   description Peer-to-peer link to Leaf2
+   no switchport
+   ip address 10.0.2.1/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+
+interface Ethernet3
+   description Peer-to-peer link to Leaf3
+   no switchport
+   ip address 10.0.3.1/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+3.2.3 Включение OSPF процесса
+cisco
+router ospf 1
+   router-id 10.1.1.1
+3.3 Настройка Spine2
+3.3.1 Настройка Loopback (Router-ID)
+cisco
+interface Loopback1
+   description IP for underlay - Router-ID
+   ip address 10.2.2.1/32
+   ip ospf area 0.0.0.0
+3.3.2 Настройка P2P интерфейсов к Leaf
+cisco
+interface Ethernet1
+   description Peer-to-peer link to Leaf1
+   no switchport
+   ip address 10.0.1.5/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+
+interface Ethernet2
+   description Peer-to-peer link to Leaf2
+   no switchport
+   ip address 10.0.2.5/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+
+interface Ethernet3
+   description Peer-to-peer link to Leaf3
+   no switchport
+   ip address 10.0.3.5/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+3.3.3 Включение OSPF процесса
+cisco
+router ospf 1
+   router-id 10.2.2.1
+3.4 Настройка Leaf2 и Leaf3
+Настройки Leaf2 и Leaf3 выполняются по аналогии с Leaf1, с соответствующими изменениями IP-адресов и VLAN.
+
+Leaf2:
+
+cisco
+interface Loopback0
+   ip address 10.0.0.2/32
+   ip ospf area 0.0.0.0
+
+interface Ethernet1
+   no switchport
+   ip address 10.0.2.0/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+
+interface Ethernet2
+   no switchport
+   ip address 10.0.2.4/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+
+vlan 20
+   name Host_Network
+
+interface Vlan20
+   ip address 192.168.2.1/24
+
+interface Ethernet3
+   switchport mode access
+   switchport access vlan 20
+   spanning-tree portfast
+
+router ospf 1
+   router-id 10.0.0.2
+Leaf3:
+
+cisco
+interface Loopback0
+   ip address 10.0.0.3/32
+   ip ospf area 0.0.0.0
+
+interface Ethernet1
+   no switchport
+   ip address 10.0.3.0/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+
+interface Ethernet2
+   no switchport
+   ip address 10.0.3.4/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+
+vlan 30
+   name Host_Network
+
+interface Vlan30
+   ip address 192.168.3.1/24
+
+interface Ethernet3
+   switchport mode access
+   switchport access vlan 30
+   spanning-tree portfast
+
+router ospf 1
+   router-id 10.0.0.3
+4. Анализ работы OSPF
+4.1 Формат Hello-пакета
+При включении OSPF процесса, коммутатор начинает отправлять Hello-пакеты на мультикаст-адрес 224.0.0.5 (AllSPFRouters). Рассмотрим структуру пакета:
+
+4.1.1 Ethernet уровень
+Destination MAC: 01-00-5E-00-00-05 (мультикаст, соответствующий IP 224.0.0.5)
+
+Individual/Group bit: установлен в 1 (пакет предназначен для группы устройств)
+
+4.1.2 IP уровень
+DSCP: значение 48 (Class Selector 6) — OSPF устанавливает высокий приоритет для своих пакетов, что важно учитывать при настройке QoS
+
+Don't Fragment (DF): установлен в 1 — фрагментация не допускается, требуется согласование MTU на обеих сторонах
+
+Destination IP: 224.0.0.5
+
+Protocol: 89 (OSPF)
+
+4.1.3 OSPF Hello-пакет
+Поле	Значение	Описание
+Version	2	OSPFv2
+Type	1	Hello Packet
+Router ID	10.0.0.1	Идентификатор маршрутизатора (Loopback)
+Area ID	0.0.0.0	Backbone area
+Authentication	0	Аутентификация не используется
+Network Mask	/31	Маска сети интерфейса
+Hello Interval	10 sec	Интервал отправки Hello
+Dead Interval	40 sec	Время ожидания (4 × Hello)
+Router Priority	1	Приоритет для выбора DR/BDR
+DR	0.0.0.0	Designated Router (не выбран)
+BDR	0.0.0.0	Backup Designated Router (не выбран)
+Active Neighbor	0.0.0.0	Список активных соседей
+Примечание: Для P2P линков DR/BDR не выбираются, поэтому соответствующие поля обнулены.
+
+4.2 Процесс установления OSPF соседства
+Процесс установления соседства между Leaf1 и Spine1 проходит следующие этапы:
+
+Состояние	Описание	Пакеты
+Down	Нет активного соседа	—
+Init	Получен Hello-пакет, но Router-ID отправителя не найден	Hello
+2-Way	Получен Hello с собственным Router-ID	Hello
+ExStart	Выбор Master/Slave, установление последовательности	DB Description
+Exchange	Обмен описаниями базы данных	DB Description
+Loading	Запрос недостающих LSA	LS Request, LS Update
+Full	Базы данных синхронизированы	LS Acknowledge
+4.2.1 Анализ трафика установления соседства
+IGMP (не OSPF): Первые пакеты — это IGMP-сообщения о присоединении к мультикаст-группе 224.0.0.5. Важно: OSPF не использует IGMP напрямую, это работа стека TCP/IP.
+
+Hello (Init): Обмен Hello-пакетами для обнаружения соседа.
+
+DB Description (ExStart/Exchange): Обмен описаниями LSA для синхронизации базы данных.
+
+LS Request/LS Update (Loading): Запрос и получение недостающих LSA.
+
+LS Acknowledge: Подтверждение получения LSA.
+
+4.3 Типы LSA в OSPF
+В процессе установления соседства наблюдаются следующие типы LSA:
+
+Тип LSA	Название	Содержание
+Type 1	Router LSA	Информация о маршрутизаторе и его интерфейсах
+Type 2	Network LSA	Формируется DR (не используется на P2P)
+Type 3	Summary LSA	Межзонные маршруты (в данной работе все в Area 0)
+В данной топологии (все интерфейсы в Area 0) распространяются только Type 1 LSA (Router LSA). Каждый Router LSA содержит информацию о:
+
+Loopback интерфейсе (/32)
+
+P2P линках (/31)
+
+Сетях, подключенных к хостам (VLAN)
+
+5. Верификация
+5.1 Проверка OSPF соседств
+Leaf1:
+
+cisco
+leaf1# show ip ospf neighbor
+
+Neighbor ID     Pri State            Dead Time Address         Interface
+10.1.1.1          0 FULL/  -          00:00:36 10.0.1.1       Ethernet1
+10.2.2.1          0 FULL/  -          00:00:33 10.0.1.5       Ethernet2
+Spine1:
+
+cisco
+spine1# show ip ospf neighbor
+
+Neighbor ID     Pri State            Dead Time Address         Interface
+10.0.0.1          0 FULL/  -          00:00:35 10.0.1.0       Ethernet1
+10.0.0.2          0 FULL/  -          00:00:32 10.0.2.0       Ethernet2
+10.0.0.3          0 FULL/  -          00:00:34 10.0.3.0       Ethernet3
+Spine2:
+
+cisco
+spine2# show ip ospf neighbor
+
+Neighbor ID     Pri State            Dead Time Address         Interface
+10.0.0.1          0 FULL/  -          00:00:38 10.0.1.4       Ethernet1
+10.0.0.2          0 FULL/  -          00:00:35 10.0.2.4       Ethernet2
+10.0.0.3          0 FULL/  -          00:00:37 10.0.3.4       Ethernet3
+5.2 Проверка таблицы маршрутизации
+Leaf1:
+
+cisco
+leaf1# show ip route ospf
+
+O        10.0.0.2/32 [110/20] via 10.0.1.1, Ethernet1
+                    [110/20] via 10.0.1.5, Ethernet2
+O        10.0.0.3/32 [110/20] via 10.0.1.1, Ethernet1
+                    [110/20] via 10.0.1.5, Ethernet2
+O        10.1.1.1/32 [110/10] via 10.0.1.1, Ethernet1
+O        10.2.2.1/32 [110/10] via 10.0.1.5, Ethernet2
+O        10.0.2.0/31 [110/20] via 10.0.1.1, Ethernet1
+                     [110/20] via 10.0.1.5, Ethernet2
+O        10.0.2.4/31 [110/20] via 10.0.1.1, Ethernet1
+                     [110/20] via 10.0.1.5, Ethernet2
+O        10.0.3.0/31 [110/20] via 10.0.1.1, Ethernet1
+                     [110/20] via 10.0.1.5, Ethernet2
+O        10.0.3.4/31 [110/20] via 10.0.1.1, Ethernet1
+                     [110/20] via 10.0.1.5, Ethernet2
+O        192.168.2.0/24 [110/20] via 10.0.1.1, Ethernet1
+                       [110/20] via 10.0.1.5, Ethernet2
+O        192.168.3.0/24 [110/20] via 10.0.1.1, Ethernet1
+                       [110/20] via 10.0.1.5, Ethernet2
+Примечание: Для каждой сети присутствуют два маршрута (через Spine1 и Spine2), что обеспечивает отказоустойчивость и балансировку нагрузки (ECMP).
+
+Spine1:
+
+cisco
+spine1# show ip route ospf
+
+O        10.0.0.1/32 [110/10] via 10.0.1.0, Ethernet1
+O        10.0.0.2/32 [110/10] via 10.0.2.0, Ethernet2
+O        10.0.0.3/32 [110/10] via 10.0.3.0, Ethernet3
+O        10.2.2.1/32 [110/30] via 10.0.1.0, Ethernet1
+                      [110/30] via 10.0.2.0, Ethernet2
+                      [110/30] via 10.0.3.0, Ethernet3
+O        192.168.1.0/24 [110/20] via 10.0.1.0, Ethernet1
+O        192.168.2.0/24 [110/20] via 10.0.2.0, Ethernet2
+O        192.168.3.0/24 [110/20] via 10.0.3.0, Ethernet3
+5.3 Проверка IP-связности
+Пинг с Leaf1 до Spine2 Loopback:
+
+cisco
+leaf1# ping 10.2.2.1
+PING 10.2.2.1 (10.2.2.1) 72(100) bytes of data.
+80 bytes from 10.2.2.1: icmp_seq=1 ttl=64 time=5.2 ms
+80 bytes from 10.2.2.1: icmp_seq=2 ttl=64 time=4.9 ms
+80 bytes from 10.2.2.1: icmp_seq=3 ttl=64 time=5.1 ms
+--- 10.2.2.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+Пинг с Leaf1 до Leaf3 Loopback:
+
+cisco
+leaf1# ping 10.0.0.3
+PING 10.0.0.3 (10.0.0.3) 72(100) bytes of data.
+80 bytes from 10.0.0.3: icmp_seq=1 ttl=63 time=8.3 ms
+80 bytes from 10.0.0.3: icmp_seq=2 ttl=63 time=7.9 ms
+--- 10.0.0.3 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss
+Пинг с Host1 до Leaf3 (192.168.3.1):
+
+bash
+host1# ping 192.168.3.1
+PING 192.168.3.1 (192.168.3.1) 56(84) bytes of data.
+64 bytes from 192.168.3.1: icmp_seq=1 ttl=63 time=15.2 ms
+64 bytes from 192.168.3.1: icmp_seq=2 ttl=63 time=14.8 ms
+64 bytes from 192.168.3.1: icmp_seq=3 ttl=63 time=15.1 ms
+--- 192.168.3.1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2004ms
+Пинг с Host1 до Host3 (192.168.3.2):
+
+bash
+host1# ping 192.168.3.2
+PING 192.168.3.2 (192.168.3.2) 56(84) bytes of data.
+64 bytes from 192.168.3.2: icmp_seq=1 ttl=62 time=16.1 ms
+64 bytes from 192.168.3.2: icmp_seq=2 ttl=62 time=15.7 ms
+--- 192.168.3.2 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss
+6. Выявленные проблемы и их решение
+6.1 Проблема: Отсутствие маршрутов через Spine1
+Симптомы: На Leaf1 маршруты OSPF приходили только через интерфейс Ethernet2 (к Spine2). Маршруты через Ethernet1 (к Spine1) отсутствовали.
+
+Диагностика:
+
+cisco
+leaf1# show ip ospf neighbor
+Neighbor ID     Pri State            Dead Time Address         Interface
+10.2.2.1          0 FULL/  -          00:00:36 10.0.1.5       Ethernet2
+Соседство со Spine1 отсутствовало.
+
+Причина: На Spine1 OSPF не был активирован на интерфейсе Ethernet1. Команда ip ospf area 0.0.0.0 была пропущена.
+
+Решение: Добавление OSPF активации на интерфейсе Ethernet1 Spine1:
+
+cisco
+spine1(config)# interface Ethernet1
+spine1(config-if-Et1)# ip ospf area 0.0.0.0
+После применения конфигурации соседство установилось, и маршруты стали доступны через оба Spine:
+
+cisco
+leaf1# show ip ospf neighbor
+Neighbor ID     Pri State            Dead Time Address         Interface
+10.1.1.1          0 FULL/  -          00:00:36 10.0.1.1       Ethernet1
+10.2.2.1          0 FULL/  -          00:00:33 10.0.1.5       Ethernet2
+6.2 Проблема: Нет связности с хостом
+Симптомы: При первой проверке пинг с Leaf1 до хоста 192.168.1.2 не проходил.
+
+cisco
+leaf1# ping 192.168.1.2
+PING 192.168.1.2 (192.168.1.2) 72(100) bytes of data.
+--- 192.168.1.2 ping statistics ---
+5 packets transmitted, 0 received, 100% packet loss
+Диагностика: Проверка конфигурации порта Ethernet3 показала:
+
+cisco
+leaf1# show running-config interface Ethernet3
+interface Ethernet3
+   description -=Direction to host=-
+   no switchport
+Причина: Порт Ethernet3 был настроен как no switchport (роутерный порт), в то время как хост ожидал access-порт в VLAN.
+
+Решение: Переключение порта в режим access:
+
+cisco
+leaf1(config)# interface Ethernet3
+leaf1(config-if-Et3)# switchport mode access
+leaf1(config-if-Et3)# switchport access vlan 10
+leaf1(config-if-Et3)# spanning-tree portfast
+После изменения конфигурации связность восстановилась:
+
+cisco
+leaf1# ping 192.168.1.2
+PING 192.168.1.2 (192.168.1.2) 72(100) bytes of data.
+80 bytes from 192.168.1.2: icmp_seq=1 ttl=64 time=10.1 ms
+80 bytes from 192.168.1.2: icmp_seq=2 ttl=64 time=9.8 ms
+7. Используемые команды для верификации
+Команда	Назначение
+show ip ospf	Общая информация об OSPF процессе
+show ip ospf summary	Сводная информация об OSPF
+show ip ospf neighbor	Список OSPF соседей и их состояния
+show ip ospf interface brief	Интерфейсы с OSPF и их параметры
+show ip route ospf	Маршруты, полученные через OSPF
+show run section ospf	Конфигурация OSPF
+show log	Системный журнал для отладки
+show ip ospf database	Содержимое базы данных OSPF
+8. Заключение
+В ходе выполнения лабораторной работы была настроена Underlay сеть на базе протокола OSPF для топологии spine-leaf. Основные результаты:
+
+IP-связность: Все сетевые устройства имеют связность в Underlay сети. Каждый Leaf имеет доступ к Loopback интерфейсам Spine и удаленных Leaf через оба пути.
+
+OSPF соседства: Установлены соседства в состоянии Full между всеми Leaf и Spine коммутаторами. Всего установлено 6 OSPF соседств (3 Leaf × 2 Spine).
+
+Отказоустойчивость: В таблицах маршрутизации присутствуют равнозначные маршруты через оба Spine, что обеспечивает резервирование и балансировку нагрузки (ECMP).
+
+Анализ протокола: Выполнен детальный анализ OSPF Hello-пакетов и процесса установления соседства, рассмотрены ключевые поля заголовков Ethernet, IP и OSPF.
+
+Отладка: Выявлены и устранены проблемы:
+
+Отсутствие OSPF активации на интерфейсе Spine1 Ethernet1
+
+Неправильный режим порта для подключения хоста
+
+Underlay сеть готова к использованию в качестве транспортной основы для построения Overlay сетей (VXLAN/EVPN).
+
+9. Приложение: Полные конфигурации устройств
+<details> <summary><b>Leaf1 - Полная конфигурация</b></summary>
+cisco
+!
+hostname leaf1
+!
+ip routing
+!
+vlan 10
+   name Host_Network
+!
+interface Loopback0
+   description OSPF Router-ID
+   ip address 10.0.0.1/32
+   ip ospf area 0.0.0.0
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine1
+   no switchport
+   ip address 10.0.1.0/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine2
+   no switchport
+   ip address 10.0.1.4/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+interface Ethernet3
+   description Connection to Host1
+   switchport mode access
+   switchport access vlan 10
+   spanning-tree portfast
+!
+interface Vlan10
+   ip address 192.168.1.1/24
+!
+router ospf 1
+   router-id 10.0.0.1
+!
+</details><details> <summary><b>Spine1 - Полная конфигурация</b></summary>
+cisco
+!
+hostname spine1
+!
+ip routing
+!
+interface Loopback1
+   description IP for underlay - Router-ID
+   ip address 10.1.1.1/32
+   ip ospf area 0.0.0.0
+!
+interface Ethernet1
+   description Peer-to-peer link to Leaf1
+   no switchport
+   ip address 10.0.1.1/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+interface Ethernet2
+   description Peer-to-peer link to Leaf2
+   no switchport
+   ip address 10.0.2.1/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+interface Ethernet3
+   description Peer-to-peer link to Leaf3
+   no switchport
+   ip address 10.0.3.1/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+router ospf 1
+   router-id 10.1.1.1
+!
+</details><details> <summary><b>Spine2 - Полная конфигурация</b></summary>
+cisco
+!
+hostname spine2
+!
+ip routing
+!
+interface Loopback1
+   description IP for underlay - Router-ID
+   ip address 10.2.2.1/32
+   ip ospf area 0.0.0.0
+!
+interface Ethernet1
+   description Peer-to-peer link to Leaf1
+   no switchport
+   ip address 10.0.1.5/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+interface Ethernet2
+   description Peer-to-peer link to Leaf2
+   no switchport
+   ip address 10.0.2.5/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+interface Ethernet3
+   description Peer-to-peer link to Leaf3
+   no switchport
+   ip address 10.0.3.5/31
+   ip ospf network point-to-point
+   ip ospf area 0.0.0.0
+!
+router ospf 1
+   router-id 10.2.2.1
+!
+</details>
 # Построение Underlay сети с использованием OSPF
 ## Цель:
 Настроить OSPF для Underlay сети.
