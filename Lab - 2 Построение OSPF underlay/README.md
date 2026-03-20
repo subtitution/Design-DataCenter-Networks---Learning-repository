@@ -67,6 +67,7 @@ interface Loopback0
    ip ospf area 0.0.0.0
 ```
 #### 3.1.2 Настройка P2P интерфейсов к Spine
+```
 cisco
 interface Ethernet1
    description Peer-to-peer link to Spine1
@@ -81,7 +82,9 @@ interface Ethernet2
    ip address 10.0.1.4/31
    ip ospf network point-to-point
    ip ospf area 0.0.0.0
+```
 #### 3.1.3 Настройка хостовой сети (VLAN и SVI)
+```
 cisco
 vlan 10
    name Host_Network
@@ -94,6 +97,7 @@ interface Ethernet3
    switchport mode access
    switchport access vlan 10
    spanning-tree portfast
+```
 #### 3.1.4 Включение OSPF процесса
 cisco
 router ospf 1
