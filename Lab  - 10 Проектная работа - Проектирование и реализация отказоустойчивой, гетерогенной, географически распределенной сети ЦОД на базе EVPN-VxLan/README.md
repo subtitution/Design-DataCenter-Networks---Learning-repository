@@ -198,6 +198,43 @@ router bgp 65503
 end
 leaf3#
 ```
+Проверка bgp сессий:
+```
+leaf3#sho ip bgp summary
+BGP summary information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+Neighbor Status Codes: m - Under maintenance
+  Neighbor V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+  10.0.3.1 4 65500         243991    244127    0    0 00:43:18 Estab   3      3
+  10.0.3.5 4 65500         244002    244062    0    0 00:43:18 Estab   3      3
+leaf3#
+leaf3#sho ip bgp summary vrf ?
+  WORD     VRF name
+  all      All Virtual Routing and Forwarding instances
+  default  Default Virtual Routing and Forwarding instance
+
+leaf3#sho ip bgp summary vrf all
+BGP summary information for VRF default
+Router identifier 10.1.0.3, local AS number 65503
+Neighbor Status Codes: m - Under maintenance
+  Neighbor V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+  10.0.3.1 4 65500         244005    244141    0    0 00:43:55 Estab   3      3
+  10.0.3.5 4 65500         244017    244076    0    0 00:43:55 Estab   3      3
+
+BGP summary information for VRF VRF_GOOGLE
+Router identifier 5.5.5.5, local AS number 65503
+Neighbor Status Codes: m - Under maintenance
+  Neighbor V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+  5.5.5.6  4 65504           8101      8088    0    0 05:44:46 Estab   4      4
+
+BGP summary information for VRF vrf1
+Router identifier 192.168.113.1, local AS number 65503
+Neighbor Status Codes: m - Under maintenance
+  Neighbor V AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+leaf3#
+leaf3#
+```
+
 Технология L3VPN использует VRF для изоляции сети, поэтому вот краткое введение: <br>
 <br>
 VRF — это сокращение от Virtual Routing Forwarding (виртуальная пересылка маршрутов).<br>
