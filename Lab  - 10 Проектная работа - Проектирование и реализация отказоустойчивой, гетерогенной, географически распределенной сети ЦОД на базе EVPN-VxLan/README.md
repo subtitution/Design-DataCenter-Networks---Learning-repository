@@ -375,7 +375,9 @@ Gateway of last resort is not set
 ## 5. Конфигурация устройств
 <details>
   <summary>leaf1 конфигурация</summary>
+
 ```
+
 leaf1#show run
 ! Command: show running-config
 ! device: leaf1 (vEOS-lab, EOS-4.29.2F)
@@ -564,11 +566,15 @@ router bgp 65501
 !
 end
 leaf1#
- ```
+
+```
+
   </details>
 <details>
   <summary>leaf2 конфигурация</summary>
+
 ```
+
 leaf2#wr me
 Copy completed successfully.
 leaf2#
@@ -756,11 +762,15 @@ router bgp 65502
 !
 end
      leaf2#
- ```
+
+```
+
   </details>
 <details>
   <summary>leaf3 (Border Leaf) конфигурация</summary>
+ 
 ```
+
 leaf3#show run
 ! Command: show running-config
 ! device: leaf3 (vEOS-lab, EOS-4.29.2F)
@@ -904,11 +914,15 @@ router bgp 65503
 !
 end
   leaf3#
+
  ```
+
   </details>
 <details>
   <summary>Edge Router</summary>
+ 
 ```
+
 EdgeRouter#sho run
 ! Command: show running-config
 ! device: EdgeRouter (vEOS-lab, EOS-4.29.2F)
@@ -970,11 +984,15 @@ router bgp 65504
 !
 end
  EdgeRouter#
+
  ```
+
   </details>
 <details>
   <summary>S1-host1</summary>
+ 
 ```
+
 S1-Host1#sho run
 ! Command: show running-config
 ! device: S1-Host1 (vEOS-lab, EOS-4.29.2F)
@@ -1032,11 +1050,15 @@ ip route 0.0.0.0/0 192.168.112.254
 !
 end
  S1-Host1#
+
  ```
+
   </details>
 <details>
   <summary>IamGoogle конфигурация</summary>
+ 
 ```
+
 iamgoogle> show ip
 
 NAME        : iamgoogle[1]
@@ -1049,7 +1071,9 @@ RHOST:PORT  : 127.0.0.1:30000
 MTU         : 1500
 
 iamgoogle>
+
  ```
+
   </details>
 
 
