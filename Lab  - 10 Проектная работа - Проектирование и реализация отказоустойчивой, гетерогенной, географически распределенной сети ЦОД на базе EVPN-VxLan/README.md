@@ -373,7 +373,684 @@ Gateway of last resort is not set
 
 
 ## 5. Конфигурация устройств
+<details>
+  <summary>leaf1 конфигурация</summary>
+```
+leaf1#show run
+! Command: show running-config
+! device: leaf1 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname leaf1
+!
+spanning-tree mode mstp
+!
+vlan 1
+   name Host_Network
+!
+vlan 2
+   name 2
+!
+vlan 10,20,30,112-113
+!
+vrf instance TENANT-1
+!
+vrf instance TENANT-2
+!
+vrf instance vrf1
+!
+interface Port-Channel1
+   description EVPN A-A DownLink S1-Host1-Eth7
+   switchport trunk allowed vlan 10,20,30,112-113
+   switchport mode trunk
+   !
+   evpn ethernet-segment
+      identifier 0034:0000:0000:0000:0001
+      route-target import 00:03:04:00:00:05
+   lacp system-id 1234.5678.0304
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine-1
+   no switchport
+   ip address 10.0.1.0/31
+!
+interface Ethernet1/3
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine-2
+   no switchport
+   ip address 10.0.1.4/31
+!
+interface Ethernet3
+   description EVPN A-A Downlink -host
+   switchport trunk allowed vlan 10,20,30,112-113
+   channel-group 1 mode active
+!
+interface Ethernet4
+   description to pc 1-2
+   switchport access vlan 113
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Loopback1
+   description VTEP
+   ip address 10.1.0.1/32
+!
+interface Management1
+!
+interface Vlan10
+   vrf TENANT-1
+   ip address virtual 192.168.10.1/24
+!
+interface Vlan20
+   vrf TENANT-1
+   ip address virtual 192.168.20.1/24
+!
+interface Vlan30
+   vrf TENANT-2
+   ip address virtual 192.168.30.1/24
+!
+interface Vlan112
+   description Host Network 112
+   vrf vrf1
+   ip address 192.168.112.1/24
+   ip virtual-router address 192.168.112.254/24
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 10 vni 10010
+   vxlan vlan 20 vni 10020
+   vxlan vlan 30 vni 10030
+   vxlan vlan 112 vni 1112
+   vxlan vrf TENANT-1 vni 10100
+   vxlan vrf TENANT-2 vni 10200
+   vxlan vrf VRF_GOOGLE vni 8888
+   vxlan vrf vrf1 vni 666
+   vxlan learn-restrict any
+!
+ip virtual-router mac-address 02:00:00:00:00:00
+!
+ip routing
+ip routing vrf TENANT-1
+ip routing vrf TENANT-2
+ip routing vrf vrf1
+!
+router bgp 65501
+   router-id 10.1.0.1
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   rd auto
+   maximum-paths 2 ecmp 2
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN remote-as 65500
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.1.1 peer group UNDERLAY
+   neighbor 10.0.1.5 peer group UNDERLAY
+   neighbor 10.1.1.1 peer group SPINE-EVPN
+   neighbor 10.2.2.2 peer group SPINE-EVPN
+   !
+   vlan 10
+      rd auto
+      route-target both 10:10010
+      route-target both 65501:10010
+      redistribute learned
+   !
+   vlan 112
+      rd auto
+      route-target both 65500:1112
+      redistribute learned
+   !
+   vlan 20
+      rd auto
+      route-target both 65501:10020
+      redistribute learned
+   !
+   vlan 30
+      rd auto
+      route-target both 65501:10030
+      redistribute learned
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.1.0.1/32
+   !
+   vrf TENANT-1
+      rd 65501:10100
+      route-target import evpn 65501:10100
+      route-target export evpn 65501:10100
+      !
+      address-family ipv4
+         redistribute connected
+   !
+   vrf TENANT-2
+      rd 65501:10200
+      route-target import evpn 65501:10200
+      route-target export evpn 65501:10200
+      !
+      address-family ipv4
+         redistribute connected
+   !
+   vrf vrf1
+      rd 65501:5555
+      route-target import evpn 1:666
+      route-target import evpn 65503:5555
+      route-target import evpn 65503:8888
+      route-target export evpn 1:666
+      route-target export evpn 65501:5555
+      redistribute connected
+!
+end
+leaf1#
+ ```
+  </details>
+<details>
+  <summary>leaf2 конфигурация</summary>
+```
+leaf2#wr me
+Copy completed successfully.
+leaf2#
+leaf2#sho run
+! Command: show running-config
+! device: leaf2 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname leaf2
+!
+spanning-tree mode mstp
+!
+vlan 10,20,30
+!
+vlan 112
+   name Host_network_Vlan_112
+!
+vrf instance TENANT-1
+!
+vrf instance TENANT-2
+!
+vrf instance vrf1
+!
+interface Port-Channel1
+   description EVPN A-A DownLink S1-Host1-Eth7
+   switchport trunk allowed vlan 10,20,30,112-113
+   switchport mode trunk
+   !
+   evpn ethernet-segment
+      identifier 0034:0000:0000:0000:0001
+      route-target import 00:03:04:00:00:05
+   lacp system-id 1234.5678.0304
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine-1
+   no switchport
+   ip address 10.0.2.0/31
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine-2
+   no switchport
+   ip address 10.0.2.4/31
+!
+interface Ethernet3
+   description EVPN A-A Downlink -host
+   switchport trunk allowed vlan 10,20,30,112-113
+   channel-group 1 mode active
+!
+interface Ethernet4
+   description to pc-host 2-2
+   switchport access vlan 113
+!
+interface Ethernet5
+   description -=Direction to hosts=-
+   no switchport
+   ip address 192.168.2.1/24
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+!
+interface Loopback1
+   description VTEP
+   ip address 10.1.0.2/32
+!
+interface Management1
+!
+interface Vlan10
+   vrf TENANT-1
+   ip address virtual 192.168.10.1/24
+!
+interface Vlan20
+   vrf TENANT-1
+   ip address virtual 192.168.20.1/24
+!
+interface Vlan30
+   vrf TENANT-2
+   ip address virtual 192.168.30.1/24
+!
+interface Vlan112
+   vrf vrf1
+   ip address 192.168.112.2/24
+   ip virtual-router address 192.168.112.254
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 10 vni 10010
+   vxlan vlan 20 vni 10020
+   vxlan vlan 30 vni 10030
+   vxlan vlan 112 vni 1112
+   vxlan vrf TENANT-1 vni 10100
+   vxlan vrf TENANT-2 vni 10200
+   vxlan vrf VRF_GOOGLE vni 8888
+   vxlan vrf vrf1 vni 666
+!
+ip virtual-router mac-address 02:00:00:00:00:00
+!
+ip routing
+ip routing vrf TENANT-1
+ip routing vrf TENANT-2
+ip routing vrf vrf1
+!
+router bgp 65502
+   router-id 10.1.0.2
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   rd auto
+   maximum-paths 2 ecmp 2
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN remote-as 65500
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.2.1 peer group UNDERLAY
+   neighbor 10.0.2.5 peer group UNDERLAY
+   neighbor 10.1.1.1 peer group SPINE-EVPN
+   neighbor 10.2.2.2 peer group SPINE-EVPN
+   !
+   vlan 10
+      rd auto
+      route-target both 65502:10010
+      redistribute learned
+   !
+   vlan 112
+      rd auto
+      route-target both 65500:1112
+      route-target both 65502:1112
+      redistribute learned
+   !
+   vlan 20
+      rd auto
+      route-target both 65502:10020
+      redistribute learned
+   !
+   vlan 30
+      rd auto
+      route-target both 65502:10030
+      redistribute learned
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.1.0.2/32
+   !
+   vrf TENANT-1
+      rd 65502:10100
+      route-target import evpn 65502:10100
+      route-target export evpn 65502:10100
+      !
+      address-family ipv4
+         redistribute connected
+   !
+   vrf TENANT-2
+      rd 65502:10200
+      route-target import evpn 65502:10200
+      route-target export evpn 65502:10200
+      !
+      address-family ipv4
+         redistribute connected
+   !
+   vrf vrf1
+      rd 65502:5555
+      route-target import evpn 1:666
+      route-target import evpn 65503:5555
+      route-target import evpn 65503:8888
+      route-target export 1:666
+      route-target export evpn 65502:5555
+      redistribute connected
+!
+end
+     leaf2#
+ ```
+  </details>
+<details>
+  <summary>leaf3 (Border Leaf) конфигурация</summary>
+```
+leaf3#show run
+! Command: show running-config
+! device: leaf3 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname leaf3
+!
+spanning-tree mode mstp
+!
+vlan 113
+   name 113
+!
+vrf instance VRF_GOOGLE
+   rd 65503:5555
+!
+vrf instance vrf1
+!
+interface Ethernet1
+   description Peer-to-peer link to Spine-1
+   no switchport
+   ip address 10.0.3.0/31
+!
+interface Ethernet2
+   description Peer-to-peer link to Spine-2
+   no switchport
+   ip address 10.0.3.4/31
+!
+interface Ethernet3
+   description downlink to host
+   switchport access vlan 113
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+   description to EDGE router
+   no switchport
+   vrf VRF_GOOGLE
+   ip address 5.5.5.5/30
+!
+interface Loopback1
+   description VTEP
+   ip address 10.1.0.3/32
+!
+interface Management1
+!
+interface Vlan113
+   description Host Network 113
+   vrf vrf1
+   ip address 192.168.113.1/24
+   ip virtual-router address 192.168.113.254/24
+!
+interface Vxlan1
+   vxlan source-interface Loopback1
+   vxlan udp-port 4789
+   vxlan vlan 112 vni 1112
+   vxlan vrf VRF_GOOGLE vni 5555
+   vxlan vrf vrf1 vni 666
+   vxlan learn-restrict any
+!
+ip virtual-router mac-address 02:00:00:00:00:00
+!
+ip routing
+ip routing vrf VRF_GOOGLE
+ip routing vrf vrf1
+!
+router bgp 65503
+   router-id 10.1.0.3
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   rd auto
+   maximum-paths 3 ecmp 3
+   neighbor SPINE-EVPN peer group
+   neighbor SPINE-EVPN remote-as 65500
+   neighbor SPINE-EVPN update-source Loopback1
+   neighbor SPINE-EVPN ebgp-multihop 3
+   neighbor SPINE-EVPN send-community standard extended
+   neighbor UNDERLAY peer group
+   neighbor UNDERLAY remote-as 65500
+   neighbor UNDERLAY out-delay 0
+   neighbor UNDERLAY send-community extended
+   neighbor 10.0.3.1 peer group UNDERLAY
+   neighbor 10.0.3.5 peer group UNDERLAY
+   neighbor 10.1.1.1 peer group SPINE-EVPN
+   neighbor 10.2.2.2 peer group SPINE-EVPN
+   redistribute connected
+   !
+   vlan 113
+      rd auto
+      route-target both 65500:1113
+      redistribute learned
+   !
+   address-family evpn
+      neighbor SPINE-EVPN activate
+      no neighbor 5.5.5.6 activate
+   !
+   address-family ipv4
+      neighbor UNDERLAY activate
+      network 10.1.0.3/32
+      redistribute connected
+   !
+   vrf VRF_GOOGLE
+      rd 65503:5555
+      route-target import evpn 1:666
+      route-target import evpn 65503:5555
+      route-target export evpn 65503:5555
+      neighbor 5.5.5.6 remote-as 65504
+      neighbor 5.5.5.6 next-hop-peer
+      !
+      address-family ipv4
+         neighbor 5.5.5.6 activate
+         redistribute bgp leaked
+   !
+   vrf vrf1
+      rd 65503:8887
+      route-target import evpn 1:666
+      route-target import evpn 65503:100
+      route-target import evpn 65503:8888
+      route-target export evpn 1:666
+      route-target export evpn 65503:100
+      route-target import evpn route-map IMPORT-GOOGLE
+      redistribute connected
+      !
+      address-family ipv4
+         bgp route install-map IMPORT-GOOGLE
+         no neighbor 5.5.5.6 activate
+         no neighbor 10.254.254.1 activate
+         redistribute connected
+!
+end
+  leaf3#
+ ```
+  </details>
+<details>
+  <summary>Edge Router</summary>
+```
+EdgeRouter#sho run
+! Command: show running-config
+! device: EdgeRouter (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model multi-agent
+!
+hostname EdgeRouter
+!
+spanning-tree mode mstp
+!
+interface Ethernet1
+!
+interface Ethernet2
+!
+interface Ethernet3
+   description rouiting port to google
+   no switchport
+   ip address 8.8.8.254/24
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+!
+interface Ethernet8
+   description Interconnect to BorderLeaf3
+   no switchport
+   ip address 5.5.5.6/30
+!
+interface Management1
+!
+ip routing
+!
+router bgp 65504
+   router-id 5.5.5.6
+   no bgp default ipv4-unicast
+   timers bgp 3 9
+   neighbor test peer group
+   neighbor test remote-as 65503
+   neighbor test next-hop-self
+   neighbor test update-source Ethernet8
+   neighbor 5.5.5.5 peer group test
+   redistribute connected
+   !
+   address-family ipv4
+      neighbor 5.5.5.5 activate
+      network 8.8.8.8/32
+      network 8.8.8.0/24
+      redistribute connected
+!
+end
+ EdgeRouter#
+ ```
+  </details>
+<details>
+  <summary>S1-host1</summary>
+```
+S1-Host1#sho run
+! Command: show running-config
+! device: S1-Host1 (vEOS-lab, EOS-4.29.2F)
+!
+! boot system flash:/vEOS-lab.swi
+!
+no aaa root
+!
+transceiver qsfp default-mode 4x10G
+!
+service routing protocols model ribd
+!
+hostname S1-Host1
+!
+spanning-tree mode mstp
+!
+vlan 2,112
+!
+interface Port-Channel1
+   switchport trunk allowed vlan 112-113
+   switchport mode trunk
+!
+interface Ethernet1
+!
+interface Ethernet2
+!
+interface Ethernet3
+!
+interface Ethernet4
+!
+interface Ethernet5
+!
+interface Ethernet6
+!
+interface Ethernet7
+   switchport access vlan 112
+   switchport mode trunk
+   channel-group 1 mode active
+!
+interface Ethernet8
+   switchport mode trunk
+   channel-group 1 mode active
+!
+interface Management1
+!
+interface Vlan112
+   ip address 192.168.112.112/24
+!
+interface Vlan113
+   ip address 192.168.113.113/24
+!
+ip routing
+!
+ip route 0.0.0.0/0 192.168.112.254
+!
+end
+ S1-Host1#
+ ```
+  </details>
+<details>
+  <summary>IamGoogle конфигурация</summary>
+```
+iamgoogle> show ip
 
+NAME        : iamgoogle[1]
+IP/MASK     : 8.8.8.8/24
+GATEWAY     : 8.8.8.254
+DNS         :
+MAC         : 00:50:79:66:68:09
+LPORT       : 20000
+RHOST:PORT  : 127.0.0.1:30000
+MTU         : 1500
+
+iamgoogle>
+ ```
+  </details>
 
 
 
