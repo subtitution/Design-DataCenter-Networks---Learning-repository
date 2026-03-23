@@ -31,190 +31,29 @@
 VRF — это сокращение от Virtual Routing Forwarding (виртуальная пересылка маршрутов).<br>
 При создании VRF внутри маршрутизатора создается виртуальная таблица маршрутизации.<br>
 Затем вы можете назначить интерфейсы для VRF. Трафик, поступающий на этот интерфейс, будет маршрутизироваться в соответствии с маршрутами в этом конкретном VRF.<br>
+## Что такое Route-target?
+Команда __route-target both__ в контексте BGP (обычно для L2VPN/EVPN или L3VPN) используется для управления импортом и экспортом маршрутов. Использование номера VLAN или AS (автономной системы) зависит от архитектуры сети и того, как вы решили формировать идентификаторы.<br><br>
+Вот основные сценарии:<br>
+- 1. Использование номера VLAN (10:10010, где 10 — VLAN)
+Это характерно для EVPN-VXLAN (Data Center).
+Когда применяется: Когда вам нужно связать конкретный L2-сегмент (VLAN) между разными коммутаторами (VTEP).
+Логика: Для удобства администраторы часто включают номер VLAN в RT, чтобы сразу видеть, к какой широковещательной сети относится маршрут. Например, route-target both 65000:10 означает: «принимать и отправлять маршруты для VLAN 10».
+- 2. Использование номера AS или IP (65001:100)
+Это классический вариант для L3VPN (MPLS) или сложных EVPN топологий.
+Когда применяется: Когда настраивается VRF (Virtual Routing and Forwarding) для изоляции трафика клиента или департамента.
+Логика: Здесь число после двоеточия — это произвольный Index (например, ID клиента), а не номер VLAN. Номер AS гарантирует уникальность RT внутри вашей сети или при обмене с партнерами.
+Краткое сравнение:
+VLAN:VNI или AS:VLAN	EVPN / VXLAN	Конкретный L2 сегмент (Bridge Domain)
+AS:Index	L3VPN / MPLS	Глобальный идентификатор VPN-сервиса/клиента
+Почему это важно: both — это просто сокращение. Оно говорит роутеру: «используй это значение и для пометки своих исходящих маршрутов (export), и для фильтрации входящих (import)».
 
-И так я выбрал 2-й вариант с vrf-ами. <br>
-И так как мы видели ниже, на EdgeRouter прилетели маршруты Route type 5 из нашей фабрики. <br>
-пример вывода маршутов 5-го типа на Edge Router представлены ниже:
+<br>
 
-```
-EdgeRouter#
-gp evpn route-type ip-prefix ipv4
-BGP routing table information for VRF default
-Router identifier 5.5.5.6, local AS number 65504
-Route status codes: * - valid, > - active, S - Stale, E - ECMP head, e - ECMP
-                    c - Contributing to ECMP, % - Pending BGP convergence
-Origin codes: i - IGP, e - EGP, ? - incomplete
-AS Path Attributes: Or-ID - Originator ID, C-LST - Cluster List, LL Nexthop - Link Local Nexthop
-
-          Network                Next Hop              Metric  LocPref Weight  Path
- * >      RD: 65501:10100 ip-prefix 192.168.10.0/24
-                                 10.1.0.1              -       100     0       65503 65500 65501 i
- * >      RD: 65502:10100 ip-prefix 192.168.10.0/24
-                                 10.1.0.2              -       100     0       65503 65500 65502 i
- * >      RD: 65501:10100 ip-prefix 192.168.20.0/24
-                                 10.1.0.1              -       100     0       65503 65500 65501 i
- * >      RD: 65502:10100 ip-prefix 192.168.20.0/24
-                                 10.1.0.2              -       100     0       65503 65500 65502 i
- * >      RD: 65501:10200 ip-prefix 192.168.30.0/24
-                                 10.1.0.1              -       100     0       65503 65500 65501 i
- * >      RD: 65502:10200 ip-prefix 192.168.30.0/24
-                                 10.1.0.2              -       100     0       65503 65500 65502 i
- * >      RD: 65501:1 ip-prefix 192.168.112.0/24
-                                 10.1.0.1              -       100     0       65503 65500 65501 i
- * >      RD: 65502:1 ip-prefix 192.168.112.0/24
-                                 10.1.0.2              -       100     0       65503 65500 65502 i
- * >      RD: 65503:1 ip-prefix 192.168.113.0/24
-                                 10.1.0.3              -       100     0       65503 i
-EdgeRouter#
-```
-## Мои поиски решения по простому вопросу, как из IPV4 маршрута пришедшего на leaf, анонсировать его в bgp evpn route-type 5?
-Стоит поблагодарить @Дмитриева Евгения, из учебного потока, за подсказку, ниже представлены выводы команд и конфигурация, перед моими небольшими изменениями, по желанию нижнюю часть, можно пропустить, и перейти к разделу __3  исправление конфигурации__
- <details>
-  <summary>Какие маршруты имеются на leaf3?</summary>
-   
- ## Базовый ip маршрут
-   
-   ```
-   leaf3#sho ip route
-
-VRF: default
-Codes: C - connected, S - static, K - kernel,
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
-       N2 - OSPF NSSA external type2, B - Other BGP Routes,
-       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
-       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
-       A O - OSPF Summary, NG - Nexthop Group Static Route,
-       V - VXLAN Control Service, M - Martian,
-       DH - DHCP client installed default route,
-       DP - Dynamic Policy Route, L - VRF Leaked,
-       G  - gRIBI, RC - Route Cache Route
-
-Gateway of last resort is not set
-
- C        5.5.5.4/30 is directly connected, Ethernet8
- B E      8.8.8.0/24 [200/0] via 5.5.5.6, Ethernet8
- B E      10.0.0.4/32 [200/0] via 5.5.5.6, Ethernet8
- C        10.0.3.0/31 is directly connected, Ethernet1
- C        10.0.3.4/31 is directly connected, Ethernet2
- B E      10.1.0.1/32 [200/0] via 10.0.3.1, Ethernet1
-                              via 10.0.3.5, Ethernet2
- B E      10.1.0.2/32 [200/0] via 10.0.3.1, Ethernet1
-                              via 10.0.3.5, Ethernet2
- C        10.1.0.3/32 is directly connected, Loopback1
- B E      10.1.1.1/32 [200/0] via 10.0.3.1, Ethernet1
- B E      10.2.2.2/32 [200/0] via 10.0.3.5, Ethernet2
- C        192.168.100.3/32 is directly connected, Loopback100
-
-leaf3#
-
-```
-## Просмотр vrf маршрутов
-
-```
-leaf3#sho ip route vrf all
-
-VRF: default
-Codes: C - connected, S - static, K - kernel,
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
-       N2 - OSPF NSSA external type2, B - Other BGP Routes,
-       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
-       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
-       A O - OSPF Summary, NG - Nexthop Group Static Route,
-       V - VXLAN Control Service, M - Martian,
-       DH - DHCP client installed default route,
-       DP - Dynamic Policy Route, L - VRF Leaked,
-       G  - gRIBI, RC - Route Cache Route
-
-Gateway of last resort is not set
-
- C        5.5.5.4/30 is directly connected, Ethernet8
- B E      8.8.8.0/24 [200/0] via 5.5.5.6, Ethernet8
- B E      10.0.0.4/32 [200/0] via 5.5.5.6, Ethernet8
- C        10.0.3.0/31 is directly connected, Ethernet1
- C        10.0.3.4/31 is directly connected, Ethernet2
- B E      10.1.0.1/32 [200/0] via 10.0.3.1, Ethernet1
-                              via 10.0.3.5, Ethernet2
- B E      10.1.0.2/32 [200/0] via 10.0.3.1, Ethernet1
-                              via 10.0.3.5, Ethernet2
- C        10.1.0.3/32 is directly connected, Loopback1
- B E      10.1.1.1/32 [200/0] via 10.0.3.1, Ethernet1
- B E      10.2.2.2/32 [200/0] via 10.0.3.5, Ethernet2
- C        192.168.100.3/32 is directly connected, Loopback100
-
-
-VRF: VRF_GOOGLE
-Codes: C - connected, S - static, K - kernel,
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
-       N2 - OSPF NSSA external type2, B - Other BGP Routes,
-       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
-       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
-       A O - OSPF Summary, NG - Nexthop Group Static Route,
-       V - VXLAN Control Service, M - Martian,
-       DH - DHCP client installed default route,
-       DP - Dynamic Policy Route, L - VRF Leaked,
-       G  - gRIBI, RC - Route Cache Route
-
-Gateway of last resort is not set
-
-
-
-VRF: v
-Codes: C - connected, S - static, K - kernel,
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
-       N2 - OSPF NSSA external type2, B - Other BGP Routes,
-       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
-       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
-       A O - OSPF Summary, NG - Nexthop Group Static Route,
-       V - VXLAN Control Service, M - Martian,
-       DH - DHCP client installed default route,
-       DP - Dynamic Policy Route, L - VRF Leaked,
-       G  - gRIBI, RC - Route Cache Route
-
-Gateway of last resort is not set
-
-
-! IP routing not enabled
-
-VRF: vrf1
-Codes: C - connected, S - static, K - kernel,
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
-       N2 - OSPF NSSA external type2, B - Other BGP Routes,
-       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
-       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
-       A O - OSPF Summary, NG - Nexthop Group Static Route,
-       V - VXLAN Control Service, M - Martian,
-       DH - DHCP client installed default route,
-       DP - Dynamic Policy Route, L - VRF Leaked,
-       G  - gRIBI, RC - Route Cache Route
-
-Gateway of last resort is not set
-
- B E      192.168.112.112/32 [200/0] via VTEP 10.1.0.1 VNI 666 router-mac 50:00:00:d7:ee:0b local-interface Vxlan1
-                                     via VTEP 10.1.0.2 VNI 666 router-mac 50:00:00:cb:38:c2 local-interface Vxlan1
- B E      192.168.112.0/24 [200/0] via VTEP 10.1.0.1 VNI 666 router-mac 50:00:00:d7:ee:0b local-interface Vxlan1
-                                   via VTEP 10.1.0.2 VNI 666 router-mac 50:00:00:cb:38:c2 local-interface Vxlan1
- C        192.168.113.0/24 is directly connected, Vlan113
-
-
-VRF: vrf2
-Codes: C - connected, S - static, K - kernel,
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,
-       N2 - OSPF NSSA external type2, B - Other BGP Routes,
-       B I - iBGP, B E - eBGP, R - RIP, I L1 - IS-IS level 1,
-       I L2 - IS-IS level 2, O3 - OSPFv3, A B - BGP Aggregate,
-       A O - OSPF Summary, NG - Nexthop Group Static Route,
-       V - VXLAN Control Service, M - Martian,
-       DH - DHCP client installed default route,
-       DP - Dynamic Policy Route, L - VRF Leaked,
-       G  - gRIBI, RC - Route Cache Route
-
-Gateway of last resort is not set
+# 2. Настройка
+## 2.1. Настройка Edge Router
+## 2.2. Настройка Border-leaf (leaf3)
+## 2.3. Настройка leaf2
+## 2.4. Настройка leaf1
 
 ```
 ## Просмотр bgp маршрутов
