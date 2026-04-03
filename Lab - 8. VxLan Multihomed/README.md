@@ -70,6 +70,59 @@ router bgp 65501
 ```
 ## 1.2. Настройка службы EVPN уровня 3 на Leaf1 коммутаторе
 ### 1.2.1. Создадим VRF, или логический экземпляр маршрутизации, для сети уровня 3 заказчика
+Для корректной работы EVPN Multihoming (ESI) в топологии с разными AS (как у вас: 65501 и 65502) лифы должны обмениваться маршрутами __Type 4 (Ethernet Segment) и Type 1 (Auto-discovery)__.
+Ниже шаблон конфигурации:<br>
+1. Настройка Leaf1 (AS 65501)
+bash
+router bgp 65501
+   ! Глобальная активация EVPN для соседей (Spine)
+   address-family evpn
+      neighbor SPINE-EVPN activate
+   !
+   vrf TENANT-1
+      rd 65501:10100
+      ! Важно: оба лифа должны импортировать RT друг друга или использовать общий
+      route-target import evpn 65501:10100
+      route-target import evpn 65502:10100  <-- Добавляем RT соседа
+      route-target export evpn 65501:10100
+
+
+2. Настройка Leaf2 (AS 65502)
+bash
+router bgp 65502
+   address-family evpn
+      neighbor SPINE-EVPN activate
+   !
+   vrf TENANT-1
+      rd 65502:10100
+      route-target import evpn 65502:10100
+      route-target import evpn 65501:10100  <-- Добавляем RT соседа
+      route-target export evpn 65502:10100
+
+
+3. Проверка интерфейсов (ESI)
+Убедитесь, что identifier и lacp system-id идентичны на обоих устройствах (у вас в конфиге они уже совпадают, это правильно):
+bash
+interface Port-Channel10
+   evpn ethernet-segment
+      identifier 0034:0000:0000:0000:0001
+   lacp system-id 1234.5678.0304
+
+
+Почему это важно:
+В EVPN All-Active лифы выбирают Designated Forwarder (DF). Если лиф не видит соседа по BGP (пустой вывод show bgp evpn route-type ethernet-segment), он может:
+Считать себя единственным и блокировать трафик, чтобы не создать петлю.
+Не синхронизировать ARP-таблицу с соседом.
+Как проверить результат:
+После применения RT-импорта введите команду:
+show evpn ethernet-segment interface Port-Channel10
+В выводе вы должны увидеть:
+DF Role: Designated Forwarder (на одном) и Non-Designated Forwarder (на другом).
+Remote ES hosts: IP-адрес соседа (10.1.0.1 или 10.1.0.4).
+
+
+
+
 Замечание: ``` В EOS по умолчанию VRF создаются с отключенной маршрутизацией между подсетями. Всегда включайте IP-маршрутизацию в определяемых пользователем VRF.```
 Команды:
 ```
