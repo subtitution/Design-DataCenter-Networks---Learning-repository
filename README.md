@@ -43,14 +43,14 @@ https://eltexcm.ru/assets/files/site/3686/ip_fabric_design_guide.pdf
 
     ## Instraction for beginners work with GITHUB
    
-### 1. Подготовьте файлы проекта
+### 1. Подготовьте файлы проекта <br> <br>
 Добавьте все текущие файлы папки ai_project в индекс Git:bashgit add .
 
-### 2. Сделайте первый коммит
+### 2. Сделайте первый коммит <br> <br>
 Создайте базовую точку отсчета для вашего проекта:bashgit commit -m "Initial commit"
 (Если Git напишет, что нечего коммитить, значит, ваша папка ai_project пуста. Просто создайте в ней любой файл, например, через команду touch README.md, а затем повторите git add . и git commit).
-### 3. Создайте тег заново
+### 3. Создайте тег заново <br> <br>
 Теперь, когда коммит существует, команда сработает без ошибок:bashgit tag -a v1.0.0 -m "The first stable local version 1.0"
-### 4. Отправьте всё на GitHub
+### 4. Отправьте всё на GitHub <br> <br>
 Загрузите ваш код вместе с созданным тегом на сайт:bashgit push -u origin main --tags
 
